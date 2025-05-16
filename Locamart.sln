@@ -1,0 +1,93 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9F451E40-96B9-4BF1-A92F-735E45CDA60A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{501058CD-F2CF-4ADA-A4BD-27A1AD1301AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{EFC04C25-EF66-4CEA-A6A6-4AF9A6567614}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\migrations\add-migration.ps1 = scripts\migrations\add-migration.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{757F1E0D-43E5-4FFC-BB5B-403B0D0E0E8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Adapter.Http", "src\Infrastructure\Locamart.Adapter.Http\Locamart.Adapter.Http.csproj", "{8617E023-39D5-5B82-3B10-829CDD32D01E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Adapter.Postgresql", "src\Infrastructure\Locamart.Adapter.Postgresql\Locamart.Adapter.Postgresql.csproj", "{099A148C-77B0-4278-46E2-CB12F57F065B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Application", "src\Application\Locamart.Application\Locamart.Application.csproj", "{5313A896-31C5-4906-C92E-DD2DAD7B22FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Domain", "src\Locamart.Domain\Locamart.Domain.csproj", "{27E2E284-8740-CE44-205F-F811C2F7318D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Application.Contracts", "Locamart.Application.Contracts\Locamart.Application.Contracts.csproj", "{BD72C5A4-5E96-495A-B8FB-DA1D80EEABFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Shared", "src\Locamart.Shared\Locamart.Shared.csproj", "{C384AE91-DFAB-E2BB-DE8F-3D9DB2107A4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Host", "src\Locamart.Host\Locamart.Host.csproj", "{E089F395-D276-059C-0F8C-0F36E7CC9EC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Adapter.ObjectStorage", "src\Infrastructure\Locamart.Adapter.ObjectStorage\Locamart.Adapter.ObjectStorage.csproj", "{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8617E023-39D5-5B82-3B10-829CDD32D01E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8617E023-39D5-5B82-3B10-829CDD32D01E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8617E023-39D5-5B82-3B10-829CDD32D01E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8617E023-39D5-5B82-3B10-829CDD32D01E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{099A148C-77B0-4278-46E2-CB12F57F065B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{099A148C-77B0-4278-46E2-CB12F57F065B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{099A148C-77B0-4278-46E2-CB12F57F065B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{099A148C-77B0-4278-46E2-CB12F57F065B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5313A896-31C5-4906-C92E-DD2DAD7B22FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5313A896-31C5-4906-C92E-DD2DAD7B22FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5313A896-31C5-4906-C92E-DD2DAD7B22FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5313A896-31C5-4906-C92E-DD2DAD7B22FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27E2E284-8740-CE44-205F-F811C2F7318D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27E2E284-8740-CE44-205F-F811C2F7318D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27E2E284-8740-CE44-205F-F811C2F7318D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27E2E284-8740-CE44-205F-F811C2F7318D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD72C5A4-5E96-495A-B8FB-DA1D80EEABFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD72C5A4-5E96-495A-B8FB-DA1D80EEABFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD72C5A4-5E96-495A-B8FB-DA1D80EEABFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD72C5A4-5E96-495A-B8FB-DA1D80EEABFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C384AE91-DFAB-E2BB-DE8F-3D9DB2107A4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C384AE91-DFAB-E2BB-DE8F-3D9DB2107A4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C384AE91-DFAB-E2BB-DE8F-3D9DB2107A4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C384AE91-DFAB-E2BB-DE8F-3D9DB2107A4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
+		{EFC04C25-EF66-4CEA-A6A6-4AF9A6567614} = {501058CD-F2CF-4ADA-A4BD-27A1AD1301AC}
+		{757F1E0D-43E5-4FFC-BB5B-403B0D0E0E8C} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
+		{8617E023-39D5-5B82-3B10-829CDD32D01E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{099A148C-77B0-4278-46E2-CB12F57F065B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{5313A896-31C5-4906-C92E-DD2DAD7B22FB} = {757F1E0D-43E5-4FFC-BB5B-403B0D0E0E8C}
+		{27E2E284-8740-CE44-205F-F811C2F7318D} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
+		{BD72C5A4-5E96-495A-B8FB-DA1D80EEABFD} = {757F1E0D-43E5-4FFC-BB5B-403B0D0E0E8C}
+		{C384AE91-DFAB-E2BB-DE8F-3D9DB2107A4B} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
+		{E089F395-D276-059C-0F8C-0F36E7CC9EC3} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
+		{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6398E810-9F43-49BE-A63A-91406D237096}
+	EndGlobalSection
+EndGlobal
