@@ -1,6 +1,8 @@
 using Locamart.Adapter.Http;
-using Locamart.Adapter.Postgresql;
 using Locamart.Adapter.ObjectStorage;
+using Locamart.Adapter.Postgresql;
+using Locamart.Application;
+using Locamart.Shared.Abstracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,12 @@ builder.Services.AddAdaptersHttpServices();
 builder.Services.AddPostgresqleServices(configuration);
 
 builder.Services.AddObjectStorageServices(configuration);
+
+builder.Services.Scan(scan => scan.FromAssemblies(typeof(IApplicationMarker).Assembly)
+    .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)), publicOnly: false)
+    .AsImplementedInterfaces()
+    .WithScopedLifetime()
+);
 
 var app = builder.Build();
 

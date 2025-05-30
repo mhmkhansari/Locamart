@@ -12,7 +12,7 @@ public abstract class Entity<TId>(TId id)
     public IReadOnlyCollection<DomainEvent> DomainEvents =>
         _domainEvents != null ? _domainEvents.AsReadOnly() : Array.Empty<DomainEvent>();
 
-    public void AddDomainEvent(DomainEvent eventItem)
+    public void Raise(DomainEvent eventItem)
     {
         _domainEvents ??= new List<DomainEvent>();
         _domainEvents.Add(eventItem);

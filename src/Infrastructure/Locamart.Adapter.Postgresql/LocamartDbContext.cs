@@ -52,4 +52,11 @@ public class LocamartDbContext : DbContext
                 .UsePropertyAccessMode(PropertyAccessMode.Field);
         });
     }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        int result = await base.SaveChangesAsync(cancellationToken);
+
+        return result;
+    }
 }
