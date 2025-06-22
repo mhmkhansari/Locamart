@@ -1,5 +1,7 @@
 ﻿using Locamart.Adapter.Postgresql.Repositories;
 using Locamart.Domain.Product.Abstracts;
+using Locamart.Domain.Store.Abstracts;
+using Locamart.Domain.StoreCategory.Abstracts;
 using Locamart.Shared.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +20,10 @@ public static class AdapterPostgresqlServiceExtensions
         });
 
         services.AddScoped<IProductRepository, ProductRepository>();
+
+        services.AddScoped<IStoreRepository, StoreRepository>();
+
+        services.AddScoped<IStoreCategoryRepository, StoreCategoryRepository>();
 
         services.AddScoped<IUnitOfWork, EfCoreUnitOfWork>();
 

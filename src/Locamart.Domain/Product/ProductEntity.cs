@@ -2,6 +2,7 @@
 using Locamart.Domain.Product.RequestModels;
 using Locamart.Domain.Product.ValueObjects;
 using Locamart.Shared;
+using Locamart.Shared.ValueObjects;
 
 namespace Locamart.Domain.Product;
 
@@ -10,14 +11,13 @@ public sealed class ProductEntity : Shared.Entity<ProductId>
     public string Title { get; private set; }
     public string? Description { get; private set; }
     public decimal Price { get; private set; }
-    public List<string> Images { get; } = [];
+    public List<Image> Images { get; } = [];
 
-    private ProductEntity(ProductId id, string title, string description, decimal price, List<string> images) : base(id)
+    private ProductEntity(ProductId id, string title, string description, decimal price, List<Image> images) : base(id)
     {
         Title = title;
         Description = description;
-        SetTitle(title);
-        SetPrice(price);
+        Price = price;
         AddImages(images);
 
         if (!string.IsNullOrEmpty(description))
@@ -56,7 +56,7 @@ public sealed class ProductEntity : Shared.Entity<ProductId>
         return UnitResult.Success<Error>();
     }
 
-    public UnitResult<Error> AddImages(IEnumerable<string> images)
+    public UnitResult<Error> AddImages(IEnumerable<Image> images)
     {
         Images.AddRange(images);
         return UnitResult.Success<Error>();

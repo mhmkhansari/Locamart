@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Locamart.Shared;
+namespace Locamart.Shared.ValueObjects;
 public sealed class Image : ValueObject<Image>
 {
     public string Url { get; }

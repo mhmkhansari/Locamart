@@ -3,6 +3,7 @@ using System;
 using Locamart.Adapter.Postgresql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locamart.Adapter.Postgresql.Migrations
 {
     [DbContext(typeof(LocamartDbContext))]
-    partial class LocamartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250622185705_AddProductStoreTable")]
+    partial class AddProductStoreTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
