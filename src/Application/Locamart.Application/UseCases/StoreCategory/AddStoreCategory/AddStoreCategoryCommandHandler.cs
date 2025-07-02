@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Application.Contracts.UseCases.StoreCategory;
-using Locamart.Domain.StoreCategory;
-using Locamart.Domain.StoreCategory.Abstracts;
-using Locamart.Domain.StoreCategory.ValueObjects;
+using Locamart.Domain.Entities.StoreCategory;
+using Locamart.Domain.Entities.StoreCategory.Abstracts;
+using Locamart.Domain.Entities.StoreCategory.ValueObjects;
 using Locamart.Shared;
 using Locamart.Shared.Abstracts;
 using Locamart.Shared.Infrastructure;
@@ -15,10 +15,14 @@ public class AddStoreCategoryCommandHandler(IStoreCategoryRepository storeCatego
     {
         try
         {
-            var parentId = request.ParentId is not null ? StoreCategoryId.Create(request.ParentId) : null;
+            var parentId = request.ParentId.HasValue ? StoreCategoryId.Create(request.ParentId.Value) : null;
+
             var entity = StoreCategoryEntity.Create(request.Name, parentId);
 
-            storeCategoryRepository.Add(entity);
+            if (entity.IsFailure)
+                return UnitResult.Failure<Error>(entity.Error);
+
+            storeCategoryRepository.Add(entity.Value);
 
             await unitOfWork.CommitAsync(cancellationToken);
 

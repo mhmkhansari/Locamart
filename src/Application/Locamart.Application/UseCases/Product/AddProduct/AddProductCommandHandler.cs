@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using Locamart.Application.Contracts.UseCases.Product;
-using Locamart.Domain.Product;
-using Locamart.Domain.Product.Abstracts;
-using Locamart.Domain.Product.RequestModels;
+using Locamart.Application.Contracts.UseCases.Product.AddProduct;
+using Locamart.Domain.Entities.Product;
+using Locamart.Domain.Entities.Product.Abstracts;
+using Locamart.Domain.Entities.Product.RequestModels;
 using Locamart.Shared;
 using Locamart.Shared.Abstracts;
 using Locamart.Shared.Infrastructure;

@@ -1,7 +1,7 @@
 ﻿using Locamart.Adapter.Postgresql.Repositories;
-using Locamart.Domain.Product.Abstracts;
-using Locamart.Domain.Store.Abstracts;
-using Locamart.Domain.StoreCategory.Abstracts;
+using Locamart.Domain.Entities.Product.Abstracts;
+using Locamart.Domain.Entities.Store.Abstracts;
+using Locamart.Domain.Entities.StoreCategory.Abstracts;
 using Locamart.Shared.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

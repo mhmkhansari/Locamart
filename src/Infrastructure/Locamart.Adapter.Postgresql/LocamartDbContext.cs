@@ -1,5 +1,7 @@
 ﻿using Locamart.Adapter.Postgresql.Configurations;
-using Locamart.Domain.Product;
+using Locamart.Domain.Entities.Product;
+using Locamart.Domain.Entities.Store;
+using Locamart.Domain.Entities.StoreCategory;
 using Locamart.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +10,8 @@ namespace Locamart.Adapter.Postgresql;
 public class LocamartDbContext : DbContext
 {
     public DbSet<ProductEntity> Products => Set<ProductEntity>();
+    public DbSet<StoreEntity> Stores => Set<StoreEntity>();
+    public DbSet<StoreCategoryEntity> StoreCategories => Set<StoreCategoryEntity>();
 
     public LocamartDbContext(DbContextOptions<LocamartDbContext> options)
         : base(options)

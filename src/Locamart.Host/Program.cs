@@ -1,3 +1,5 @@
+using Elastic.Clients.Elasticsearch;
+using Locamart.Adapter.Elasticsearch;
 using Locamart.Adapter.Http;
 using Locamart.Adapter.ObjectStorage;
 using Locamart.Adapter.Postgresql;
@@ -20,6 +22,8 @@ builder.Services.AddPostgresqleServices(configuration);
 
 builder.Services.AddObjectStorageServices(configuration);
 
+builder.Services.AddAdapterElasticsearchServices(configuration);
+
 builder.Services.Scan(scan => scan.FromAssemblies(typeof(IApplicationMarker).Assembly)
     .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)), publicOnly: false)
     .AsImplementedInterfaces()
@@ -27,6 +31,10 @@ builder.Services.Scan(scan => scan.FromAssemblies(typeof(IApplicationMarker).Ass
 );
 
 var app = builder.Build();
+
+var client = app.Services.GetRequiredService<ElasticsearchClient>();
+await IndexInitialization.EnsureProductIndexExistsAsync(client);
+
 
 if (app.Environment.IsDevelopment())
 {

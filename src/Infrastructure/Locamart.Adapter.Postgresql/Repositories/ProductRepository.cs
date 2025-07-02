@@ -1,6 +1,6 @@
-﻿using Locamart.Domain.Product;
-using Locamart.Domain.Product.Abstracts;
-using Locamart.Domain.Product.ValueObjects;
+﻿using Locamart.Domain.Entities.Product;
+using Locamart.Domain.Entities.Product.Abstracts;
+using Locamart.Domain.Entities.Product.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Locamart.Adapter.Postgresql.Repositories;
@@ -8,7 +8,7 @@ namespace Locamart.Adapter.Postgresql.Repositories;
 public class ProductRepository(LocamartDbContext context) : IProductRepository
 {
     public async Task AddAsync(ProductEntity product, CancellationToken cancellationToken)
-    { 
+    {
         await context.AddAsync(product, cancellationToken);
     }
 
@@ -22,7 +22,7 @@ public class ProductRepository(LocamartDbContext context) : IProductRepository
     }
 
     public void Remove(ProductEntity entity, CancellationToken cancellationToken)
-    { 
+    {
         context.Products.Remove(entity);
     }
 }

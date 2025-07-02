@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Host", "src\Locama
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Adapter.ObjectStorage", "src\Infrastructure\Locamart.Adapter.ObjectStorage\Locamart.Adapter.ObjectStorage.csproj", "{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Adapter.Elasticsearch", "Locamart.Adapter.Elasticseach\Locamart.Adapter.Elasticsearch.csproj", "{12650D71-6E61-4087-A8DF-CEF39A7E66EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12650D71-6E61-4087-A8DF-CEF39A7E66EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12650D71-6E61-4087-A8DF-CEF39A7E66EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12650D71-6E61-4087-A8DF-CEF39A7E66EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12650D71-6E61-4087-A8DF-CEF39A7E66EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +92,7 @@ Global
 		{C384AE91-DFAB-E2BB-DE8F-3D9DB2107A4B} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
 		{3356A037-3BA5-1B4A-7E01-FDA1EA8DC29B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{12650D71-6E61-4087-A8DF-CEF39A7E66EB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6398E810-9F43-49BE-A63A-91406D237096}

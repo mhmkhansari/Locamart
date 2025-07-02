@@ -1,5 +1,5 @@
-﻿using Locamart.Domain.StoreCategory;
-using Locamart.Domain.StoreCategory.ValueObjects;
+﻿using Locamart.Domain.Entities.StoreCategory;
+using Locamart.Domain.Entities.StoreCategory.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

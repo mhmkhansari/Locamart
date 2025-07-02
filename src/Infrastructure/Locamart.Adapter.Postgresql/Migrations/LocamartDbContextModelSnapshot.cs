@@ -59,6 +59,9 @@ namespace Locamart.Adapter.Postgresql.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Location")
                         .HasColumnType("jsonb")
                         .HasColumnName("Location");
@@ -75,6 +78,9 @@ namespace Locamart.Adapter.Postgresql.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
 
                     b.ToTable("StoreEntity");
                 });
@@ -96,6 +102,15 @@ namespace Locamart.Adapter.Postgresql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StoreCategoryEntity");
+                });
+
+            modelBuilder.Entity("Locamart.Domain.Store.StoreEntity", b =>
+                {
+                    b.HasOne("Locamart.Domain.StoreCategory.StoreCategoryEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Locamart.Domain.Store.StoreEntity", "CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

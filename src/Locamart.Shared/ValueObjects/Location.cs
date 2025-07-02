@@ -1,17 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Locamart.Domain.Store.ValueObjects;
+namespace Locamart.Shared.ValueObjects;
 
-public class Location : ValueObject<Location>
+public class Location(double latitude, double longitude) : ValueObject<Location>
 {
-    public double Latitude { get; }
-    public double Longitude { get; }
-
-    public Location(double latitude, double longitude)
-    {
-        Latitude = latitude;
-        Longitude = longitude;
-    }
+    public double Latitude { get; init; } = latitude;
+    public double Longitude { get; init; } = longitude;
 
     protected override bool EqualsCore(Location other)
     {
@@ -20,13 +14,7 @@ public class Location : ValueObject<Location>
 
     protected override int GetHashCodeCore()
     {
-        unchecked
-        {
-            int hash = 17;
-            hash = hash * 23 + Latitude.GetHashCode();
-            hash = hash * 23 + Longitude.GetHashCode();
-            return hash;
-        }
+        return HashCode.Combine(Latitude, Longitude);
     }
     public override string ToString() => $"({Latitude}, {Longitude})";
 }

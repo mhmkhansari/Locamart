@@ -1,6 +1,7 @@
 ﻿using Locamart.Adapter.Postgresql.Converters;
-using Locamart.Domain.Store;
-using Locamart.Domain.Store.ValueObjects;
+using Locamart.Domain.Entities.Store;
+using Locamart.Domain.Entities.Store.ValueObjects;
+using Locamart.Domain.Entities.StoreCategory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,7 +16,7 @@ public class StoreConfiguration : IEntityTypeConfiguration<StoreEntity>
         builder.Property(p => p.Id)
             .HasConversion(
                 id => id.Value,
-                value => StoreId.Create(value))
+                value => StoreId.Create(value).Value)
             .HasColumnType("uuid")
             .IsRequired();
 
@@ -24,10 +25,14 @@ public class StoreConfiguration : IEntityTypeConfiguration<StoreEntity>
             .HasColumnName("ProfileImage")
             .HasColumnType("jsonb");
 
-        builder.Property(p => p.Location)
+        builder.Property(x => x.Location)
             .HasConversion(new LocationConverter())
-            .HasColumnName("Location")
-            .HasColumnType("jsonb");
+            .HasColumnType("geography (point, 4326)");
+
+        builder.HasOne<StoreCategoryEntity>()
+            .WithOne()
+            .HasForeignKey<StoreEntity>(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
 
     }
 }

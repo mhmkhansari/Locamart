@@ -1,6 +1,7 @@
 ﻿using Locamart.Adapter.Postgresql.Converters;
-using Locamart.Domain.Product;
-using Locamart.Domain.Product.ValueObjects;
+using Locamart.Domain.Entities.Product;
+using Locamart.Domain.Entities.Product.ValueObjects;
+using Locamart.Domain.Entities.Store;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,7 +16,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
         builder.Property(p => p.Id)
             .HasConversion(
                 id => id.Value,
-                value => ProductId.Create(value))
+                value => ProductId.Create(value).Value)
             .HasColumnType("uuid")
             .IsRequired();
 
@@ -29,6 +30,23 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
             .HasConversion(new ImageListConverter())
             .HasColumnType("jsonb")
             .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.HasOne<StoreEntity>()
+            .WithMany()
+            .HasForeignKey(x => x.StoreId);
+
+        builder.OwnsOne(p => p.Price, price =>
+        {
+            price.Property(p => p.Value)
+                .HasColumnName("PriceValue")
+                .HasColumnType("decimal(18,2)")
+                .IsRequired();
+
+            price.Property(p => p.Currency)
+                .HasColumnName("PriceCurrency")
+                .HasMaxLength(3)
+                .IsRequired();
+        });
     }
 }
 
