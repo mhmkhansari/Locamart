@@ -8,9 +8,16 @@ namespace Locamart.Application.UseCases.Product.GetNearbyProducts;
 
 public class GetNearbyProductsQueryHandler(ISearchService searchService) : IQueryHandler<GetProductsWithinDistanceQuery, Result<GetProductsWithinDistanceQueryResult, Error>>
 {
-    public Task<Result<GetProductsWithinDistanceQueryResult, Error>> Handle(GetProductsWithinDistanceQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetProductsWithinDistanceQueryResult, Error>> Handle(GetProductsWithinDistanceQuery request, CancellationToken cancellationToken)
     {
-        searchService.GetNearbyProducts(request.Product, request.Distance, request)
+        var result = await searchService.GetNearbyProducts(request.Product, request.Distance, request.Latitude, request.Longitude);
+        if (result.IsFailure)
+            return result.Error;
+
+        return new GetProductsWithinDistanceQueryResult()
+        {
+            Products = result.Value
+        };
     }
 }
 

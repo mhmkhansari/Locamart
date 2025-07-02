@@ -1,12 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Application.Contracts.UseCases.Store;
-using Locamart.Domain.Entities.Store;
 using Locamart.Domain.Entities.Store.Abstracts;
+using Locamart.Domain.Entities.Store.Builders;
 using Locamart.Domain.Entities.StoreCategory.ValueObjects;
 using Locamart.Shared;
 using Locamart.Shared.Abstracts;
 using Locamart.Shared.Extensions;
 using Locamart.Shared.Infrastructure;
+using Locamart.Shared.ValueObjects;
 
 namespace Locamart.Application.UseCases.Store.AddStore;
 
@@ -19,15 +20,14 @@ public class AddStoreCommandHandler(IStoreRepository storeRepository, IUnitOfWor
             var storeCategoryId = StoreCategoryId.Create(request.CategoryId);
             var builder = new StoreBuilder(request.Name, storeCategoryId)
                 .MaybeDo(request.Bio, (b, v) => b.WithBio(v))
-                .MaybeDo(request.Latitude, request.Longitude, (b, lat, lon) => b.WithLocation())
+                .MaybeDo(request.ProfileImage, (b, v) => b.WithProfileImage(new Image(request.ProfileImage!)))
+                .MaybeDo(request.Latitude, request.Longitude, (lat, lon) => lat is not null && lon is not null,
+                    (b, lat, lon) => b.WithLocation(new Location(lat!.Value, lon!.Value)));
 
-            builder
-
-
-            var entity = StoreEntity.Create(request.Name, );
+            var entity = builder.Build();
 
             if (entity.IsFailure)
-                return UnitResult.Failure<Error>(entity.Error);
+                return entity.Error;
 
             storeRepository.Add(entity.Value);
 
@@ -38,7 +38,7 @@ public class AddStoreCommandHandler(IStoreRepository storeRepository, IUnitOfWor
 
         catch (Exception ex)
         {
-            return UnitResult.Failure<Error>(Error.Create("add_store_failed", ex.Message));
+            return Error.Create("add_store_failed", ex.Message);
         }
     }
 }

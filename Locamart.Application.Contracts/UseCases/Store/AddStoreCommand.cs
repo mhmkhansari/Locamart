@@ -10,9 +10,9 @@ public record AddStoreCommand : ICommand<UnitResult<Error>>
 
     public Guid CategoryId { get; init; }
 
-    public decimal? Latitude { get; init; }
+    public double? Latitude { get; init; }
 
-    public decimal? Longitude { get; init; }
+    public double? Longitude { get; init; }
 
     public string? Bio { get; init; }
 

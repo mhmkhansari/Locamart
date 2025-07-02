@@ -4,7 +4,7 @@ namespace Locamart.Application.Contracts.UseCases.Product.GetProductsWithinDista
 
 public class GetProductsWithinDistanceQueryResult
 {
-    public List<ProductDto> Products { get; set; }
+    public IReadOnlyCollection<ProductDto> Products { get; set; }
 }
 
 
