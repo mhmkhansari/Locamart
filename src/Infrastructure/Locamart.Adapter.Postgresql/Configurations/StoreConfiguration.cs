@@ -25,9 +25,23 @@ public class StoreConfiguration : IEntityTypeConfiguration<StoreEntity>
             .HasColumnName("ProfileImage")
             .HasColumnType("jsonb");
 
-        builder.Property(x => x.Location)
-            .HasConversion(new LocationConverter())
-            .HasColumnType("geography (point, 4326)");
+        builder.OwnsOne(x => x.Location, location =>
+        {
+            location.Property(p => p.Latitude)
+                .HasColumnName("Latitude")
+                .HasColumnType("double precision");
+
+            location.Property(p => p.Longitude)
+                .HasColumnName("Longitude")
+                .HasColumnType("double precision");
+        });
+
+        builder.OwnsOne(x => x.Identifier, identifier =>
+        {
+            identifier.Property(p => p.Value)
+                .HasColumnName("StoreIdentifier")
+                .HasColumnType("varchar(100)");
+        });
 
         builder.HasOne<StoreCategoryEntity>()
             .WithOne()

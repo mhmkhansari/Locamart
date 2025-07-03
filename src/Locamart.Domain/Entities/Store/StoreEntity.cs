@@ -17,6 +17,7 @@ public sealed class StoreEntity : Entity<StoreId>
     public StoreIdentifier? Identifier { get; private set; }
 
 
+    private StoreEntity() : base(default!) { }
     public static Result<StoreEntity, Error> Create(string name, StoreCategoryId categoryId)
     {
         var storeId = StoreId.Create(Guid.NewGuid());

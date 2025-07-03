@@ -38,12 +38,12 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
         builder.OwnsOne(p => p.Price, price =>
         {
             price.Property(p => p.Value)
-                .HasColumnName("PriceValue")
+                .HasColumnName("Price")
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
 
             price.Property(p => p.Currency)
-                .HasColumnName("PriceCurrency")
+                .HasColumnName("Currency")
                 .HasMaxLength(3)
                 .IsRequired();
         });

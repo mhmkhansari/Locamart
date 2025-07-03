@@ -15,6 +15,8 @@ public sealed class ProductEntity : Entity<ProductId>
     public List<Image> Images { get; } = [];
     public StoreId StoreId { get; init; }
 
+    private ProductEntity() : base(default!) { }
+
     private ProductEntity(ProductId id, string title, string description, Price price, List<Image> images) : base(id)
     {
         Title = title;

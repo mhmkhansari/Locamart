@@ -77,14 +77,13 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
 
             var products = response.Hits.Select(hit =>
             {
-                Guid.TryParse(hit.Source.productId, out var productId);
+                Guid.TryParse(hit.Source!.productId, out var productId);
                 Guid.TryParse(hit.Source.storeId, out var storeId);
                 double firstDistance = 0;
                 if (TryGetTypedList<double>(hit.Fields!, "distance", out var distances))
                 {
-                    firstDistance = distances.FirstOrDefault();
+                    firstDistance = Math.Round(distances.FirstOrDefault(), 1);
                 }
-
 
                 return new ProductDto
                 {
@@ -127,10 +126,9 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
                 result = enumerable.ToList();
                 return true;
 
-            case JsonElement jsonElement when jsonElement.ValueKind == JsonValueKind.Array:
+            case JsonElement { ValueKind: JsonValueKind.Array } jsonElement:
                 try
                 {
-                    // Works for simple value types like double, int, etc.
                     result = jsonElement.EnumerateArray()
                         .Select(e => (T)Convert.ChangeType(e.GetDouble(), typeof(T)))
                         .ToList();

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Locamart.Adapter.Elasticseach\Locamart.Adapter.Elasticsearch.csproj" />
+    <ProjectReference Include="..\..\Locamart.Liam\Locamart.Liam.csproj" />
     <ProjectReference Include="..\Infrastructure\Locamart.Adapter.Http\Locamart.Adapter.Http.csproj" />
     <ProjectReference Include="..\Infrastructure\Locamart.Adapter.ObjectStorage\Locamart.Adapter.ObjectStorage.csproj" />
     <ProjectReference Include="..\Infrastructure\Locamart.Adapter.Postgresql\Locamart.Adapter.Postgresql.csproj" />

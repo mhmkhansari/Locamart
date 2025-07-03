@@ -4,6 +4,7 @@ using Locamart.Adapter.Http;
 using Locamart.Adapter.ObjectStorage;
 using Locamart.Adapter.Postgresql;
 using Locamart.Application;
+using Locamart.Liam;
 using Locamart.Shared.Abstracts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,8 @@ builder.Services.AddPostgresqleServices(configuration);
 builder.Services.AddObjectStorageServices(configuration);
 
 builder.Services.AddAdapterElasticsearchServices(configuration);
+
+builder.Services.AddLiamServices(configuration);
 
 builder.Services.Scan(scan => scan.FromAssemblies(typeof(IApplicationMarker).Assembly)
     .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)), publicOnly: false)
@@ -44,6 +47,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
