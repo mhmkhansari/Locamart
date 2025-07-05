@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Dina\Locamart.Dina\Locamart.Dina.csproj" />
+    <ProjectReference Include="..\..\Locamart.Liam.Domain\Locamart.Liam.Domain.csproj" />
+    <ProjectReference Include="..\Locamart.Liam.Application.Contracts\Locamart.Liam.Application.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

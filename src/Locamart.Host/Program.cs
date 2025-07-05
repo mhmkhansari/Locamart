@@ -1,11 +1,14 @@
-using Elastic.Clients.Elasticsearch;
-using Locamart.Adapter.Elasticsearch;
-using Locamart.Adapter.Http;
-using Locamart.Adapter.ObjectStorage;
-using Locamart.Adapter.Postgresql;
-using Locamart.Application;
-using Locamart.Liam;
-using Locamart.Shared.Abstracts;
+using Locamart.Dina.Abstracts;
+using Locamart.Liam.Adapter.Http;
+using Locamart.Liam.Adapter.Postgresql;
+using Locamart.Liam.Adapter.Redis;
+using Locamart.Liam.Application;
+using Locamart.Nava.Adapter.Elasticsearch;
+using Locamart.Nava.Adapter.Http;
+using Locamart.Nava.Adapter.ObjectStorage;
+using Locamart.Nava.Adapter.Postgresql;
+using Locamart.Nava.Application;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,16 @@ builder.Services.AddObjectStorageServices(configuration);
 
 builder.Services.AddAdapterElasticsearchServices(configuration);
 
-builder.Services.AddLiamServices(configuration);
+
+builder.Services.AddLiamPostgresServices(configuration);
+
+
+
+builder.Services.AddLiamRedisServices(configuration);
+
+builder.Services.AddLiamAdaptersHttpServices();
+
+builder.Services.AddLiamApplicationServices(configuration);
 
 builder.Services.Scan(scan => scan.FromAssemblies(typeof(IApplicationMarker).Assembly)
     .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)), publicOnly: false)
@@ -35,9 +47,10 @@ builder.Services.Scan(scan => scan.FromAssemblies(typeof(IApplicationMarker).Ass
 
 var app = builder.Build();
 
-var client = app.Services.GetRequiredService<ElasticsearchClient>();
-await IndexInitialization.EnsureProductIndexExistsAsync(client);
-
+using (var scope = app.Services.CreateScope())
+{
+    await AdapterElasticServiceCollectionExtensions.InitializeAdapterElasticsearchAsync(scope.ServiceProvider);
+}
 
 if (app.Environment.IsDevelopment())
 {

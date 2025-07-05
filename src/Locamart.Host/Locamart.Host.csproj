@@ -16,11 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Locamart.Adapter.Elasticseach\Locamart.Adapter.Elasticsearch.csproj" />
-    <ProjectReference Include="..\..\Locamart.Liam\Locamart.Liam.csproj" />
-    <ProjectReference Include="..\Infrastructure\Locamart.Adapter.Http\Locamart.Adapter.Http.csproj" />
-    <ProjectReference Include="..\Infrastructure\Locamart.Adapter.ObjectStorage\Locamart.Adapter.ObjectStorage.csproj" />
-    <ProjectReference Include="..\Infrastructure\Locamart.Adapter.Postgresql\Locamart.Adapter.Postgresql.csproj" />
+    <ProjectReference Include="..\Dina\Locamart.Dina\Locamart.Dina.csproj" />
+    <ProjectReference Include="..\Liam\Application\Locamart.Liam.Application\Locamart.Liam.Application.csproj" />
+    <ProjectReference Include="..\Liam\Infrastructure\Locamart.Liam.Adapter.Http\Locamart.Liam.Adapter.Http.csproj" />
+    <ProjectReference Include="..\Liam\Infrastructure\Locamart.Liam.Adapter.Postgresql\Locamart.Liam.Adapter.Postgresql.csproj" />
+    <ProjectReference Include="..\Liam\Infrastructure\Locamart.Liam.Adapter.Redis\Locamart.Liam.Adapter.Redis.csproj" />
+    <ProjectReference Include="..\Nava\Infrastructure\Locamart.Nava.Adapter.Elasticsearch\Locamart.Nava.Adapter.Elasticsearch.csproj" />
+    <ProjectReference Include="..\Nava\Infrastructure\Locamart.Nava.Adapter.Http\Locamart.Nava.Adapter.Http.csproj" />
+    <ProjectReference Include="..\Nava\Infrastructure\Locamart.Nava.Adapter.ObjectStorage\Locamart.Nava.Adapter.ObjectStorage.csproj" />
+    <ProjectReference Include="..\Nava\Infrastructure\Locamart.Nava.Adapter.Postgresql\Locamart.Nava.Adapter.Postgresql.csproj" />
   </ItemGroup>
 
 </Project>
