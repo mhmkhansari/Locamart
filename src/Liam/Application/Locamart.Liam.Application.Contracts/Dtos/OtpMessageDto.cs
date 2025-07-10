@@ -1,6 +1,6 @@
-﻿namespace Locamart.Liam.Domain;
+﻿namespace Locamart.Liam.Application.Contracts.Dtos;
 
-public class OtpMessage
+public class OtpMessageDto
 {
     public Guid TempUserId { get; set; }
     public string MobileNumber { get; set; }
@@ -8,4 +8,3 @@ public class OtpMessage
     public DateTime CreatedAt { get; set; }
     public string Message { get; set; }
 }
-

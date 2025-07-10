@@ -3,6 +3,6 @@
 public class RegisterUserCommandResult
 {
     public Guid TempUserId { get; set; }
-    public string OtpCode { get; set; }
+    public string Message { get; set; }
 }
 

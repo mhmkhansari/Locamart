@@ -24,11 +24,13 @@ public class ClientSeeder(IServiceProvider serviceProvider) : IHostedService
                 Permissions =
                 {
                     OpenIddictConstants.Permissions.Endpoints.Token,
-                    OpenIddictConstants.Permissions.GrantTypes.Password,
+                    OpenIddictConstants.Permissions.Endpoints.Introspection,
+                    "gt:otp",
                     OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
                     OpenIddictConstants.Permissions.Scopes.Profile,
+                    OpenIddictConstants.Permissions.Scopes.Email,
                     OpenIddictConstants.Permissions.Scopes.Roles,
-                    "api"
+                    "scp:api"
                 }
             }, cancellationToken);
         }

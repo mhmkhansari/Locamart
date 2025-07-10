@@ -16,6 +16,11 @@ public static class ServiceCollectionExtensions
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssemblies(typeof(ILiamApplicationMarker).Assembly));
 
+        services.AddHttpClient();
+
+        services.AddEndpointsApiExplorer();
+
+
         return services;
     }
 }

@@ -37,8 +37,6 @@ builder.Services.AddLiamRedisServices(configuration);
 
 builder.Services.AddLiamAdaptersHttpServices();
 
-builder.Services.AddLiamApplicationServices(configuration);
-
 builder.Services.Scan(scan => scan.FromAssemblies(typeof(IApplicationMarker).Assembly)
     .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)), publicOnly: false)
     .AsImplementedInterfaces()
