@@ -5,14 +5,15 @@ public sealed class Image : ValueObject<Image>
 {
     public string Url { get; }
     public string? AltText { get; }
-
-    public Image(string url, string? altText = null)
+    public int Ordering { get; }
+    public Image(string url, int ordering = 0, string? altText = null)
     {
         if (string.IsNullOrWhiteSpace(url))
             throw new ArgumentException("Image URL cannot be null or empty.", nameof(url));
 
         Url = url;
         AltText = altText;
+        Ordering = ordering;
     }
 
     protected override bool EqualsCore(Image other)

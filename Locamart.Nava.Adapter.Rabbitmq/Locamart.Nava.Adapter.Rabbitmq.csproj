@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Dina\Locamart.Dina\Locamart.Dina.csproj" />
+    <PackageReference Include="MassTransit" Version="8.5.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Order\" />
+    <ProjectReference Include="..\src\Dina\Locamart.Dina\Locamart.Dina.csproj" />
   </ItemGroup>
 
 </Project>

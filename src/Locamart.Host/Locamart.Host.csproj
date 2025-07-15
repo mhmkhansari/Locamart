@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Locamart.Nava.Adapter.Rabbitmq\Locamart.Nava.Adapter.Rabbitmq.csproj" />
     <ProjectReference Include="..\Dina\Locamart.Dina\Locamart.Dina.csproj" />
     <ProjectReference Include="..\Liam\Application\Locamart.Liam.Application\Locamart.Liam.Application.csproj" />
     <ProjectReference Include="..\Liam\Infrastructure\Locamart.Liam.Adapter.Http\Locamart.Liam.Adapter.Http.csproj" />

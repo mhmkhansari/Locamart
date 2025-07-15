@@ -1,4 +1,4 @@
-﻿using Locamart.Adapter.Http.Store.RequestModels;
+﻿using Locamart.Nava.Adapter.Http.Store.RequestModels;
 using Locamart.Nava.Application.Contracts.UseCases.Store;
 using Mapster;
 using MediatR;

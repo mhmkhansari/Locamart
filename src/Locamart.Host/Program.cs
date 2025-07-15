@@ -2,11 +2,11 @@ using Locamart.Dina.Abstracts;
 using Locamart.Liam.Adapter.Http;
 using Locamart.Liam.Adapter.Postgresql;
 using Locamart.Liam.Adapter.Redis;
-using Locamart.Liam.Application;
 using Locamart.Nava.Adapter.Elasticsearch;
 using Locamart.Nava.Adapter.Http;
 using Locamart.Nava.Adapter.ObjectStorage;
 using Locamart.Nava.Adapter.Postgresql;
+using Locamart.Nava.Adapter.Rabbitmq;
 using Locamart.Nava.Application;
 
 
@@ -28,6 +28,7 @@ builder.Services.AddObjectStorageServices(configuration);
 
 builder.Services.AddAdapterElasticsearchServices(configuration);
 
+builder.Services.AddRabbitmqServices(configuration);
 
 builder.Services.AddLiamPostgresServices(configuration);
 

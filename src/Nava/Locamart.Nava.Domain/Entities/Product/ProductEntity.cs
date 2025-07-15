@@ -12,16 +12,19 @@ public sealed class ProductEntity : Entity<ProductId>
     public string Title { get; private set; }
     public string? Description { get; private set; }
     public Price Price { get; private set; }
+    public int? Quantity { get; private set; }
     public List<Image> Images { get; } = [];
     public StoreId StoreId { get; init; }
 
     private ProductEntity() : base(default!) { }
 
-    private ProductEntity(ProductId id, string title, string description, Price price, List<Image> images) : base(id)
+    private ProductEntity(ProductId id, StoreId storeId, string title, int? quantity, string description, Price price, List<Image> images) : base(id)
     {
+        StoreId = storeId;
         Title = title;
         Description = description;
         Price = price;
+        Quantity = quantity;
         AddImages(images);
 
         if (!string.IsNullOrEmpty(description))
@@ -35,12 +38,17 @@ public sealed class ProductEntity : Entity<ProductId>
         if (productId.IsFailure)
             return productId.Error;
 
+        var storeId = StoreId.Create(request.StoreId);
+
+        if (storeId.IsFailure)
+            return storeId.Error;
+
         var price = Price.Create(request.Price, "IRR");
 
         if (price.IsFailure)
             return price.Error;
 
-        return new ProductEntity(productId.Value, request.Title, request.Description, price.Value, request.Images);
+        return new ProductEntity(productId.Value, storeId.Value, request.Title, request.Quantity, request.Description, price.Value, request.Images);
 
     }
 
