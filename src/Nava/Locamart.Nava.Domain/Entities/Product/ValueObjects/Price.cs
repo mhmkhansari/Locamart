@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
+using ValueObject = Locamart.Dina.ValueObject;
 
 namespace Locamart.Nava.Domain.Entities.Product.ValueObjects;
 
-public class Price : ValueObject<Price>
+public class Price : ValueObject
 {
     public decimal Value { get; init; }
     public string Currency { get; init; }
@@ -22,14 +23,10 @@ public class Price : ValueObject<Price>
         Currency = currency;
     }
 
-    protected override bool EqualsCore(Price other)
+    protected override IEnumerable<object?> GetEqualityComponents()
     {
-        return Value == other.Value && Currency == other.Currency;
-    }
-
-    protected override int GetHashCodeCore()
-    {
-        return HashCode.Combine(Value, Currency);
+        yield return Value;
+        yield return Currency.ToUpperInvariant();
     }
 }
 

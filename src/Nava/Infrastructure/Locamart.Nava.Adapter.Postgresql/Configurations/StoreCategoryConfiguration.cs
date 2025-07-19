@@ -14,14 +14,14 @@ public class StoreCategoryConfiguration : IEntityTypeConfiguration<StoreCategory
         builder.Property(p => p.Id)
             .HasConversion(
                 id => id.Value,
-                value => StoreCategoryId.Create(value))
+                value => StoreCategoryId.Create(value).Value)
             .HasColumnType("uuid")
             .IsRequired();
 
         builder.Property(p => p.ParentId)
             .HasConversion(
                 id => id.Value,
-                value => StoreCategoryId.Create(value))
+                value => StoreCategoryId.Create(value).Value)
             .HasColumnType("uuid");
 
         builder.Property(p => p.Name).IsRequired().HasColumnName("Name").HasMaxLength(200);

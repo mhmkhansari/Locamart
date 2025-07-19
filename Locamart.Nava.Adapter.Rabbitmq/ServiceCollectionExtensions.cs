@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Locamart.Nava.Application.Contracts.Services;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,6 +20,8 @@ public static class ServiceCollectionExtensions
                 });
             });
         });
+
+        service.AddScoped<IIntegrationEventPublisher, MassTransitIntegrationEventPublisher>();
 
         return service;
     }

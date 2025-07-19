@@ -1,6 +1,4 @@
-﻿using Locamart.Liam.Adapter.Postgresql;
-using Locamart.Liam.Application.Contracts.UseCases.RegisterUser;
-using Locamart.Liam.Application.Contracts.UseCases.VerifyOtp;
+﻿using Locamart.Liam.Application.Contracts.UseCases.Login;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +11,10 @@ public class UserController(IMediator mediator, IHttpClientFactory httpClientFac
 {
 
     [HttpPost]
-    [Route("register")]
+    [Route("login")]
     public async Task<IActionResult> Register(string mobileNumber, CancellationToken cancellationToken)
     {
-        var command = new RegisterUserCommand()
+        var command = new LoginCommand()
         {
             MobileNumber = mobileNumber
         };
@@ -27,7 +25,7 @@ public class UserController(IMediator mediator, IHttpClientFactory httpClientFac
     }
 
     [HttpPost]
-    [Route("verify-otp")]
+    [Route("verify")]
     public async Task<IActionResult> VerifyOtp(VerifyOtpRequestModel request,
         CancellationToken cancellationToken)
     {
@@ -36,10 +34,11 @@ public class UserController(IMediator mediator, IHttpClientFactory httpClientFac
         var parameters = new Dictionary<string, string>
             {
                 { "grant_type", "otp" },
-                { "username", request.UserId.ToString() },
+                { "username", request.MobileNumber },
                 { "client_id", "web-client" },
                 { "client_secret", "901564A5-E7FE-42CB-B10D-61EF6A8F3654" },
                 {"otp_code", request.OtpCode},
+                {"challenge_id", request.ChallengeId},
                 { "scope", "api" }
             };
 

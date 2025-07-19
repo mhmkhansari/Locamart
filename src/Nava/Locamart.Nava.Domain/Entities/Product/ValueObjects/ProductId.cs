@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
+using ValueObject = Locamart.Dina.ValueObject;
 
 namespace Locamart.Nava.Domain.Entities.Product.ValueObjects;
 
-public sealed class ProductId : ValueObject<ProductId>, IComparable<ProductId>
+public sealed class ProductId : ValueObject, IComparable<ProductId>
 {
     public Guid Value { get; }
 
@@ -24,20 +25,16 @@ public sealed class ProductId : ValueObject<ProductId>, IComparable<ProductId>
 
 
     public static implicit operator Guid(ProductId productId) => productId.Value;
-    protected override bool EqualsCore(ProductId other)
-    {
-        return Value == other.Value;
-    }
-
-    protected override int GetHashCodeCore()
-    {
-        return Value.GetHashCode();
-    }
 
     public int CompareTo(ProductId? other)
     {
         if (ReferenceEquals(this, other)) return 0;
         if (other is null) return 1;
         return Value.CompareTo(other.Value);
+    }
+
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }

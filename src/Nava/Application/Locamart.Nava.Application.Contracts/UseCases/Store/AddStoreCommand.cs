@@ -10,6 +10,8 @@ public record AddStoreCommand : ICommand<UnitResult<Error>>
 
     public Guid CategoryId { get; init; }
 
+    public Guid CreatedBy { get; set; }
+
     public double? Latitude { get; init; }
 
     public double? Longitude { get; init; }

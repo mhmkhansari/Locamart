@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Entities\Order\" />
+    <Folder Include="Entities\Product\Events\" />
   </ItemGroup>
 
 </Project>

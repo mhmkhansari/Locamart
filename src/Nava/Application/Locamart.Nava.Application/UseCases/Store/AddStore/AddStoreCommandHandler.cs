@@ -18,8 +18,15 @@ public class AddStoreCommandHandler(IStoreRepository storeRepository, IUnitOfWor
     {
         try
         {
+            var ownerId = UserId.Create(request.CreatedBy);
+            if (ownerId.IsFailure)
+                return ownerId.Error;
+
             var storeCategoryId = StoreCategoryId.Create(request.CategoryId);
-            var builder = new StoreBuilder(request.Name, storeCategoryId)
+            if (storeCategoryId.IsFailure)
+                return storeCategoryId.Error;
+
+            var builder = new StoreBuilder(request.Name, storeCategoryId.Value, ownerId.Value)
                 .MaybeDo(request.Bio, (b, v) => b.WithBio(v))
                 .MaybeDo(request.ProfileImage, (b, v) => b.WithProfileImage(new Image(request.ProfileImage!)))
                 .MaybeDo(request.Latitude, request.Longitude, (lat, lon) => lat is not null && lon is not null,

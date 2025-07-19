@@ -3,6 +3,7 @@ using Locamart.Nava.Application.Contracts.UseCases.Product.AddProduct;
 using Locamart.Nava.Application.Contracts.UseCases.Product.GetProductsWithinDistance;
 using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Locamart.Nava.Adapter.Http.Product;
@@ -12,7 +13,7 @@ namespace Locamart.Nava.Adapter.Http.Product;
 [Route("api/products")]
 public class ProductsController(IMediator mediator) : ControllerBase
 {
-    [HttpGet]
+    [Authorize, HttpGet]
     public async Task<IActionResult> GetProductsWithinDistance([FromQuery] GetProductsWithinDistanceHttpRequest request,
         CancellationToken cancellationToken)
     {

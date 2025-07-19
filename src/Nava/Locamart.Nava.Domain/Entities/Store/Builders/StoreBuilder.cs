@@ -6,7 +6,7 @@ using Locamart.Shared.ValueObjects;
 
 namespace Locamart.Nava.Domain.Entities.Store.Builders;
 
-public class StoreBuilder(string name, StoreCategoryId categoryId)
+public class StoreBuilder(string name, StoreCategoryId categoryId, UserId ownerId)
 {
     private readonly List<Action<StoreEntity>> _configurations = [];
 
@@ -30,7 +30,7 @@ public class StoreBuilder(string name, StoreCategoryId categoryId)
 
     public Result<StoreEntity, Error> Build()
     {
-        var result = StoreEntity.Create(name, categoryId);
+        var result = StoreEntity.Create(name, categoryId, ownerId);
         if (result.IsFailure)
             return result.Error;
 

@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Core.Search;
-using Locamart.Adapter.Elasticsearch.Models;
 using Locamart.Dina;
+using Locamart.Nava.Adapter.Elasticsearch.Models;
 using Locamart.Nava.Application.Contracts.Dtos;
+using Locamart.Nava.Application.Contracts.IntegrationEvents;
 using Locamart.Nava.Application.Contracts.Services;
 using System.Text.Json;
 using Result = CSharpFunctionalExtensions.Result;
@@ -17,17 +18,17 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
     {
         try
         {
-            var response = await client.SearchAsync<ProductSearch>(s => s
+            var response = await client.SearchAsync<ProductModel>(s => s
                 .Indices("products")
                 .Source(new SourceFilter
                 {
-                    Includes = new[] { "productId", "storeId", "storeName", "productName", "description", "storeLocation" }
+                    Includes = new[] { "productId", "storeId", "storeName", "productName", "storeLocation" }
                 })
                 .Query(q => q
                     .Bool(b => b
                         .Must(m => m
                             .Match(mq => mq
-                                .Field(f => f.description)
+                                .Field(f => f.productName)
                                 .Query(query)
                             )
                         )
@@ -103,6 +104,31 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
             return Error.Create("get_nearby_products_error", ex.Message);
         }
 
+    }
+
+    public async Task<UnitResult<Error>> IndexProduct(ProductCreatedIntegrationEvent integrationEvent)
+    {
+        var productDocument = new ProductModel()
+        {
+            productName = integrationEvent.ProductName,
+            price = integrationEvent.Price,
+            productId = integrationEvent.ProductId.ToString(),
+            storeId = integrationEvent.StoreId.ToString(),
+            storeName = integrationEvent.StoreName,
+            storeLocation =
+                GeoLocation.LatitudeLongitude(new LatLonGeoLocation(integrationEvent.Latitude,
+                    integrationEvent.Longitude))
+        };
+
+        var result = await client.IndexAsync(productDocument, i => i
+            .Index("products")
+            .Id(productDocument.productId)
+            .Refresh(Refresh.WaitFor));
+
+        if (!result.IsSuccess() && result.ElasticsearchServerError is not null)
+            return Error.Create("product_index_error", result.ElasticsearchServerError.Error.ToString());
+
+        return UnitResult.Success<Error>();
     }
 
     public static bool TryGetTypedList<T>(IReadOnlyDictionary<string, object> dict, string key, out List<T> result)

@@ -26,6 +26,7 @@ public static class ServiceCollectionExtensions
             {
                 options.User.RequireUniqueEmail = false;
                 options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedPhoneNumber = true;
             })
             .AddEntityFrameworkStores<LiamDbContext>()
             .AddDefaultTokenProviders();
@@ -57,15 +58,18 @@ public static class ServiceCollectionExtensions
 
                         var userId = context.Request.GetParameter("username")?.ToString();
                         var otpCode = context.Request.GetParameter("otp_code")?.ToString();
-                        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(otpCode))
+                        var challengeId = context.Request.GetParameter("challenge_id")?.ToString();
+
+                        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(otpCode) || string.IsNullOrEmpty(challengeId))
                         {
                             context.Reject(
                                 error: OpenIddictConstants.Errors.InvalidRequest,
-                                description: "The user_id and otp_code parameters are required.");
+                                description: "The user_id, otp_code and challenge_id parameters are required.");
                             return;
                         }
 
                         var httpContext = context.Transaction.GetHttpRequest()?.HttpContext;
+
                         if (httpContext is null)
                         {
                             context.Reject(
@@ -73,47 +77,82 @@ public static class ServiceCollectionExtensions
                                 description: "Cannot access HTTP context.");
                             return;
                         }
+
                         var cacheService = httpContext.RequestServices.GetRequiredService<ICacheService>();
                         var userManager = httpContext.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
                         var signInManager = httpContext.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
 
-                        var mobileNumber = context.Request.Username;
-
-                        var jsonTempUser = await cacheService.GetAsync($"temp_user:{userId}");
-
-                        if (jsonTempUser.IsFailure)
+                        var removeChallengeResult = await cacheService.RemoveAsync($"login_challenge:{userId}");
+                        if (removeChallengeResult.IsFailure)
+                        {
                             context.Reject(
-                                error: OpenIddictConstants.Errors.InvalidClient,
-                                description: jsonTempUser.Error.ToString()
-                            );
+                                error: OpenIddictConstants.Errors.ServerError,
+                                description: "Cannot access HTTP context.");
+                            return;
+                        }
 
-                        if (jsonTempUser.Value is null)
-                            context.Reject(
-                                error: OpenIddictConstants.Errors.InvalidClient,
-                                description: jsonTempUser.Error.ToString()
-                            );
+                        var user = await userManager.FindByNameAsync(userId);
 
-                        var tempUser = JsonSerializer.Deserialize<TempUserDto>(jsonTempUser.Value!);
-
-                        if (tempUser?.OtpCode != otpCode || DateTime.UtcNow > tempUser.CreatedAt.AddMinutes(2))
-                            context.Reject(
-                                error: OpenIddictConstants.Errors.InvalidClient,
-                                description: "Otp expired"
-                            );
-
-                        var user = await userManager.FindByNameAsync(mobileNumber!);
                         if (user == null)
                         {
+                            var jsonTempUser = await cacheService.GetAsync($"login_challenge:{userId}");
+
+                            if (jsonTempUser.IsFailure)
+                            {
+                                context.Reject(
+                                    error: OpenIddictConstants.Errors.InvalidClient,
+                                    description: jsonTempUser.Error.ToString()
+                                );
+                                return;
+                            }
+
+                            if (jsonTempUser.Value is null)
+                            {
+                                context.Reject(
+                                    error: OpenIddictConstants.Errors.InvalidClient,
+                                    description: "No login challenge requested"
+                                );
+                                return;
+                            }
+
+                            var tempUser = JsonSerializer.Deserialize<LoginChallengeModel>(jsonTempUser.Value!);
+
+                            if (tempUser is null)
+                            {
+                                context.Reject(
+                                    error: OpenIddictConstants.Errors.ServerError,
+                                    description: "Unable to process login challenge on server side"
+                                );
+                                return;
+                            }
+
+                            if (tempUser.OtpCode != otpCode || tempUser.ChallengeId != challengeId || DateTime.UtcNow > tempUser.CreatedAt.AddMinutes(2))
+                                context.Reject(
+                                    error: OpenIddictConstants.Errors.InvalidClient,
+                                    description: "Verification failed"
+                                );
+
                             var identityUser = new IdentityUser()
                             {
                                 Id = Guid.NewGuid().ToString(),
                                 AccessFailedCount = 0,
                                 LockoutEnabled = true,
-                                UserName = tempUser.MobileNumber,
-                                PhoneNumber = tempUser.MobileNumber
+                                UserName = tempUser?.MobileNumber,
+                                PhoneNumber = tempUser?.MobileNumber,
+                                PhoneNumberConfirmed = true
                             };
 
                             var userResult = await userManager.CreateAsync(identityUser);
+
+                            if (!userResult.Succeeded)
+                            {
+                                context.Reject(
+                                    error: OpenIddictConstants.Errors.ServerError,
+                                    description: $"Error in creating new user {userResult.Errors}"
+                                );
+
+                                return;
+                            }
 
                             user = identityUser;
                         }
@@ -146,26 +185,14 @@ public static class ServiceCollectionExtensions
                             claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
                         }
 
-                        var signInContext = new OpenIddictServerEvents.ProcessSignInContext(context.Transaction)
+                        /*var signInContext = new OpenIddictServerEvents.ProcessSignInContext(context.Transaction)
                         {
                             Principal = principal,
                             Request = context.Request
-                        };
-
-                        /*var dispatcher = httpContext.RequestServices.GetRequiredService<IOpenIddictServerDispatcher>();
-                        await dispatcher.DispatchAsync(signInContext);
-
-                        if (signInContext.IsRejected)
-                        {
-                            context.Reject(
-                                error: signInContext.Error,
-                                description: signInContext.ErrorDescription);
-                            return;
-                        }*/
+                        };*/
 
                         context.Principal = principal;
 
-                        // context.HandleRequest();
                     });
                 });
             })

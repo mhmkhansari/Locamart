@@ -1,38 +1,44 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
 using Locamart.Dina.ValueObjects;
+using Locamart.Nava.Domain.Entities.Store.Enums;
 using Locamart.Nava.Domain.Entities.Store.ValueObjects;
 using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
 using Locamart.Shared.ValueObjects;
+using System.Dynamic;
 
 namespace Locamart.Nava.Domain.Entities.Store;
 
-public sealed class StoreEntity : Entity<StoreId>
+public sealed class StoreEntity : Dina.Entity<StoreId>
 {
     public string Name { get; private set; }
     public StoreCategoryId CategoryId { get; private set; }
+    public UserId OwnerId { get; private set; }
     public Image? ProfileImage { get; private set; }
     public Location? Location { get; private set; }
     public string? Bio { get; private set; }
     public Uri? Website { get; private set; }
     public StoreIdentifier? Identifier { get; private set; }
+    public StoreStatus Status { get; private set; }
 
 
     private StoreEntity() : base(default!) { }
-    public static Result<StoreEntity, Error> Create(string name, StoreCategoryId categoryId)
+    public static Result<StoreEntity, Error> Create(string name, StoreCategoryId categoryId, UserId ownerId)
     {
         var storeId = StoreId.Create(Guid.NewGuid());
 
         if (storeId.IsFailure)
             return storeId.Error;
 
-        return new StoreEntity(storeId.Value, name, categoryId);
+        return new StoreEntity(storeId.Value, ownerId, name, categoryId);
     }
 
-    private StoreEntity(StoreId id, string name, StoreCategoryId categoryId) : base(id)
+    private StoreEntity(StoreId id, UserId ownerId, string name, StoreCategoryId categoryId) : base(id)
     {
         Name = name;
         CategoryId = categoryId;
+        OwnerId = ownerId;
+        Status = StoreStatus.Open;
     }
 
     public void SetProfileImage(Image image)

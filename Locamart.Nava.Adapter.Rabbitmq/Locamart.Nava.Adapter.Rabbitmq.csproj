@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Dina\Locamart.Dina\Locamart.Dina.csproj" />
+    <ProjectReference Include="..\src\Nava\Application\Locamart.Nava.Application.Contracts\Locamart.Nava.Application.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Locamart.Nava.Application.Contracts\Locamart.Nava.Application.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Product\SetProductPrice\" />
+  </ItemGroup>
+
 </Project>

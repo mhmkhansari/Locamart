@@ -1,24 +1,30 @@
-﻿using CSharpFunctionalExtensions;
-using Locamart.Dina.Abstracts;
+﻿using Locamart.Dina.Abstracts;
 
 namespace Locamart.Dina;
 
-public abstract class Entity<T> : Entity<T>
+public abstract class Entity<TId> : IEquatable<Entity<TId>>
+    where TId : notnull
 {
     private readonly List<IDomainEvent> _domainEvents = new();
 
-    protected EntityWithEvents(T id) : base(id)
+    public TId Id { get; }
+
+    protected Entity(TId id)
     {
+        Id = id ?? throw new ArgumentNullException(nameof(id));
     }
 
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+    public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => _domainEvents.AsReadOnly();
 
-    protected void AddDomainEvent(IDomainEvent domainEvent)
+    public void AddDomainEvent(IDomainEvent domainEvent)
     {
+        if (domainEvent is null)
+            throw new ArgumentNullException(nameof(domainEvent));
+
         _domainEvents.Add(domainEvent);
     }
 
-    protected void RemoveDomainEvent(IDomainEvent domainEvent)
+    public void RemoveDomainEvent(IDomainEvent domainEvent)
     {
         _domainEvents.Remove(domainEvent);
     }
@@ -27,5 +33,27 @@ public abstract class Entity<T> : Entity<T>
     {
         _domainEvents.Clear();
     }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Entity<TId> entity && Equals(entity);
+    }
+
+    public bool Equals(Entity<TId>? other)
+    {
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
+        if (GetType() != other.GetType()) return false;
+
+        return EqualityComparer<TId>.Default.Equals(Id, other.Id);
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
+
+    public static bool operator ==(Entity<TId>? left, Entity<TId>? right) => Equals(left, right);
+
+    public static bool operator !=(Entity<TId>? left, Entity<TId>? right) => !Equals(left, right);
+
+    public override string ToString() => $"{GetType().Name} [Id={Id}]";
 }
 

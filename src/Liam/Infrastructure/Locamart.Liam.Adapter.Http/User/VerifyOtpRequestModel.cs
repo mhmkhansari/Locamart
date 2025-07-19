@@ -5,7 +5,8 @@ namespace Locamart.Liam.Adapter.Http.User;
 
 public class VerifyOtpRequestModel
 {
-    public Guid UserId { get; set; }
+    public string MobileNumber { get; set; }
+    public string ChallengeId { get; set; }
     public string OtpCode { get; set; }
 }
 

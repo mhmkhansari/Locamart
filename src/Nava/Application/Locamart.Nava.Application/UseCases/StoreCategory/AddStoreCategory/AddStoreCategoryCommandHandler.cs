@@ -15,7 +15,7 @@ public class AddStoreCategoryCommandHandler(IStoreCategoryRepository storeCatego
     {
         try
         {
-            var parentId = request.ParentId.HasValue ? StoreCategoryId.Create(request.ParentId.Value) : null;
+            var parentId = request.ParentId.HasValue ? StoreCategoryId.Create(request.ParentId.Value).Value : null;
 
             var entity = StoreCategoryEntity.Create(request.Name, parentId);
 
