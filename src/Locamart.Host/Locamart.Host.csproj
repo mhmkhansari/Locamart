@@ -13,10 +13,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Scrutor" Version="6.0.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Locamart.Nava.Adapter.Rabbitmq\Locamart.Nava.Adapter.Rabbitmq.csproj" />
     <ProjectReference Include="..\Dina\Locamart.Dina\Locamart.Dina.csproj" />
     <ProjectReference Include="..\Liam\Application\Locamart.Liam.Application\Locamart.Liam.Application.csproj" />
     <ProjectReference Include="..\Liam\Infrastructure\Locamart.Liam.Adapter.Http\Locamart.Liam.Adapter.Http.csproj" />

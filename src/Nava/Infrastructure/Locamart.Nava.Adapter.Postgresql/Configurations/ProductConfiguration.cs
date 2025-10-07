@@ -5,7 +5,7 @@ using Locamart.Nava.Domain.Entities.Store;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Locamart.Adapter.Postgresql.Configurations;
+namespace Locamart.Nava.Adapter.Postgresql.Configurations;
 
 public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
 {
@@ -47,6 +47,16 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
                 .HasMaxLength(3)
                 .IsRequired();
         });
+
+        builder.Property(p => p.CreatedBy)
+            .HasConversion(new UserConverter())
+            .HasColumnType("uuid")
+            .IsRequired();
+
+        builder.Property(p => p.UpdatedBy)
+            .HasConversion(new NullableUserConverter())
+            .HasColumnType("uuid");
+
     }
 }
 

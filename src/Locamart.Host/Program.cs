@@ -3,12 +3,15 @@ using Locamart.Liam.Adapter.Http;
 using Locamart.Liam.Adapter.Postgresql;
 using Locamart.Liam.Adapter.Redis;
 using Locamart.Nava.Adapter.Elasticsearch;
+using Locamart.Nava.Adapter.Elasticsearch.Consumers;
 using Locamart.Nava.Adapter.Http;
+using Locamart.Nava.Adapter.Http.Middlewares;
 using Locamart.Nava.Adapter.ObjectStorage;
 using Locamart.Nava.Adapter.Postgresql;
-using Locamart.Nava.Adapter.Rabbitmq;
 using Locamart.Nava.Application;
+using MassTransit;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +33,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter your JWT token below (prefix with 'Bearer ')"
+        Description = "Enter your JWT token below (Already prefixed with 'Bearer ')"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -48,16 +51,44 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
 
-builder.Services.AddAdaptersHttpServices();
+builder.Host.UseSerilog();
+
+builder.Services.AddSingleton<Serilog.ILogger>(Log.Logger);
+
+builder.Services.AddAdaptersHttpServices(configuration);
 
 builder.Services.AddPostgresqleServices(configuration);
 
 builder.Services.AddObjectStorageServices(configuration);
 
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddEntityFrameworkOutbox<LocamartNavaDbContext>(o =>
+    {
+
+        o.UsePostgres();
+
+        o.UseBusOutbox();
+    });
+
+    x.UsingInMemory((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context); // creates the receive endpoint(s)
+        cfg.ConcurrentMessageLimit = Environment.ProcessorCount;
+    });
+
+    x.AddElasticsearchMessaging();
+});
+
 builder.Services.AddAdapterElasticsearchServices(configuration);
 
-builder.Services.AddRabbitmqServices(configuration);
+//builder.Services.AddRabbitmqServices(configuration);
 
 builder.Services.AddLiamPostgresServices(configuration);
 
@@ -94,5 +125,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<SetCurrentUserMiddleware>();
 
 app.Run();

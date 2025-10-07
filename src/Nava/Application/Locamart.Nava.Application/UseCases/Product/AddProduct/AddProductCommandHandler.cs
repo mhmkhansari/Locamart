@@ -30,8 +30,6 @@ public class AddProductCommandHandler(IProductRepository productRepository, ISto
 
         await productRepository.AddAsync(product.Value, cancellationToken);
 
-        await unitOfWork.CommitAsync(cancellationToken);
-
         var productCreatedIntegrationEvent = new ProductCreatedIntegrationEvent()
         {
             Id = Guid.NewGuid(),
@@ -39,12 +37,16 @@ public class AddProductCommandHandler(IProductRepository productRepository, ISto
             ProductName = product.Value.Title,
             StoreId = store.Id,
             StoreName = store.Name,
-            StoreUniqueIdentity = store.Identifier.Value,
+            StoreUniqueIdentity = store.Identifier ?? "",
             StoreLatitude = store.Location.Latitude,
             StoreLongitude = store.Location.Longitude
         };
 
-        await eventPublisher.PublishAsync(productCreatedIntegrationEvent);
+        await eventPublisher.PublishAsync(productCreatedIntegrationEvent, cancellationToken);
+
+        await unitOfWork.CommitAsync(cancellationToken);
+
+
 
         return UnitResult.Success<Error>();
     }

@@ -20,6 +20,8 @@ public class IndexInitialization
                 {
                     ["product_id"] = new KeywordProperty(),
                     ["store_id"] = new KeywordProperty(),
+                    ["store_name"] = new KeywordProperty(),
+                    ["store_identifier"] = new KeywordProperty(),
                     ["product_name"] = new TextProperty(),
                     ["description"] = new TextProperty(),
                     ["price"] = new DoubleNumberProperty(),

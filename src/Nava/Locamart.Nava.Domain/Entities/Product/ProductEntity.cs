@@ -8,34 +8,29 @@ using Locamart.Nava.Domain.Entities.Store.ValueObjects;
 
 namespace Locamart.Nava.Domain.Entities.Product;
 
-public sealed class ProductEntity : Dina.Entity<ProductId>
+public sealed class ProductEntity : AuditableEntity<ProductId>
 {
     public string Title { get; private set; }
     public string? Description { get; private set; }
     public Price Price { get; private set; }
     public List<Image> Images { get; } = [];
     public StoreId StoreId { get; private set; }
-    public UserId CreatedBy { get; private set; }
     public ProductStatus Status { get; private set; }
-    public List<string> Tags { get; private set; }
 
-    private ProductEntity() : base(default!) { }
+    private ProductEntity(ProductId id) : base(id) { }
 
-    private ProductEntity(ProductId id, StoreId storeId, UserId createdBy, string title, string description, Price price, List<Image> images, List<string> tags) : base(id)
+    private ProductEntity(ProductId id, StoreId storeId, string title, string description, Price price, List<Image> images) : base(id)
     {
         StoreId = storeId;
-        CreatedBy = createdBy;
         Title = title;
         Description = description;
         Price = price;
         Status = ProductStatus.Available;
-        Tags = tags;
 
         AddImages(images);
 
         if (!string.IsNullOrEmpty(description))
             SetDescription(description);
-        Tags = tags;
     }
 
     public static Result<ProductEntity, Error> Create(AddProductRequest request)
@@ -50,20 +45,12 @@ public sealed class ProductEntity : Dina.Entity<ProductId>
         if (storeId.IsFailure)
             return storeId.Error;
 
-        var createdById = UserId.Create(request.CreatedBy);
-
-        if (createdById.IsFailure)
-            return createdById.Error;
-
         var price = Price.Create(request.Price, "IRR");
 
         if (price.IsFailure)
             return price.Error;
 
-        if (request.Tags.Count > 5)
-            return Error.Create("too_many_tags", "Too many tags");
-
-        return new ProductEntity(productId.Value, storeId.Value, createdById.Value, request.Title, request.Description, price.Value, request.Images, request.Tags);
+        return new ProductEntity(productId.Value, storeId.Value, request.Title, request.Description, price.Value, request.Images);
 
     }
 

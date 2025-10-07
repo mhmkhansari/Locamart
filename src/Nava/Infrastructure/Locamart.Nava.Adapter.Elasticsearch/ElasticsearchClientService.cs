@@ -35,7 +35,7 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
                         .Filter(f => f
                             .GeoDistance(g => g
                                 .Field(f => f.storeLocation)
-                                .Distance($"{distance}km")
+                                .Distance($"{distance}m")
                                 .Location(new LatLonGeoLocation { Lat = lat, Lon = lon })
                             )
                         )
@@ -116,8 +116,8 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
             storeId = integrationEvent.StoreId.ToString(),
             storeName = integrationEvent.StoreName,
             storeLocation =
-                GeoLocation.LatitudeLongitude(new LatLonGeoLocation(integrationEvent.Latitude,
-                    integrationEvent.Longitude))
+                GeoLocation.LatitudeLongitude(new LatLonGeoLocation(integrationEvent.StoreLatitude,
+                    integrationEvent.StoreLongitude))
         };
 
         var result = await client.IndexAsync(productDocument, i => i

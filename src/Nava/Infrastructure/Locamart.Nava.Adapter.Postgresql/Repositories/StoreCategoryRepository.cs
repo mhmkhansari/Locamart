@@ -1,5 +1,4 @@
-﻿using Locamart.Adapter.Postgresql;
-using Locamart.Nava.Domain.Entities.StoreCategory;
+﻿using Locamart.Nava.Domain.Entities.StoreCategory;
 using Locamart.Nava.Domain.Entities.StoreCategory.Abstracts;
 using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
 using Microsoft.EntityFrameworkCore;

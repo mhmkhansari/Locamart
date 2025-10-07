@@ -39,11 +39,11 @@ public class UserController(IMediator mediator, IHttpClientFactory httpClientFac
                 { "client_secret", "901564A5-E7FE-42CB-B10D-61EF6A8F3654" },
                 {"otp_code", request.OtpCode},
                 {"challenge_id", request.ChallengeId},
-                { "scope", "api" }
+                { "scope", "api offline_access" }
             };
 
         var content = new FormUrlEncodedContent(parameters);
-        var response = await httpClient.PostAsync("http://localhost:5103/connect/token", content, cancellationToken);
+        var response = await httpClient.PostAsync("https://localhost:7046/connect/token", content, cancellationToken);
 
         var tokenResponseJson = await response.Content.ReadAsStringAsync(cancellationToken);
         if (!response.IsSuccessStatusCode)

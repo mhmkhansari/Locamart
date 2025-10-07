@@ -5,10 +5,8 @@ namespace Locamart.Nava.Domain.Entities.Product.RequestModels;
 public class AddProductRequest
 {
     public Guid StoreId { get; set; }
-    public Guid CreatedBy { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
     public List<Image> Images { get; set; } = [];
-    public List<string> Tags { get; set; }
 }

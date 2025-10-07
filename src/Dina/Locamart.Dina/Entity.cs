@@ -7,8 +7,9 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
 {
     private readonly List<IDomainEvent> _domainEvents = new();
 
-    public TId Id { get; }
+    public TId Id { get; protected set; } = default!;
 
+    protected Entity() { }
     protected Entity(TId id)
     {
         Id = id ?? throw new ArgumentNullException(nameof(id));

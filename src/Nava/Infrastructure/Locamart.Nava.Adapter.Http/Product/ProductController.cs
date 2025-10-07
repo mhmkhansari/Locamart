@@ -5,11 +5,13 @@ using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenIddict.Validation.AspNetCore;
 
 namespace Locamart.Nava.Adapter.Http.Product;
 
 
 [ApiController]
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [Route("api/products")]
 public class ProductsController(IMediator mediator) : ControllerBase
 {

@@ -10,6 +10,7 @@
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
+    <PackageReference Include="OpenIddict.AspNetCore" Version="7.0.0" />
     <PackageReference Include="OpenIddict.Client.AspNetCore" Version="7.0.0" />
     <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="7.0.0" />
     <PackageReference Include="OpenIddict.Validation.SystemNetHttp" Version="7.0.0" />

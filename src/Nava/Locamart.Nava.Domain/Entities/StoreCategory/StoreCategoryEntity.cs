@@ -5,7 +5,7 @@ using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
 
 namespace Locamart.Nava.Domain.Entities.StoreCategory;
 
-public sealed class StoreCategoryEntity : Dina.Entity<StoreCategoryId>
+public sealed class StoreCategoryEntity : AuditableEntity<StoreCategoryId>
 {
     public string Name { get; private set; }
     public StoreCategoryId? ParentId { get; private set; }

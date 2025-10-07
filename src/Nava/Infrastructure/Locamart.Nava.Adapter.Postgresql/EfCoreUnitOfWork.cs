@@ -1,5 +1,4 @@
-﻿using Locamart.Adapter.Postgresql;
-using Locamart.Dina.Infrastructure;
+﻿using Locamart.Dina.Infrastructure;
 
 namespace Locamart.Nava.Adapter.Postgresql;
 
@@ -10,4 +9,6 @@ public class EfCoreUnitOfWork(LocamartNavaDbContext context) : IUnitOfWork
         await context.SaveChangesAsync(cancellationToken);
     }
 }
+
+
 

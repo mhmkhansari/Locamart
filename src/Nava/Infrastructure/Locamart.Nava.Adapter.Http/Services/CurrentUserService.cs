@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.JsonWebTokens;
+﻿using Locamart.Dina.Abstracts;
+using Locamart.Nava.Application.Contracts.Services;
+using Microsoft.AspNetCore.Http;
+using OpenIddict.Abstractions;
 using System.Security.Claims;
 
 namespace Locamart.Nava.Adapter.Http.Services;
 
-public interface ICurrentUser
-{
-    Guid UserId { get; }
-}
-
-public class CurrentUserService : ICurrentUser
+/*public class CurrentUserService : ICurrentUser
 {
     public Guid UserId { get; }
 
@@ -21,8 +18,7 @@ public class CurrentUserService : ICurrentUser
         if (!user.Identity?.IsAuthenticated ?? true)
             throw new UnauthorizedAccessException("User is not authenticated");
 
-        var claim = user.FindFirst(JwtRegisteredClaimNames.Sub)?.Value
-
+        var claim = user.FindFirst(OpenIddictConstants.Claims.Subject)?.Value
                     ?? user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (claim == null || !Guid.TryParse(claim, out var id))
@@ -30,4 +26,4 @@ public class CurrentUserService : ICurrentUser
 
         UserId = id;
     }
-}
+}*/

@@ -1,13 +1,17 @@
 ﻿using Locamart.Adapter.Http.StoreCategory.RequestModels;
+using Locamart.Dina.Abstracts;
 using Locamart.Nava.Application.Contracts.UseCases.StoreCategory;
 using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenIddict.Validation.AspNetCore;
 
 namespace Locamart.Nava.Adapter.Http.StoreCategory;
 
 [ApiController]
 [Route("api/storecategories")]
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class StoreCategoryController(IMediator mediator) : ControllerBase
 {
     [HttpPost]

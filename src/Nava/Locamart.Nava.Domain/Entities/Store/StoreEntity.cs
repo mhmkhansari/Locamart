@@ -5,15 +5,13 @@ using Locamart.Nava.Domain.Entities.Store.Enums;
 using Locamart.Nava.Domain.Entities.Store.ValueObjects;
 using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
 using Locamart.Shared.ValueObjects;
-using System.Dynamic;
 
 namespace Locamart.Nava.Domain.Entities.Store;
 
-public sealed class StoreEntity : Dina.Entity<StoreId>
+public sealed class StoreEntity : AuditableEntity<StoreId>
 {
     public string Name { get; private set; }
     public StoreCategoryId CategoryId { get; private set; }
-    public UserId OwnerId { get; private set; }
     public Image? ProfileImage { get; private set; }
     public Location? Location { get; private set; }
     public string? Bio { get; private set; }
@@ -22,7 +20,7 @@ public sealed class StoreEntity : Dina.Entity<StoreId>
     public StoreStatus Status { get; private set; }
 
 
-    private StoreEntity() : base(default!) { }
+    private StoreEntity() : base() { }
     public static Result<StoreEntity, Error> Create(string name, StoreCategoryId categoryId, UserId ownerId)
     {
         var storeId = StoreId.Create(Guid.NewGuid());
@@ -37,7 +35,6 @@ public sealed class StoreEntity : Dina.Entity<StoreId>
     {
         Name = name;
         CategoryId = categoryId;
-        OwnerId = ownerId;
         Status = StoreStatus.Open;
     }
 

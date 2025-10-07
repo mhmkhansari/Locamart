@@ -5,8 +5,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 
 namespace Locamart.Liam.Adapter.Postgresql;
@@ -15,6 +18,20 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddLiamPostgresServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var signingCert = configuration["CertificateSettings:SigningCert"];
+        var signingKey = configuration["CertificateSettings:SigningKey"];
+        var encryptionCert = configuration["CertificateSettings:EncryptionCert"];
+        var encryptionKey = configuration["CertificateSettings:EncryptionKey"];
+
+        var keyPath = configuration["CertificateSettings:KeyPath"];
+
+        if (signingCert is null || signingKey is null || encryptionCert is null || encryptionKey is null)
+            throw new InvalidOperationException("Certificate path not found");
+
+
+        var signCert = X509Certificate2.CreateFromPemFile(signingCert, signingKey);
+        var encCert = X509Certificate2.CreateFromPemFile(encryptionCert, encryptionKey);
+
         services.AddDbContext<LiamDbContext>(options =>
         {
             var connectionString = configuration.GetConnectionString("Liam");
@@ -39,15 +56,18 @@ public static class ServiceCollectionExtensions
             })
             .AddServer(options =>
             {
+
                 options.SetTokenEndpointUris("connect/token")
                     .SetRevocationEndpointUris("connect/revoke")
-                    .AllowCustomFlow("otp")
+                    .SetRefreshTokenLifetime(TimeSpan.FromHours(12))
                     .AllowRefreshTokenFlow()
-                    .RegisterScopes("api")
-                    .AddDevelopmentEncryptionCertificate()
+                    .AllowCustomFlow("otp")
+                    .RegisterScopes("api", OpenIddictConstants.Scopes.OfflineAccess)
                     .AddDevelopmentSigningCertificate()
-                    .UseAspNetCore()
-                    .DisableTransportSecurityRequirement();
+                    .AddDevelopmentEncryptionCertificate()
+                    /*                    .AddSigningCertificate(signCert)
+                                        .AddEncryptionCertificate(encCert)*/
+                    .UseAspNetCore();
 
                 options.AddEventHandler<OpenIddictServerEvents.HandleTokenRequestContext>(builder =>
                 {
@@ -82,14 +102,7 @@ public static class ServiceCollectionExtensions
                         var userManager = httpContext.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
                         var signInManager = httpContext.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
 
-                        var removeChallengeResult = await cacheService.RemoveAsync($"login_challenge:{userId}");
-                        if (removeChallengeResult.IsFailure)
-                        {
-                            context.Reject(
-                                error: OpenIddictConstants.Errors.ServerError,
-                                description: "Cannot access HTTP context.");
-                            return;
-                        }
+
 
                         var user = await userManager.FindByNameAsync(userId);
 
@@ -123,6 +136,15 @@ public static class ServiceCollectionExtensions
                                     error: OpenIddictConstants.Errors.ServerError,
                                     description: "Unable to process login challenge on server side"
                                 );
+                                return;
+                            }
+
+                            var removeChallengeResult = await cacheService.RemoveAsync($"login_challenge:{userId}");
+                            if (removeChallengeResult.IsFailure)
+                            {
+                                context.Reject(
+                                    error: OpenIddictConstants.Errors.ServerError,
+                                    description: "Cannot access HTTP context.");
                                 return;
                             }
 
@@ -178,18 +200,12 @@ public static class ServiceCollectionExtensions
 
                         principal.SetScopes(context.Request.GetScopes());
                         principal.SetResources("api");
-                        principal.SetClaim(OpenIddictConstants.Claims.Subject, user.UserName);
+                        principal.SetClaim(OpenIddictConstants.Claims.Subject, user.Id);
 
                         foreach (var claim in principal.Claims)
                         {
                             claim.SetDestinations(OpenIddictConstants.Destinations.AccessToken);
                         }
-
-                        /*var signInContext = new OpenIddictServerEvents.ProcessSignInContext(context.Transaction)
-                        {
-                            Principal = principal,
-                            Request = context.Request
-                        };*/
 
                         context.Principal = principal;
 

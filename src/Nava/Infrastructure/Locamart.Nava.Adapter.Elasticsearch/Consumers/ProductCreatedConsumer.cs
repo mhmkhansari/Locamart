@@ -1,12 +1,13 @@
 ﻿using Locamart.Nava.Application.Contracts.IntegrationEvents;
+using Locamart.Nava.Application.Contracts.Services;
 using MassTransit;
 using Serilog;
 
 namespace Locamart.Nava.Adapter.Elasticsearch.Consumers;
 
-public class ProductCreatedConsumer(ILogger logger) : IConsumer<ProductCreatedIntegrationEvent>
+public class ProductCreatedConsumer(ILogger logger, ISearchService searchService) : IConsumer<ProductCreatedIntegrationEvent>
 {
-    public Task Consume(ConsumeContext<ProductCreatedIntegrationEvent> context)
+    public async Task Consume(ConsumeContext<ProductCreatedIntegrationEvent> context)
     {
         var message = context.Message;
 
@@ -16,8 +17,6 @@ public class ProductCreatedConsumer(ILogger logger) : IConsumer<ProductCreatedIn
             message.StoreName,
             message.StoreId);
 
-        // TODO: Process the event (e.g., update read models, trigger workflows)
-
-        return Task.CompletedTask;
+        await searchService.IndexProduct(message);
     }
 }

@@ -43,6 +43,15 @@ public class StoreConfiguration : IEntityTypeConfiguration<StoreEntity>
                 .HasColumnType("varchar(100)");
         });
 
+        builder.Property(p => p.CreatedBy)
+            .HasConversion(new UserConverter())
+            .HasColumnType("uuid")
+            .IsRequired();
+
+        builder.Property(p => p.UpdatedBy)
+            .HasConversion(new NullableUserConverter())
+            .HasColumnType("uuid");
+
         builder.HasOne<StoreCategoryEntity>()
             .WithOne()
             .HasForeignKey<StoreEntity>(p => p.CategoryId)

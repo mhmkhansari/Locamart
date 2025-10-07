@@ -65,7 +65,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Nava.Adapter.Elast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Host", "src\Locamart.Host\Locamart.Host.csproj", "{E089F395-D276-059C-0F8C-0F36E7CC9EC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Nava.Adapter.Rabbitmq", "Locamart.Nava.Adapter.Rabbitmq\Locamart.Nava.Adapter.Rabbitmq.csproj", "{3BBDBCDA-69A7-4FB4-B170-C46B23D99175}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "certificates", "certificates", "{FFA198C6-007C-4639-B578-7E146E8F30FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{BC3AFD48-8BEC-42F3-97A2-F6BD12772599}"
+	ProjectSection(SolutionItems) = preProject
+		certificates\dev\encryption-cert.pem = certificates\dev\encryption-cert.pem
+		certificates\dev\encryption-key.pem = certificates\dev\encryption-key.pem
+		certificates\dev\signing-cert.pem = certificates\dev\signing-cert.pem
+		certificates\dev\signing-key.pem = certificates\dev\signing-key.pem
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,10 +141,6 @@ Global
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3BBDBCDA-69A7-4FB4-B170-C46B23D99175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BBDBCDA-69A7-4FB4-B170-C46B23D99175}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BBDBCDA-69A7-4FB4-B170-C46B23D99175}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BBDBCDA-69A7-4FB4-B170-C46B23D99175}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,7 +172,7 @@ Global
 		{B762EF4B-8B51-B678-D38D-E90E016B4886} = {7B2B9C58-EA96-4D67-9859-BD6FA3028BDF}
 		{3E1E1BC3-2A3B-DA7E-295E-039BFC248FDF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
-		{3BBDBCDA-69A7-4FB4-B170-C46B23D99175} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{BC3AFD48-8BEC-42F3-97A2-F6BD12772599} = {FFA198C6-007C-4639-B578-7E146E8F30FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6398E810-9F43-49BE-A63A-91406D237096}

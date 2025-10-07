@@ -1,5 +1,4 @@
-﻿using Locamart.Adapter.Postgresql;
-using Locamart.Dina.ValueObjects;
+﻿using Locamart.Dina.ValueObjects;
 using Locamart.Nava.Domain.Entities.Store;
 using Locamart.Nava.Domain.Entities.Store.Abstracts;
 using Locamart.Nava.Domain.Entities.Store.ValueObjects;
@@ -22,12 +21,13 @@ public class StoreRepository(LocamartNavaDbContext dbContext) : IStoreRepository
 
     public async Task<StoreEntity?> GetById(StoreId id)
     {
-        return await dbContext.Set<StoreEntity>().Where(x => x.Id == id).SingleOrDefaultAsync();
+        var res = await dbContext.Stores.Where(x => x.Id == id).SingleOrDefaultAsync();
+        return res;
     }
 
     public async Task<StoreEntity?> GetByUserId(UserId id)
     {
-        return await dbContext.Set<StoreEntity>().Where(x => x.OwnerId == id).SingleOrDefaultAsync();
+        return await dbContext.Set<StoreEntity>().Where(x => x.CreatedBy == id).SingleOrDefaultAsync();
     }
 }
 

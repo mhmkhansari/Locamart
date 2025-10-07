@@ -1,9 +1,10 @@
-﻿using Locamart.Nava.Domain.Entities.StoreCategory;
+﻿using Locamart.Nava.Adapter.Postgresql.Converters;
+using Locamart.Nava.Domain.Entities.StoreCategory;
 using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Locamart.Adapter.Postgresql.Configurations;
+namespace Locamart.Nava.Adapter.Postgresql.Configurations;
 
 public class StoreCategoryConfiguration : IEntityTypeConfiguration<StoreCategoryEntity>
 {
@@ -24,9 +25,17 @@ public class StoreCategoryConfiguration : IEntityTypeConfiguration<StoreCategory
                 value => StoreCategoryId.Create(value).Value)
             .HasColumnType("uuid");
 
+        builder.Property(p => p.CreatedBy)
+            .HasConversion(new UserConverter())
+            .HasColumnType("uuid")
+            .IsRequired();
+
+        builder.Property(p => p.UpdatedBy)
+            .HasConversion(new NullableUserConverter())
+            .HasColumnType("uuid");
+
         builder.Property(p => p.Name).IsRequired().HasColumnName("Name").HasMaxLength(200);
 
-        builder.Property(p => p.ParentId).HasColumnType("uuid");
     }
 }
 

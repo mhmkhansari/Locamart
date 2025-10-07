@@ -4,5 +4,6 @@ namespace Locamart.Nava.Application.Contracts.Services;
 
 public interface IIntegrationEventPublisher
 {
-    Task PublishAsync(IIntegrationEvent integrationEvent);
+    public Task PublishAsync<T>(T evt, CancellationToken ct = default)
+        where T : class, IIntegrationEvent;
 }

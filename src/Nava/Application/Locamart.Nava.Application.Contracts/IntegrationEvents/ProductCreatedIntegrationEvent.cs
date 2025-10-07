@@ -7,8 +7,6 @@ public record ProductCreatedIntegrationEvent : IIntegrationEvent
     public Guid Id { get; init; }
     public DateTime OccurredAt { get; init; }
     public Guid ProductId { get; init; }
-    public double Latitude { get; init; }
-    public double Longitude { get; init; }
     public string ProductName { get; init; }
     public Guid StoreId { get; init; }
     public string StoreUniqueIdentity { get; init; }
