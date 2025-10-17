@@ -2,6 +2,7 @@
 using Locamart.Dina.Infrastructure;
 using Locamart.Nava.Adapter.Postgresql.Repositories;
 using Locamart.Nava.Application.Contracts.Services;
+using Locamart.Nava.Domain.Entities.Comment.Abstracts;
 using Locamart.Nava.Domain.Entities.Product.Abstracts;
 using Locamart.Nava.Domain.Entities.Store.Abstracts;
 using Locamart.Nava.Domain.Entities.StoreCategory.Abstracts;
@@ -28,6 +29,9 @@ public static class AdapterPostgresqlServiceExtensions
         services.AddScoped<IStoreRepository, StoreRepository>();
 
         services.AddScoped<IStoreCategoryRepository, StoreCategoryRepository>();
+
+        services.AddScoped<ICommentRepository, CommentRepository>();
+
 
         services.AddScoped<IUnitOfWork, EfCoreUnitOfWork>();
 

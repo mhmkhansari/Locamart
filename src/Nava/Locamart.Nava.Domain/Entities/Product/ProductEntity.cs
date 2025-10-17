@@ -54,6 +54,11 @@ public sealed class ProductEntity : AuditableEntity<ProductId>
 
     }
 
+    public void Delete()
+    {
+        IsDeleted = true;
+    }
+
     public UnitResult<Error> SetTitle(string title)
     {
         if (string.IsNullOrWhiteSpace(title))

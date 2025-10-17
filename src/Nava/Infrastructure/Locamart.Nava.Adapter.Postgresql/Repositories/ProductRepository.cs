@@ -25,4 +25,9 @@ public class ProductRepository(LocamartNavaDbContext context) : IProductReposito
     {
         context.Products.Remove(entity);
     }
+
+    public void Update(ProductEntity product)
+    {
+        context.Products.Update(product);
+    }
 }

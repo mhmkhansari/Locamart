@@ -68,6 +68,17 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
                     }
                     )
                 )
+                .Suggest(s => s
+                    .Suggesters(d => d
+                        .Add("did_you_mean", x => x
+                            .Term(h => h
+                                .Field("productName")
+                                .Text(query)
+                                .Size(1)
+                            )
+                        )
+                    )
+                )
             );
 
             if (!response.IsValidResponse)

@@ -1,30 +1,36 @@
 ﻿using Locamart.Nava.Adapter.Postgresql.Converters;
-using Locamart.Nava.Domain.Entities.StoreCategory;
-using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
+using Locamart.Nava.Domain.Entities.Comment;
+using Locamart.Nava.Domain.Entities.Comment.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Locamart.Nava.Adapter.Postgresql.Configurations;
 
-public class StoreCategoryConfiguration : IEntityTypeConfiguration<StoreCategoryEntity>
+public class CommentAttachmentConfiguration : IEntityTypeConfiguration<CommentAttachmentEntity>
 {
-    public void Configure(EntityTypeBuilder<StoreCategoryEntity> builder)
+    public void Configure(EntityTypeBuilder<CommentAttachmentEntity> builder)
     {
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Id)
             .HasConversion(
                 id => id.Value,
-                value => StoreCategoryId.Create(value).Value)
+                value => CommentAttachmentId.Create(value).Value)
             .HasColumnType("uuid")
             .IsRequired();
 
-        builder.Property(p => p.ParentId)
+        builder.Property(x => x.CommentId)
             .HasConversion(
-                id => id == null ? (Guid?)null : id.Value,
-                value => value.HasValue ? StoreCategoryId.Create(value.Value).Value : null)
-            .HasColumnType("uuid")
-            .IsRequired(false);
+                id => id.Value,
+                value => CommentId.Create(value).Value)
+            .IsRequired();
+
+        builder.Property(x => x.Url)
+            .HasConversion(
+                uri => uri.ToString(),
+                value => new Uri(value))
+            .IsRequired()
+            .HasMaxLength(2000);
 
         builder.Property(p => p.CreatedBy)
             .HasConversion(new UserConverter())
@@ -38,8 +44,6 @@ public class StoreCategoryConfiguration : IEntityTypeConfiguration<StoreCategory
         builder.Property(p => p.DeletedBy)
             .HasConversion(new NullableUserConverter())
             .HasColumnType("uuid");
-
-        builder.Property(p => p.Name).IsRequired().HasColumnName("Name").HasMaxLength(200);
 
     }
 }

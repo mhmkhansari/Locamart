@@ -20,7 +20,7 @@ public class AddStoreCategoryCommandHandler(IStoreCategoryRepository storeCatego
             var entity = StoreCategoryEntity.Create(request.Name, parentId);
 
             if (entity.IsFailure)
-                return UnitResult.Failure<Error>(entity.Error);
+                return entity.Error;
 
             storeCategoryRepository.Add(entity.Value);
 
@@ -31,7 +31,7 @@ public class AddStoreCategoryCommandHandler(IStoreCategoryRepository storeCatego
 
         catch (Exception ex)
         {
-            return UnitResult.Failure<Error>(Error.Create("add_store_category_failed", ex.Message));
+            return Error.Create("add_store_category_failed", ex.Message);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Locamart.Nava.Domain.Entities.Product;
 using Locamart.Nava.Domain.Entities.Product.ValueObjects;
 using Locamart.Nava.Domain.Entities.Store;
+using Locamart.Nava.Domain.Entities.Store.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -20,9 +21,14 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
             .HasColumnType("uuid")
             .IsRequired();
 
-        builder.Property(p => p.Title).IsRequired().HasColumnName("Title").HasMaxLength(200);
+        builder.Property(p => p.Title)
+            .IsRequired()
+            .HasColumnName("Title")
+            .HasMaxLength(200);
 
-        builder.Property(p => p.Description).HasColumnName("Description").HasMaxLength(2000);
+        builder.Property(p => p.Description)
+            .HasColumnName("Description")
+            .HasMaxLength(2000);
 
         builder
             .Property(p => p.Images)
@@ -33,7 +39,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
 
         builder.HasOne<StoreEntity>()
             .WithMany()
-            .HasForeignKey(x => x.StoreId);
+            .HasForeignKey(x => x.StoreId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.OwnsOne(p => p.Price, price =>
         {
@@ -48,12 +55,23 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
                 .IsRequired();
         });
 
+        builder.Property(p => p.StoreId)
+            .HasConversion(
+                id => id.Value,
+                value => StoreId.Create(value).Value)
+            .HasColumnType("uuid")
+            .IsRequired();
+
         builder.Property(p => p.CreatedBy)
             .HasConversion(new UserConverter())
             .HasColumnType("uuid")
             .IsRequired();
 
         builder.Property(p => p.UpdatedBy)
+            .HasConversion(new NullableUserConverter())
+            .HasColumnType("uuid");
+
+        builder.Property(p => p.DeletedBy)
             .HasConversion(new NullableUserConverter())
             .HasColumnType("uuid");
 

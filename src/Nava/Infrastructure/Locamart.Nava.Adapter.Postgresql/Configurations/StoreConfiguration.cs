@@ -20,6 +20,11 @@ public class StoreConfiguration : IEntityTypeConfiguration<StoreEntity>
             .HasColumnType("uuid")
             .IsRequired();
 
+        builder.HasOne<StoreCategoryEntity>()
+            .WithMany()
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         builder.Property(p => p.ProfileImage)
             .HasConversion(new ImageConverter())
             .HasColumnName("ProfileImage")
@@ -43,6 +48,12 @@ public class StoreConfiguration : IEntityTypeConfiguration<StoreEntity>
                 .HasColumnType("varchar(100)");
         });
 
+        builder.Property(p => p.Website)
+            .HasConversion(
+                uri => uri != null ? uri.ToString() : null,
+                str => !string.IsNullOrWhiteSpace(str) ? new Uri(str) : null)
+            .HasColumnType("varchar(255)");
+
         builder.Property(p => p.CreatedBy)
             .HasConversion(new UserConverter())
             .HasColumnType("uuid")
@@ -52,11 +63,9 @@ public class StoreConfiguration : IEntityTypeConfiguration<StoreEntity>
             .HasConversion(new NullableUserConverter())
             .HasColumnType("uuid");
 
-        builder.HasOne<StoreCategoryEntity>()
-            .WithOne()
-            .HasForeignKey<StoreEntity>(p => p.CategoryId)
-            .OnDelete(DeleteBehavior.SetNull);
-
+        builder.Property(p => p.DeletedBy)
+            .HasConversion(new NullableUserConverter())
+            .HasColumnType("uuid");
     }
 }
 

@@ -1,4 +1,6 @@
 ﻿using Locamart.Adapter.Http.Product.RequestModels;
+using Locamart.Nava.Adapter.Http.Product.RequestModels;
+using Locamart.Nava.Application.Contracts.UseCases.Product.AddComment;
 using Locamart.Nava.Application.Contracts.UseCases.Product.AddProduct;
 using Locamart.Nava.Application.Contracts.UseCases.Product.GetProductsWithinDistance;
 using Mapster;
@@ -30,6 +32,16 @@ public class ProductsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Create(CreateProductHttpRequest request, CancellationToken cancellationToken)
     {
         var command = request.Adapt<AddProductCommand>();
+
+        var result = await mediator.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Ok() : BadRequest(result.Error);
+    }
+
+    [HttpPost("{productId:guid}/comments")]
+    public async Task<IActionResult> AddComment(AddCommentHttpRequest request, CancellationToken cancellationToken)
+    {
+        var command = request.Adapt<AddCommentCommand>();
 
         var result = await mediator.Send(command, cancellationToken);
 

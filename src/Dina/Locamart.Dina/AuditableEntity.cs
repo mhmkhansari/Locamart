@@ -12,6 +12,10 @@ public abstract class AuditableEntity<TId> : Entity<TId>, IAuditable
     public UserId CreatedBy { get; protected set; }
     public DateTime? LastUpdatedAt { get; protected set; }
     public UserId? UpdatedBy { get; protected set; }
+    public bool IsDeleted { get; protected set; }
+    public DateTime? DeletedAt { get; protected set; }
+    public UserId? DeletedBy { get; protected set; }
+
 
     public void SetCreated(DateTime now, UserId user)
     {

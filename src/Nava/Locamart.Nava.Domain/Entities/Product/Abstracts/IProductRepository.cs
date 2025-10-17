@@ -8,4 +8,5 @@ public interface IProductRepository
     Task<ProductEntity?> GetByIdAsync(ProductId id, CancellationToken cancellationToken);
     Task<List<ProductEntity>> GetAllAsync(CancellationToken cancellationToken);
     void Remove(ProductEntity product, CancellationToken cancellationToken);
+    void Update(ProductEntity product);
 }

@@ -1,5 +1,4 @@
-﻿using Locamart.Nava.Application.Contracts.IntegrationEvents;
-using MassTransit;
+﻿using MassTransit;
 
 namespace Locamart.Nava.Adapter.Elasticsearch.Consumers;
 
