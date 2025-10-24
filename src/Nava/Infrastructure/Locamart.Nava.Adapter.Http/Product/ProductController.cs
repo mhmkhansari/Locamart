@@ -2,6 +2,7 @@
 using Locamart.Nava.Adapter.Http.Product.RequestModels;
 using Locamart.Nava.Application.Contracts.UseCases.Product.AddComment;
 using Locamart.Nava.Application.Contracts.UseCases.Product.AddProduct;
+using Locamart.Nava.Application.Contracts.UseCases.Product.GetComments;
 using Locamart.Nava.Application.Contracts.UseCases.Product.GetProductsWithinDistance;
 using Mapster;
 using MediatR;
@@ -13,7 +14,7 @@ namespace Locamart.Nava.Adapter.Http.Product;
 
 
 [ApiController]
-[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+//[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [Route("api/products")]
 public class ProductsController(IMediator mediator) : ControllerBase
 {
@@ -46,5 +47,15 @@ public class ProductsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(command, cancellationToken);
 
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
+    }
+
+    [HttpGet("{productId:guid}/comments")]
+    public async Task<IActionResult> GetComments(Guid productId, [FromQuery] Guid? cursor, [FromQuery] int? pageSize, CancellationToken cancellationToken)
+    {
+        var query = new GetCommentsQuery { ProductId = productId, Cursor = cursor, PageSize = pageSize };
+
+        var result = await mediator.Send(query, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 }

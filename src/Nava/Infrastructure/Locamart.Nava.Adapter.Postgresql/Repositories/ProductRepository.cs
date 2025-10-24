@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Locamart.Nava.Adapter.Postgresql.Repositories;
 
-public class ProductRepository(LocamartNavaDbContext context) : IProductRepository
+internal sealed class ProductRepository(LocamartNavaDbContext context) : IProductRepository
 {
     public async Task AddAsync(ProductEntity product, CancellationToken cancellationToken)
     {

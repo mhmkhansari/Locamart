@@ -99,7 +99,7 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
 
                 return new ProductDto
                 {
-                    ProductId = productId,
+                    Id = productId,
                     StoreId = storeId,
                     StoreName = hit.Source.storeName,
                     ProductName = hit.Source.productName,

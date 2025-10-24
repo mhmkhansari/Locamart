@@ -8,7 +8,7 @@ using Locamart.Nava.Domain.Entities.Store;
 using Locamart.Nava.Domain.Entities.StoreCategory;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
+
 
 
 namespace Locamart.Nava.Adapter.Postgresql;

@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
+using Locamart.Dina.Extensions;
+using Locamart.Dina.Utils;
 using Locamart.Dina.ValueObjects;
 using Locamart.Nava.Domain.Entities.Product.Enums;
 using Locamart.Nava.Domain.Entities.Product.RequestModels;
@@ -17,8 +19,7 @@ public sealed class ProductEntity : AuditableEntity<ProductId>
     public StoreId StoreId { get; private set; }
     public ProductStatus Status { get; private set; }
 
-    private ProductEntity(ProductId id) : base(id) { }
-
+    private ProductEntity() : base(ProductId.Empty()) { }
     private ProductEntity(ProductId id, StoreId storeId, string title, string description, Price price, List<Image> images) : base(id)
     {
         StoreId = storeId;
@@ -35,10 +36,7 @@ public sealed class ProductEntity : AuditableEntity<ProductId>
 
     public static Result<ProductEntity, Error> Create(AddProductRequest request)
     {
-        var productId = ProductId.Create(Guid.NewGuid());
-
-        if (productId.IsFailure)
-            return productId.Error;
+        var productId = ProductId.Create(DinaGuid.NewSequentialGuid());
 
         var storeId = StoreId.Create(request.StoreId);
 

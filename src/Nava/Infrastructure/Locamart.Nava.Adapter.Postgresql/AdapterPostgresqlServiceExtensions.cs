@@ -1,5 +1,6 @@
 ﻿using Locamart.Dina.Abstracts;
 using Locamart.Dina.Infrastructure;
+using Locamart.Nava.Adapter.Postgresql.QueryServices;
 using Locamart.Nava.Adapter.Postgresql.Repositories;
 using Locamart.Nava.Application.Contracts.Services;
 using Locamart.Nava.Domain.Entities.Comment.Abstracts;
@@ -24,6 +25,12 @@ public static class AdapterPostgresqlServiceExtensions
             options.UseNpgsql(connectionString);
         });
 
+        services.AddDbContext<LocamartNavaQueryDbContext>(options =>
+        {
+            var connectionString = configuration.GetConnectionString("Postgres");
+            options.UseNpgsql(connectionString);
+        });
+
         services.AddScoped<IProductRepository, ProductRepository>();
 
         services.AddScoped<IStoreRepository, StoreRepository>();
@@ -34,6 +41,8 @@ public static class AdapterPostgresqlServiceExtensions
 
 
         services.AddScoped<IUnitOfWork, EfCoreUnitOfWork>();
+
+        services.AddScoped<ICommentQueryService, CommentQueryService>();
 
         services.AddScoped<IIntegrationEventPublisher, MassTransitIntegrationEventPublisher>();
 

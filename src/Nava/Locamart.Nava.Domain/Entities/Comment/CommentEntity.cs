@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
+using Locamart.Dina.Utils;
 using Locamart.Nava.Domain.Entities.Comment.Enums;
 using Locamart.Nava.Domain.Entities.Comment.ValueObjects;
 using Locamart.Nava.Domain.Entities.Product.ValueObjects;
@@ -21,7 +22,7 @@ public class CommentEntity : AuditableEntity<CommentId>
 
     public static Result<CommentEntity, Error> Create(ProductId productId, CommentId? parentId, string bodyMarkdown)
     {
-        var commentId = CommentId.Create(Guid.NewGuid());
+        var commentId = CommentId.Create(DinaGuid.NewSequentialGuid());
 
         if (commentId.IsFailure)
             return commentId.Error;

@@ -5,7 +5,7 @@ public class AddCommentHttpRequest
     public Guid ProductId { get; set; }
     public Guid? ParentId { get; set; }
     public string BodyMarkdown { get; set; }
-    public IEnumerable<AddCommentAttachmenHttpRequest> Attachments { get; set; }
+    public IEnumerable<AddCommentAttachmenHttpRequest>? Attachments { get; set; }
 
 }
 

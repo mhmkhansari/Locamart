@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Locamart.Nava.Adapter.Postgresql.Repositories;
 
-public class StoreCategoryRepository(LocamartNavaDbContext dbContext) : IStoreCategoryRepository
+internal sealed class StoreCategoryRepository(LocamartNavaDbContext dbContext) : IStoreCategoryRepository
 {
     public void Add(StoreCategoryEntity entity)
     {

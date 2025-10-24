@@ -33,25 +33,27 @@ public class AddCommentCommandHandler(IProductRepository productRepository, ICom
         if (comment.IsFailure)
             return comment.Error;
 
+        if (request.Attachments is not null)
+        {
+            var attachmentResults = request.Attachments?
+                                        .Select(dto => CommentAttachmentEntity.Create(new AddCommentAttachmentRequest
+                                        {
+                                            CommentId = comment.Value.Id.Value,
+                                            Url = dto.Url,
+                                            Width = dto.Width,
+                                            Height = dto.Height
+                                        }))
+                                    ?? [];
 
-        var attachmentResults = request.Attachments?
-                                    .Select(dto => CommentAttachmentEntity.Create(new AddCommentAttachmentRequest
-                                    {
-                                        CommentId = comment.Value.Id.Value,
-                                        Url = dto.Url,
-                                        Width = dto.Width,
-                                        Height = dto.Height
-                                    }))
-                                ?? [];
+            var firstFailure = attachmentResults.FirstOrDefault(r => r.IsFailure);
 
-        var firstFailure = attachmentResults.FirstOrDefault(r => r.IsFailure);
+            if (firstFailure.Value is not null)
+                return firstFailure.Error;
 
-        if (firstFailure.Value is not null)
-            return firstFailure.Error;
+            IEnumerable<CommentAttachmentEntity> attachments = attachmentResults.Select(r => r.Value);
 
-        IEnumerable<CommentAttachmentEntity> attachments = attachmentResults.Select(r => r.Value);
-
-        comment.Value.AddAttachments(attachments);
+            comment.Value.AddAttachments(attachments);
+        }
 
         await commentRepository.AddAsync(comment.Value, cancellationToken);
 

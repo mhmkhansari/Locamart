@@ -37,4 +37,5 @@ public sealed class ProductId : ValueObject, IComparable<ProductId>
     {
         yield return Value;
     }
+    public static ProductId Empty() => new(Guid.Empty);
 }

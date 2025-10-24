@@ -9,7 +9,7 @@ public class AddCommentCommand : ICommand<UnitResult<Error>>
     public Guid ProductId { get; set; }
     public Guid? ParentId { get; set; }
     public string BodyMarkdown { get; set; }
-    public IEnumerable<AddCommentAttachmentDto> Attachments { get; set; }
+    public IEnumerable<AddCommentAttachmentDto>? Attachments { get; set; }
 
 }
 
