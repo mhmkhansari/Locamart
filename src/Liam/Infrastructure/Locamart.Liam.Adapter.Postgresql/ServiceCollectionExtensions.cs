@@ -1,4 +1,5 @@
-﻿using Locamart.Liam.Application.Contracts.Dtos.User;
+﻿using Locamart.Liam.Adapter.Postgresql.Stores;
+using Locamart.Liam.Application.Contracts.Dtos.User;
 using Locamart.Liam.Application.Contracts.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Identity;
@@ -220,6 +221,7 @@ public static class ServiceCollectionExtensions
 
         services.AddHostedService<ClientSeeder>();
 
+        services.AddScoped<IUserStore, UserStore>();
 
         return services;
     }

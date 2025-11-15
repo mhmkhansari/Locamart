@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
-using Locamart.Dina.Extensions;
 using Locamart.Dina.Utils;
 using Locamart.Dina.ValueObjects;
 using Locamart.Nava.Domain.Entities.Product.Enums;

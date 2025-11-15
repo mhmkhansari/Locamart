@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
 using Locamart.Dina.Abstracts;
-using Locamart.Dina.Infrastructure;
 using Locamart.Nava.Application.Contracts.UseCases.Product.AddComment;
 using Locamart.Nava.Domain.Entities.Comment;
 using Locamart.Nava.Domain.Entities.Comment.Abstracts;

@@ -1,5 +1,4 @@
 ﻿using Locamart.Dina.Abstracts;
-using Locamart.Dina.Infrastructure;
 using Locamart.Nava.Adapter.Postgresql.QueryServices;
 using Locamart.Nava.Adapter.Postgresql.Repositories;
 using Locamart.Nava.Application.Contracts.Services;
@@ -7,7 +6,6 @@ using Locamart.Nava.Domain.Entities.Comment.Abstracts;
 using Locamart.Nava.Domain.Entities.Product.Abstracts;
 using Locamart.Nava.Domain.Entities.Store.Abstracts;
 using Locamart.Nava.Domain.Entities.StoreCategory.Abstracts;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,22 +37,10 @@ public static class AdapterPostgresqlServiceExtensions
 
         services.AddScoped<ICommentRepository, CommentRepository>();
 
-
         services.AddScoped<IUnitOfWork, EfCoreUnitOfWork>();
 
         services.AddScoped<ICommentQueryService, CommentQueryService>();
 
-        services.AddScoped<IIntegrationEventPublisher, MassTransitIntegrationEventPublisher>();
-
         return services;
     }
-
-    public sealed class MassTransitIntegrationEventPublisher(IPublishEndpoint bus)
-        : IIntegrationEventPublisher
-    {
-        public Task PublishAsync<T>(T evt, CancellationToken ct = default)
-            where T : class, IIntegrationEvent
-            => bus.Publish(evt, ct);
-    }
-
 }

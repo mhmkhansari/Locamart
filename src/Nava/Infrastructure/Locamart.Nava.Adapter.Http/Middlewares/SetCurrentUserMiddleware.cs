@@ -5,15 +5,8 @@ using System.Security.Claims;
 
 namespace Locamart.Nava.Adapter.Http.Middlewares;
 
-public class SetCurrentUserMiddleware
+public class SetCurrentUserMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public SetCurrentUserMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
     public async Task InvokeAsync(HttpContext httpContext, CurrentUserContext context)
     {
         var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier);
@@ -22,6 +15,6 @@ public class SetCurrentUserMiddleware
             context.UserId = UserId.Create(userId).Value;
         }
 
-        await _next(httpContext);
+        await next(httpContext);
     }
 }

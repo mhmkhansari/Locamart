@@ -1,14 +1,13 @@
-using Locamart.Dina.Abstracts;
 using Locamart.Liam.Adapter.Http;
+using Locamart.Liam.Adapter.Masstransit;
 using Locamart.Liam.Adapter.Postgresql;
 using Locamart.Liam.Adapter.Redis;
 using Locamart.Nava.Adapter.Elasticsearch;
-using Locamart.Nava.Adapter.Elasticsearch.Consumers;
 using Locamart.Nava.Adapter.Http;
 using Locamart.Nava.Adapter.Http.Middlewares;
+using Locamart.Nava.Adapter.Masstransit;
 using Locamart.Nava.Adapter.ObjectStorage;
 using Locamart.Nava.Adapter.Postgresql;
-using Locamart.Nava.Application;
 using MassTransit;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -58,7 +57,22 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-builder.Services.AddSingleton<Serilog.ILogger>(Log.Logger);
+builder.Services.AddSingleton(Log.Logger);
+
+
+builder.Services.AddMassTransit(cfg =>
+{
+    cfg.AddLiamMasstransit();
+    cfg.AddNavaMasstransit();
+
+    cfg.UsingInMemory((context, bus) =>
+    {
+        bus.ConfigureEndpoints(context);
+        bus.ConcurrentMessageLimit = Environment.ProcessorCount;
+    });
+});
+
+//Nava services
 
 builder.Services.AddAdaptersHttpServices(configuration);
 
@@ -66,43 +80,18 @@ builder.Services.AddPostgresqleServices(configuration);
 
 builder.Services.AddObjectStorageServices(configuration);
 
-
-builder.Services.AddMassTransit(x =>
-{
-    x.AddEntityFrameworkOutbox<LocamartNavaDbContext>(o =>
-    {
-
-        o.UsePostgres();
-
-        o.UseBusOutbox();
-    });
-
-    x.UsingInMemory((context, cfg) =>
-    {
-        cfg.ConfigureEndpoints(context); // creates the receive endpoint(s)
-        cfg.ConcurrentMessageLimit = Environment.ProcessorCount;
-    });
-
-    x.AddElasticsearchMessaging();
-});
-
 builder.Services.AddAdapterElasticsearchServices(configuration);
 
-//builder.Services.AddRabbitmqServices(configuration);
+builder.Services.AddAdapterMasstransitServices(configuration);
+
+//Liam services
 
 builder.Services.AddLiamPostgresServices(configuration);
-
-
 
 builder.Services.AddLiamRedisServices(configuration);
 
 builder.Services.AddLiamAdaptersHttpServices();
 
-builder.Services.Scan(scan => scan.FromAssemblies(typeof(IApplicationMarker).Assembly)
-    .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)), publicOnly: false)
-    .AsImplementedInterfaces()
-    .WithScopedLifetime()
-);
 
 var app = builder.Build();
 

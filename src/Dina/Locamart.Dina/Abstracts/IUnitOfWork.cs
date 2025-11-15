@@ -1,4 +1,4 @@
-﻿namespace Locamart.Dina.Infrastructure;
+﻿namespace Locamart.Dina.Abstracts;
 
 public interface IUnitOfWork
 {

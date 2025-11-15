@@ -2,8 +2,9 @@
 using Locamart.Dina;
 using Locamart.Dina.Abstracts;
 using Locamart.Dina.Extensions;
-using Locamart.Dina.Infrastructure;
 using Locamart.Dina.ValueObjects;
+using Locamart.Nava.Application.Contracts.IntegrationEvents;
+using Locamart.Nava.Application.Contracts.Services;
 using Locamart.Nava.Application.Contracts.UseCases.Store;
 using Locamart.Nava.Domain.Entities.Store.Abstracts;
 using Locamart.Nava.Domain.Entities.Store.Builders;
@@ -12,7 +13,10 @@ using Locamart.Shared.ValueObjects;
 
 namespace Locamart.Nava.Application.UseCases.Store.AddStore;
 
-public class AddStoreCommandHandler(IStoreRepository storeRepository, IUnitOfWork unitOfWork) : ICommandHandler<AddStoreCommand, UnitResult<Error>>
+public class AddStoreCommandHandler(IStoreRepository storeRepository,
+    IUnitOfWork unitOfWork,
+    IIntegrationEventPublisher eventPublisher,
+    ICurrentUser currentUser) : ICommandHandler<AddStoreCommand, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(AddStoreCommand request, CancellationToken cancellationToken)
     {
@@ -38,6 +42,16 @@ public class AddStoreCommandHandler(IStoreRepository storeRepository, IUnitOfWor
                 return entity.Error;
 
             storeRepository.Add(entity.Value);
+
+            var storeCreatedIntegrationEvent = new StoreCreatedIntegrationEvent
+            {
+                Id = Guid.NewGuid(),
+                StoreId = entity.Value.Id,
+                OccurredAt = DateTime.UtcNow,
+                OwnerId = currentUser.UserId.Value
+            };
+
+            await eventPublisher.PublishAsync(storeCreatedIntegrationEvent, cancellationToken);
 
             await unitOfWork.CommitAsync(cancellationToken);
 

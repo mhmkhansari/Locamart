@@ -42,7 +42,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{50EBD809-3BCF-4065-AE6D-9ED2E3FF6D8D}"
 	ProjectSection(SolutionItems) = preProject
 		src\Nava\scripts\migrations\add-migration.ps1 = src\Nava\scripts\migrations\add-migration.ps1
+		src\Nava\scripts\migrations\add-outbox-migration.ps1 = src\Nava\scripts\migrations\add-outbox-migration.ps1
 		src\Nava\scripts\migrations\update-database.ps1 = src\Nava\scripts\migrations\update-database.ps1
+		src\Nava\scripts\migrations\update-outbox-database.ps1 = src\Nava\scripts\migrations\update-outbox-database.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{7ABC89DC-4E95-425F-87FE-6092144FC7D5}"
@@ -50,6 +52,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{9D6074F2-8C55-48AE-B034-0E16D530F248}"
 	ProjectSection(SolutionItems) = preProject
 		src\Liam\scripts\migrations\add-migration.ps1 = src\Liam\scripts\migrations\add-migration.ps1
+		src\Liam\scripts\migrations\add-outbox-migration.ps1 = src\Liam\scripts\migrations\add-outbox-migration.ps1
 		src\Liam\scripts\migrations\update-database.ps1 = src\Liam\scripts\migrations\update-database.ps1
 	EndProjectSection
 EndProject
@@ -74,6 +77,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{BC3AFD48-8BE
 		certificates\dev\signing-cert.pem = certificates\dev\signing-cert.pem
 		certificates\dev\signing-key.pem = certificates\dev\signing-key.pem
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Liam.Adapter.Masstransit", "src\Liam\Infrastructure\Locamart.Liam.Adapter.Masstransit\Locamart.Liam.Adapter.Masstransit.csproj", "{BD95FFF5-170B-218C-73EB-186241830828}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Nava.Adapter.Masstransit", "src\Nava\Infrastructure\Locamart.Nava.Adapter.Masstransit\Locamart.Nava.Adapter.Masstransit.csproj", "{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +148,14 @@ Global
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD95FFF5-170B-218C-73EB-186241830828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD95FFF5-170B-218C-73EB-186241830828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD95FFF5-170B-218C-73EB-186241830828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD95FFF5-170B-218C-73EB-186241830828}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,6 +188,8 @@ Global
 		{3E1E1BC3-2A3B-DA7E-295E-039BFC248FDF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
 		{BC3AFD48-8BEC-42F3-97A2-F6BD12772599} = {FFA198C6-007C-4639-B578-7E146E8F30FE}
+		{BD95FFF5-170B-218C-73EB-186241830828} = {AC777EE1-707E-4FFE-B5B8-F5B2BE47719B}
+		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6398E810-9F43-49BE-A63A-91406D237096}

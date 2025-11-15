@@ -6,7 +6,6 @@ using Locamart.Nava.Domain.Entities.Comment;
 using Locamart.Nava.Domain.Entities.Product;
 using Locamart.Nava.Domain.Entities.Store;
 using Locamart.Nava.Domain.Entities.StoreCategory;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -48,7 +47,6 @@ public class LocamartNavaDbContext : DbContext
 
         modelBuilder.ApplyAuditing();
 
-        modelBuilder.AddTransactionalOutboxEntities();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

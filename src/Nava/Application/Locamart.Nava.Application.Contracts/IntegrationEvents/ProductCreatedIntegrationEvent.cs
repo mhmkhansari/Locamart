@@ -1,4 +1,5 @@
 ﻿using Locamart.Dina.Abstracts;
+using MediatR;
 
 namespace Locamart.Nava.Application.Contracts.IntegrationEvents;
 

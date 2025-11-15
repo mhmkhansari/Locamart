@@ -1,4 +1,4 @@
-﻿using Locamart.Dina.Infrastructure;
+﻿using Locamart.Dina.Abstracts;
 
 namespace Locamart.Nava.Adapter.Postgresql;
 

@@ -4,10 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Locamart.Nava.Adapter.Postgresql.Migrations
+namespace Locamart.Nava.Adapter.Masstransit.Migrations
 {
     /// <inheritdoc />
-    public partial class Addoutboxtables : Migration
+    public partial class Init_Outbox : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

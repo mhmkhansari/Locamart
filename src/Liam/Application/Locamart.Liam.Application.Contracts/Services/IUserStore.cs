@@ -8,5 +8,6 @@ public interface IUserStore
 {
     Task<Result<UserDto?, Error>> GetUserById(Guid id);
     Task<Result<UserDto?, Error>> GetUserByPhoneNumber(string phoneNumber);
+    Task<UnitResult<Error>> AddClaimAsync(Guid userId, string claimName, string claimValue);
 }
 

@@ -1,9 +1,7 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
 using Locamart.Adapter.Elasticsearch;
-using Locamart.Nava.Adapter.Elasticsearch.Consumers;
 using Locamart.Nava.Application.Contracts.Services;
-using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

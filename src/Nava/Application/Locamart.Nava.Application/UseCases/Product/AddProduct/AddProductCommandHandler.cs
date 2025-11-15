@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
 using Locamart.Dina.Abstracts;
-using Locamart.Dina.Infrastructure;
 using Locamart.Nava.Application.Contracts.IntegrationEvents;
 using Locamart.Nava.Application.Contracts.Services;
 using Locamart.Nava.Application.Contracts.UseCases.Product.AddProduct;

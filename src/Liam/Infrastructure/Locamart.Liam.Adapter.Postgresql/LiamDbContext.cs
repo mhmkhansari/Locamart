@@ -8,7 +8,6 @@ public class LiamDbContext(DbContextOptions<LiamDbContext> options) : IdentityDb
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
     }
 }
 
