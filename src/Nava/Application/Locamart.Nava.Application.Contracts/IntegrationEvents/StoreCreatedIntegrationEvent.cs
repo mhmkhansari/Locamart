@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Locamart.Dina.Abstracts;
+using MediatR;
 
 namespace Locamart.Nava.Application.Contracts.IntegrationEvents;
 
-public record StoreCreatedIntegrationEvent : INotification
+public record StoreCreatedIntegrationEvent : IIntegrationEvent
 {
     public Guid Id { get; init; }
     public DateTime OccurredAt { get; init; }

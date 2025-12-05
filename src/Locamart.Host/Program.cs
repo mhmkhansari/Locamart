@@ -1,7 +1,10 @@
+using Locamart.Dina;
+using Locamart.Dina.Abstracts;
 using Locamart.Liam.Adapter.Http;
 using Locamart.Liam.Adapter.Masstransit;
 using Locamart.Liam.Adapter.Postgresql;
 using Locamart.Liam.Adapter.Redis;
+using Locamart.Liam.Application;
 using Locamart.Nava.Adapter.Elasticsearch;
 using Locamart.Nava.Adapter.Http;
 using Locamart.Nava.Adapter.Http.Middlewares;
@@ -60,18 +63,6 @@ builder.Host.UseSerilog();
 builder.Services.AddSingleton(Log.Logger);
 
 
-builder.Services.AddMassTransit(cfg =>
-{
-    cfg.AddLiamMasstransit();
-    cfg.AddNavaMasstransit();
-
-    cfg.UsingInMemory((context, bus) =>
-    {
-        bus.ConfigureEndpoints(context);
-        bus.ConcurrentMessageLimit = Environment.ProcessorCount;
-    });
-});
-
 //Nava services
 
 builder.Services.AddAdaptersHttpServices(configuration);
@@ -85,12 +76,35 @@ builder.Services.AddAdapterElasticsearchServices(configuration);
 builder.Services.AddAdapterMasstransitServices(configuration);
 
 //Liam services
+builder.Services.AddLiamApplicationServices();
 
 builder.Services.AddLiamPostgresServices(configuration);
 
 builder.Services.AddLiamRedisServices(configuration);
 
 builder.Services.AddLiamAdaptersHttpServices();
+
+
+builder.Services.AddMassTransit(cfg =>
+{
+    cfg.AddNavaMasstransit();
+    cfg.AddLiamMasstransit();
+
+    cfg.AddEntityFrameworkOutbox<LocamartNavaDbContext>(o =>
+    {
+        o.UsePostgres();
+        o.UseBusOutbox();
+    });
+
+    cfg.UsingInMemory((context, bus) =>
+    {
+        bus.ConfigureEndpoints(context);
+        bus.ConcurrentMessageLimit = Environment.ProcessorCount;
+    });
+});
+
+builder.Services.AddSingleton<IIntegrationEventDispatcher, IntegrationEventDispatcher>();
+
 
 
 var app = builder.Build();
@@ -118,3 +132,5 @@ app.MapControllers();
 app.UseMiddleware<SetCurrentUserMiddleware>();
 
 app.Run();
+
+

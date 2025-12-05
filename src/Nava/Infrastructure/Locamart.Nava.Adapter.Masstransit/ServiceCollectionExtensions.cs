@@ -1,7 +1,6 @@
 ﻿using Locamart.Nava.Adapter.Masstransit.Consumers;
 using Locamart.Nava.Application.Contracts.Services;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,12 +19,6 @@ public static class ServiceCollectionExtensions
     public static void AddNavaMasstransit(this IBusRegistrationConfigurator cfg)
     {
         cfg.AddConsumer<ProductCreatedConsumer>();
-
-        cfg.AddEntityFrameworkOutbox<LocamartNavaAdapterMasstransitDbContext>(o =>
-        {
-            o.UsePostgres();
-            o.UseBusOutbox();
-        });
     }
 }
 

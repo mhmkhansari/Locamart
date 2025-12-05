@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Dina\Locamart.Dina\Locamart.Dina.csproj" />
+    <ProjectReference Include="..\..\..\Nava\Application\Locamart.Nava.Application.Contracts\Locamart.Nava.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\Locamart.Liam.Domain\Locamart.Liam.Domain.csproj" />
     <ProjectReference Include="..\Locamart.Liam.Application.Contracts\Locamart.Liam.Application.Contracts.csproj" />
   </ItemGroup>

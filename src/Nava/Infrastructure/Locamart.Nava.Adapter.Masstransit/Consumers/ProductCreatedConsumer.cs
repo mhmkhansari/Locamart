@@ -1,11 +1,9 @@
-﻿using Locamart.Dina.Abstracts;
-using Locamart.Nava.Application.Contracts.IntegrationEvents;
+﻿using Locamart.Nava.Application.Contracts.IntegrationEvents;
 using MassTransit;
-using MediatR;
 using ILogger = Serilog.ILogger;
 
 namespace Locamart.Nava.Adapter.Masstransit.Consumers;
-public class ProductCreatedConsumer(ILogger logger, INotificationHandler<ProductCreatedIntegrationEvent> handler) : IConsumer<ProductCreatedIntegrationEvent>
+public class ProductCreatedConsumer(ILogger logger) : IConsumer<ProductCreatedIntegrationEvent>
 {
     public async Task Consume(ConsumeContext<ProductCreatedIntegrationEvent> context)
     {
@@ -16,8 +14,6 @@ public class ProductCreatedConsumer(ILogger logger, INotificationHandler<Product
             message.ProductId,
             message.StoreName,
             message.StoreId);
-
-        await handler.Handle(message, CancellationToken.None);
     }
 }
 

@@ -1,16 +1,15 @@
-﻿using Locamart.Liam.Application.Contracts.IntegrationEvents;
+﻿using Locamart.Dina.Abstracts;
 using Locamart.Liam.Application.Contracts.Services;
-using MediatR;
+using Locamart.Nava.Application.Contracts.IntegrationEvents;
 using Serilog;
 
 namespace Locamart.Liam.Application.IntegrationEventHandlers;
 
-public class StoreCreatedEventHandler(IUserStore userStore, ILogger logger) : INotificationHandler<StoreCreatedIntegrationEvent>
+public class StoreCreatedEventHandler(IUserStore userStore, ILogger logger) : IIntegrationEventHandler<StoreCreatedIntegrationEvent>
 {
-
-    public async Task Handle(StoreCreatedIntegrationEvent notification, CancellationToken cancellationToken)
+    public async Task HandleAsync(StoreCreatedIntegrationEvent @event, CancellationToken cancellationToken = default)
     {
-        var result = await userStore.AddClaimAsync(notification.OwnerId, "store-admin", notification.StoreId.ToString());
+        var result = await userStore.AddClaimAsync(@event.OwnerId, "store-admin", @event.StoreId.ToString());
 
         if (result.IsFailure)
             logger.Error($"Error in processing StoreCreatedIntegrationEvent {result.Error}");

@@ -3,6 +3,7 @@ using Locamart.Dina;
 using Locamart.Dina.Abstracts;
 using Locamart.Dina.Extensions;
 using Locamart.Dina.ValueObjects;
+using Locamart.Nava.Adapter.Postgresql;
 using Locamart.Nava.Application.Contracts.IntegrationEvents;
 using Locamart.Nava.Application.Contracts.Services;
 using Locamart.Nava.Application.Contracts.UseCases.Store;
@@ -10,13 +11,18 @@ using Locamart.Nava.Domain.Entities.Store.Abstracts;
 using Locamart.Nava.Domain.Entities.Store.Builders;
 using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
 using Locamart.Shared.ValueObjects;
+using MassTransit;
+using Serilog;
 
 namespace Locamart.Nava.Application.UseCases.Store.AddStore;
 
 public class AddStoreCommandHandler(IStoreRepository storeRepository,
     IUnitOfWork unitOfWork,
     IIntegrationEventPublisher eventPublisher,
-    ICurrentUser currentUser) : ICommandHandler<AddStoreCommand, UnitResult<Error>>
+    ICurrentUser currentUser,
+    ILogger logger,
+    LocamartNavaDbContext dbContext,
+    IPublishEndpoint bus) : ICommandHandler<AddStoreCommand, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(AddStoreCommand request, CancellationToken cancellationToken)
     {
@@ -52,6 +58,27 @@ public class AddStoreCommandHandler(IStoreRepository storeRepository,
             };
 
             await eventPublisher.PublishAsync(storeCreatedIntegrationEvent, cancellationToken);
+
+            // 1) Log DbContext instance identity you are inspecting
+            logger.Information("Handler DbContext instance hash: {hash}", dbContext.GetHashCode());
+
+            // 2) Dump tracked entities (types & states)
+            var tracked = dbContext.ChangeTracker.Entries()
+                .Select(e => new { Type = e.Entity.GetType().FullName, Name = e.Entity.GetType().Name, State = e.State.ToString() })
+                .ToList();
+
+            logger.Information("ChangeTracker after Publish contains {count} entries: {@tracked}", tracked.Count, tracked);
+
+            // 3) Search ChangeTracker explicitly for 'Outbox'/'Inbox'
+            var outboxEntries = dbContext.ChangeTracker.Entries()
+                .Where(e => e.Entity.GetType().Name.Contains("Outbox") || e.Entity.GetType().Name.Contains("Inbox"))
+                .Select(e => new { Type = e.Entity.GetType().FullName, State = e.State.ToString() })
+                .ToList();
+
+            logger.Information("Outbox-like entries after Publish: {count}. Details: {@outboxEntries}", outboxEntries.Count, outboxEntries);
+
+            // 4) Log publish endpoint implementation type (inside your MassTransitIntegrationEventPublisher add logging of the bus type)
+            logger.Information("PublishEndpoint type: {type}", bus.GetType().FullName);
 
             await unitOfWork.CommitAsync(cancellationToken);
 

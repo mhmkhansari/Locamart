@@ -6,6 +6,8 @@ using Locamart.Nava.Domain.Entities.Comment;
 using Locamart.Nava.Domain.Entities.Product;
 using Locamart.Nava.Domain.Entities.Store;
 using Locamart.Nava.Domain.Entities.StoreCategory;
+using MassTransit;
+using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -30,6 +32,7 @@ public class LocamartNavaDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("nava");
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LocamartNavaDbContext).Assembly);
 
@@ -46,6 +49,25 @@ public class LocamartNavaDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CommentAttachmentConfiguration());
 
         modelBuilder.ApplyAuditing();
+
+        modelBuilder.AddTransactionalOutboxEntities();
+
+        /*modelBuilder.Entity<OutboxMessage>(entity =>
+        {
+            entity.ToTable("OutboxMessage", schema: "nava_outbox");
+        });
+
+        modelBuilder.Entity<InboxState>(entity =>
+        {
+            entity.ToTable("InboxState", schema: "nava_outbox");
+        });
+
+        modelBuilder.Entity<OutboxState>(entity =>
+        {
+            entity.ToTable("OutboxState", schema: "nava_outbox");
+        });*/
+
+
 
     }
 

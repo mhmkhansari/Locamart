@@ -35,7 +35,7 @@ public static class ServiceCollectionExtensions
 
         services.AddDbContext<LiamDbContext>(options =>
         {
-            var connectionString = configuration.GetConnectionString("Liam");
+            var connectionString = configuration.GetConnectionString("Postgres");
             options.UseNpgsql(connectionString);
             options.UseOpenIddict();
         });

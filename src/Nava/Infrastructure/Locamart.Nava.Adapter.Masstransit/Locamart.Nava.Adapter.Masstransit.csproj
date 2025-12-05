@@ -19,8 +19,4 @@
     <ProjectReference Include="..\..\Application\Locamart.Nava.Application.Contracts\Locamart.Nava.Application.Contracts.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

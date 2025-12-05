@@ -52,7 +52,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{9D6074F2-8C55-48AE-B034-0E16D530F248}"
 	ProjectSection(SolutionItems) = preProject
 		src\Liam\scripts\migrations\add-migration.ps1 = src\Liam\scripts\migrations\add-migration.ps1
-		src\Liam\scripts\migrations\add-outbox-migration.ps1 = src\Liam\scripts\migrations\add-outbox-migration.ps1
 		src\Liam\scripts\migrations\update-database.ps1 = src\Liam\scripts\migrations\update-database.ps1
 	EndProjectSection
 EndProject

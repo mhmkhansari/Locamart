@@ -9,6 +9,6 @@ public sealed class MassTransitIntegrationEventPublisher(IPublishEndpoint bus)
     : IIntegrationEventPublisher
 {
     public Task PublishAsync<T>(T evt, CancellationToken ct = default)
-        where T : class, INotification
+        where T : class, IIntegrationEvent
         => bus.Publish(evt, ct);
 }

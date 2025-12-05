@@ -1,12 +1,11 @@
 ﻿using Locamart.Dina.Abstracts;
-using Locamart.Liam.Application.Contracts.IntegrationEvents;
+using Locamart.Nava.Application.Contracts.IntegrationEvents;
 using MassTransit;
-using MassTransit.Mediator;
 using Serilog;
 
 namespace Locamart.Liam.Adapter.Masstransit.Consumers;
 
-public class StoreCreatedConsumer(ILogger logger) : IConsumer<StoreCreatedIntegrationEvent>
+public class StoreCreatedConsumer(ILogger logger, IIntegrationEventDispatcher dispatcher) : IConsumer<StoreCreatedIntegrationEvent>
 {
     public async Task Consume(ConsumeContext<StoreCreatedIntegrationEvent> context)
     {
@@ -15,6 +14,8 @@ public class StoreCreatedConsumer(ILogger logger) : IConsumer<StoreCreatedIntegr
         logger.Information(
             "Received StoreCreatedIntegrationEvent: for store ({StoreId})",
             message.StoreId);
+
+        await dispatcher.DispatchAsync<StoreCreatedIntegrationEvent>(context.Message, CancellationToken.None);
     }
 }
 

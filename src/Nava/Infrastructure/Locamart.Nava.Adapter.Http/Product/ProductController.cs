@@ -14,7 +14,7 @@ namespace Locamart.Nava.Adapter.Http.Product;
 
 
 [ApiController]
-//[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [Route("api/products")]
 public class ProductsController(IMediator mediator) : ControllerBase
 {
