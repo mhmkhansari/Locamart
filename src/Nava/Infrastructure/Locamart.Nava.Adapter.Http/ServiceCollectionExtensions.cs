@@ -86,6 +86,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<CurrentUserContext>();
         services.AddScoped<ICurrentUser, CurrentUser>();
 
+        services.AddHttpClient();
+
         return services;
     }
 }

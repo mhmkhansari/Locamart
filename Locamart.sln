@@ -5,8 +5,6 @@ VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9F451E40-96B9-4BF1-A92F-735E45CDA60A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Liam", "Liam", "{7B2B9C58-EA96-4D67-9859-BD6FA3028BDF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nava", "Nava", "{588DFF9D-E874-450A-9C11-A86A2828AA88}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Nava.Domain", "src\Nava\Locamart.Nava.Domain\Locamart.Nava.Domain.csproj", "{163E3BEB-ABBB-E146-1890-1B56E99EEA0A}"
@@ -29,14 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Nava.Application",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Nava.Application.Contracts", "src\Nava\Application\Locamart.Nava.Application.Contracts\Locamart.Nava.Application.Contracts.csproj", "{F4464435-67BB-7A39-9E96-D398D44BE0A3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{AC777EE1-707E-4FFE-B5B8-F5B2BE47719B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{A53F5B8D-FD1F-4E59-9ED6-DAB442D6979B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Liam.Application", "src\Liam\Application\Locamart.Liam.Application\Locamart.Liam.Application.csproj", "{E427A90E-569D-84A3-36AA-25CB150CF819}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Liam.Application.Contracts", "src\Liam\Application\Locamart.Liam.Application.Contracts\Locamart.Liam.Application.Contracts.csproj", "{8F7066C2-74B4-C2EF-32E7-85951C5E26C8}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{5B3A60F9-A54E-419F-A3A9-83685ECDA47D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{50EBD809-3BCF-4065-AE6D-9ED2E3FF6D8D}"
@@ -46,22 +36,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", 
 		src\Nava\scripts\migrations\update-database.ps1 = src\Nava\scripts\migrations\update-database.ps1
 		src\Nava\scripts\migrations\update-outbox-database.ps1 = src\Nava\scripts\migrations\update-outbox-database.ps1
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{7ABC89DC-4E95-425F-87FE-6092144FC7D5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{9D6074F2-8C55-48AE-B034-0E16D530F248}"
-	ProjectSection(SolutionItems) = preProject
-		src\Liam\scripts\migrations\add-migration.ps1 = src\Liam\scripts\migrations\add-migration.ps1
-		src\Liam\scripts\migrations\update-database.ps1 = src\Liam\scripts\migrations\update-database.ps1
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Liam.Adapter.Http", "src\Liam\Infrastructure\Locamart.Liam.Adapter.Http\Locamart.Liam.Adapter.Http.csproj", "{B6D98864-D64E-EC2C-C66C-9F3444B3AF1B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Liam.Adapter.Postgresql", "src\Liam\Infrastructure\Locamart.Liam.Adapter.Postgresql\Locamart.Liam.Adapter.Postgresql.csproj", "{2D289A93-BEBC-6E77-0773-4788A92D525C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Liam.Adapter.Redis", "src\Liam\Infrastructure\Locamart.Liam.Adapter.Redis\Locamart.Liam.Adapter.Redis.csproj", "{11917A48-E2B7-7B9C-82B5-E04FAC73B25C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Liam.Domain", "src\Liam\Locamart.Liam.Domain\Locamart.Liam.Domain.csproj", "{B762EF4B-8B51-B678-D38D-E90E016B4886}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Nava.Adapter.Elasticsearch", "src\Nava\Infrastructure\Locamart.Nava.Adapter.Elasticsearch\Locamart.Nava.Adapter.Elasticsearch.csproj", "{3E1E1BC3-2A3B-DA7E-295E-039BFC248FDF}"
 EndProject
@@ -77,9 +51,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{BC3AFD48-8BE
 		certificates\dev\signing-key.pem = certificates\dev\signing-key.pem
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Liam.Adapter.Masstransit", "src\Liam\Infrastructure\Locamart.Liam.Adapter.Masstransit\Locamart.Liam.Adapter.Masstransit.csproj", "{BD95FFF5-170B-218C-73EB-186241830828}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Nava.Adapter.Masstransit", "src\Nava\Infrastructure\Locamart.Nava.Adapter.Masstransit\Locamart.Nava.Adapter.Masstransit.csproj", "{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locamart.Nava.Adapter.Redis", "src\Nava\Infrastructure\Locamart.Nava.Adapter.Redis\Locamart.Nava.Adapter.Redis.csproj", "{2B7D0443-192C-4AC8-AC23-83F18017D7DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,30 +89,6 @@ Global
 		{F4464435-67BB-7A39-9E96-D398D44BE0A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4464435-67BB-7A39-9E96-D398D44BE0A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4464435-67BB-7A39-9E96-D398D44BE0A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E427A90E-569D-84A3-36AA-25CB150CF819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E427A90E-569D-84A3-36AA-25CB150CF819}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E427A90E-569D-84A3-36AA-25CB150CF819}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E427A90E-569D-84A3-36AA-25CB150CF819}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F7066C2-74B4-C2EF-32E7-85951C5E26C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F7066C2-74B4-C2EF-32E7-85951C5E26C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F7066C2-74B4-C2EF-32E7-85951C5E26C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F7066C2-74B4-C2EF-32E7-85951C5E26C8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6D98864-D64E-EC2C-C66C-9F3444B3AF1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6D98864-D64E-EC2C-C66C-9F3444B3AF1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6D98864-D64E-EC2C-C66C-9F3444B3AF1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6D98864-D64E-EC2C-C66C-9F3444B3AF1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D289A93-BEBC-6E77-0773-4788A92D525C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D289A93-BEBC-6E77-0773-4788A92D525C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D289A93-BEBC-6E77-0773-4788A92D525C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D289A93-BEBC-6E77-0773-4788A92D525C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11917A48-E2B7-7B9C-82B5-E04FAC73B25C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11917A48-E2B7-7B9C-82B5-E04FAC73B25C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11917A48-E2B7-7B9C-82B5-E04FAC73B25C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11917A48-E2B7-7B9C-82B5-E04FAC73B25C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B762EF4B-8B51-B678-D38D-E90E016B4886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B762EF4B-8B51-B678-D38D-E90E016B4886}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B762EF4B-8B51-B678-D38D-E90E016B4886}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B762EF4B-8B51-B678-D38D-E90E016B4886}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E1E1BC3-2A3B-DA7E-295E-039BFC248FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E1E1BC3-2A3B-DA7E-295E-039BFC248FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E1E1BC3-2A3B-DA7E-295E-039BFC248FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -147,20 +97,19 @@ Global
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD95FFF5-170B-218C-73EB-186241830828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD95FFF5-170B-218C-73EB-186241830828}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD95FFF5-170B-218C-73EB-186241830828}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD95FFF5-170B-218C-73EB-186241830828}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B7D0443-192C-4AC8-AC23-83F18017D7DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B7D0443-192C-4AC8-AC23-83F18017D7DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B7D0443-192C-4AC8-AC23-83F18017D7DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B7D0443-192C-4AC8-AC23-83F18017D7DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7B2B9C58-EA96-4D67-9859-BD6FA3028BDF} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
 		{588DFF9D-E874-450A-9C11-A86A2828AA88} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
 		{163E3BEB-ABBB-E146-1890-1B56E99EEA0A} = {588DFF9D-E874-450A-9C11-A86A2828AA88}
 		{B402DA1D-F6F0-44C3-83EB-4522FB94CC0F} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
@@ -172,23 +121,13 @@ Global
 		{D643BDDC-E809-4724-B9A2-ACA110C98D7C} = {588DFF9D-E874-450A-9C11-A86A2828AA88}
 		{7ED1A635-6058-B588-2E45-47B7B86657E7} = {D643BDDC-E809-4724-B9A2-ACA110C98D7C}
 		{F4464435-67BB-7A39-9E96-D398D44BE0A3} = {D643BDDC-E809-4724-B9A2-ACA110C98D7C}
-		{AC777EE1-707E-4FFE-B5B8-F5B2BE47719B} = {7B2B9C58-EA96-4D67-9859-BD6FA3028BDF}
-		{A53F5B8D-FD1F-4E59-9ED6-DAB442D6979B} = {7B2B9C58-EA96-4D67-9859-BD6FA3028BDF}
-		{E427A90E-569D-84A3-36AA-25CB150CF819} = {A53F5B8D-FD1F-4E59-9ED6-DAB442D6979B}
-		{8F7066C2-74B4-C2EF-32E7-85951C5E26C8} = {A53F5B8D-FD1F-4E59-9ED6-DAB442D6979B}
 		{5B3A60F9-A54E-419F-A3A9-83685ECDA47D} = {588DFF9D-E874-450A-9C11-A86A2828AA88}
 		{50EBD809-3BCF-4065-AE6D-9ED2E3FF6D8D} = {5B3A60F9-A54E-419F-A3A9-83685ECDA47D}
-		{7ABC89DC-4E95-425F-87FE-6092144FC7D5} = {7B2B9C58-EA96-4D67-9859-BD6FA3028BDF}
-		{9D6074F2-8C55-48AE-B034-0E16D530F248} = {7ABC89DC-4E95-425F-87FE-6092144FC7D5}
-		{B6D98864-D64E-EC2C-C66C-9F3444B3AF1B} = {AC777EE1-707E-4FFE-B5B8-F5B2BE47719B}
-		{2D289A93-BEBC-6E77-0773-4788A92D525C} = {AC777EE1-707E-4FFE-B5B8-F5B2BE47719B}
-		{11917A48-E2B7-7B9C-82B5-E04FAC73B25C} = {AC777EE1-707E-4FFE-B5B8-F5B2BE47719B}
-		{B762EF4B-8B51-B678-D38D-E90E016B4886} = {7B2B9C58-EA96-4D67-9859-BD6FA3028BDF}
 		{3E1E1BC3-2A3B-DA7E-295E-039BFC248FDF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{E089F395-D276-059C-0F8C-0F36E7CC9EC3} = {9F451E40-96B9-4BF1-A92F-735E45CDA60A}
 		{BC3AFD48-8BEC-42F3-97A2-F6BD12772599} = {FFA198C6-007C-4639-B578-7E146E8F30FE}
-		{BD95FFF5-170B-218C-73EB-186241830828} = {AC777EE1-707E-4FFE-B5B8-F5B2BE47719B}
 		{43AC643F-1DD9-17FE-A362-E59DBDFA2DEF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{2B7D0443-192C-4AC8-AC23-83F18017D7DC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6398E810-9F43-49BE-A63A-91406D237096}
