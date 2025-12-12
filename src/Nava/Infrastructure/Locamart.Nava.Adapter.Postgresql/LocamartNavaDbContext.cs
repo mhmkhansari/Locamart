@@ -2,6 +2,7 @@
 using Locamart.Dina.Abstracts;
 using Locamart.Nava.Adapter.Postgresql.Configurations;
 using Locamart.Nava.Adapter.Postgresql.Extensions;
+using Locamart.Nava.Domain.Entities.Cart;
 using Locamart.Nava.Domain.Entities.Comment;
 using Locamart.Nava.Domain.Entities.Product;
 using Locamart.Nava.Domain.Entities.Store;
@@ -23,6 +24,7 @@ public class LocamartNavaDbContext : DbContext
     public DbSet<StoreCategoryEntity> StoreCategories => Set<StoreCategoryEntity>();
     public DbSet<CommentEntity> Comments => Set<CommentEntity>();
     public DbSet<CommentAttachmentEntity> CommentAttachments => Set<CommentAttachmentEntity>();
+    public DbSet<CartEntity> Carts => Set<CartEntity>();
 
     public LocamartNavaDbContext(DbContextOptions<LocamartNavaDbContext> options, ICurrentUser currentUser)
         : base(options)
@@ -47,6 +49,8 @@ public class LocamartNavaDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CommentConfiguration());
 
         modelBuilder.ApplyConfiguration(new CommentAttachmentConfiguration());
+
+        modelBuilder.ApplyConfiguration(new CartConfiguration());
 
         modelBuilder.ApplyAuditing();
 

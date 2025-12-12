@@ -3,7 +3,6 @@ using Locamart.Nava.Domain.Entities.Comment;
 using Locamart.Nava.Domain.Entities.Comment.ValueObjects;
 using Locamart.Nava.Domain.Entities.Product;
 using Locamart.Nava.Domain.Entities.Product.ValueObjects;
-using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

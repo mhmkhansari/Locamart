@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\..\Dina\Locamart.Dina\Locamart.Dina.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Cart\" />
+  </ItemGroup>
+
 </Project>
