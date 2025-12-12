@@ -20,14 +20,18 @@ public class AddStoreCommandHandler(IStoreRepository storeRepository,
     IUnitOfWork unitOfWork,
     IIntegrationEventPublisher eventPublisher,
     ICurrentUser currentUser,
-    ILogger logger,
-    LocamartNavaDbContext dbContext,
-    IPublishEndpoint bus) : ICommandHandler<AddStoreCommand, UnitResult<Error>>
+    IUserStore userStore,
+    ILogger logger) : ICommandHandler<AddStoreCommand, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(AddStoreCommand request, CancellationToken cancellationToken)
     {
         try
         {
+            var userHasStore = await storeRepository.GetByUserId(currentUser.UserId);
+
+            if (userHasStore is not null)
+                return Error.Create("user_has_store", "User already has store");
+
             var ownerId = UserId.Create(request.CreatedBy);
             if (ownerId.IsFailure)
                 return ownerId.Error;
@@ -57,28 +61,12 @@ public class AddStoreCommandHandler(IStoreRepository storeRepository,
                 OwnerId = currentUser.UserId.Value
             };
 
+            var addClaimResult = await userStore.AddClaimAsync(currentUser.UserId.Value, "store-admin", entity.Value.Id.ToString());
+
+            if (addClaimResult.IsFailure)
+                return Error.Create("add_store_failed", addClaimResult.Error.Message);
+
             await eventPublisher.PublishAsync(storeCreatedIntegrationEvent, cancellationToken);
-
-            // 1) Log DbContext instance identity you are inspecting
-            logger.Information("Handler DbContext instance hash: {hash}", dbContext.GetHashCode());
-
-            // 2) Dump tracked entities (types & states)
-            var tracked = dbContext.ChangeTracker.Entries()
-                .Select(e => new { Type = e.Entity.GetType().FullName, Name = e.Entity.GetType().Name, State = e.State.ToString() })
-                .ToList();
-
-            logger.Information("ChangeTracker after Publish contains {count} entries: {@tracked}", tracked.Count, tracked);
-
-            // 3) Search ChangeTracker explicitly for 'Outbox'/'Inbox'
-            var outboxEntries = dbContext.ChangeTracker.Entries()
-                .Where(e => e.Entity.GetType().Name.Contains("Outbox") || e.Entity.GetType().Name.Contains("Inbox"))
-                .Select(e => new { Type = e.Entity.GetType().FullName, State = e.State.ToString() })
-                .ToList();
-
-            logger.Information("Outbox-like entries after Publish: {count}. Details: {@outboxEntries}", outboxEntries.Count, outboxEntries);
-
-            // 4) Log publish endpoint implementation type (inside your MassTransitIntegrationEventPublisher add logging of the bus type)
-            logger.Information("PublishEndpoint type: {type}", bus.GetType().FullName);
 
             await unitOfWork.CommitAsync(cancellationToken);
 

@@ -28,17 +28,6 @@ public class ProductsController(IMediator mediator) : ControllerBase
 
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
-
-    [HttpPost]
-    public async Task<IActionResult> Create(CreateProductHttpRequest request, CancellationToken cancellationToken)
-    {
-        var command = request.Adapt<AddProductCommand>();
-
-        var result = await mediator.Send(command, cancellationToken);
-
-        return result.IsSuccess ? Ok() : BadRequest(result.Error);
-    }
-
     [HttpPost("{productId:guid}/comments")]
     public async Task<IActionResult> AddComment(AddCommentHttpRequest request, CancellationToken cancellationToken)
     {

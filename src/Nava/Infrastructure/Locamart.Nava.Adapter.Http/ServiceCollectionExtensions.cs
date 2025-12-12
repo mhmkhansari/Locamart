@@ -1,8 +1,12 @@
 ﻿using Locamart.Dina;
 using Locamart.Dina.Abstracts;
+using Locamart.Nava.Adapter.Http.Handlers;
+using Locamart.Nava.Adapter.Http.Requirements;
 using Locamart.Nava.Application;
 using Mapster;
 using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Validation.AspNetCore;
@@ -73,7 +77,17 @@ public static class ServiceCollectionExtensions
 
             });
 
-        services.AddAuthorization();
+        //services.AddAuthorization();
+
+        services.AddHttpContextAccessor();
+
+        services.AddSingleton<IAuthorizationHandler, StoreAdminHandler>();
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("StoreAdminPolicy", policy =>
+                policy.Requirements.Add(new StoreAdminRequirement()));
+        });
 
         var config = TypeAdapterConfig.GlobalSettings;
         config.Scan(typeof(ServiceCollectionExtensions).Assembly);

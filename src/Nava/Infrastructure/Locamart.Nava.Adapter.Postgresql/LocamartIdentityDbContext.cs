@@ -9,7 +9,8 @@ public class LocamartIdentityDbContext(DbContextOptions<LocamartIdentityDbContex
     {
         base.OnModelCreating(builder);
 
-        builder.HasDefaultSchema("liam");
+        builder.HasDefaultSchema("iam");
 
+        builder.UseOpenIddict();
     }
 }
