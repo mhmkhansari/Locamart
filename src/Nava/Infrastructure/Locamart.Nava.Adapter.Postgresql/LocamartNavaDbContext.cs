@@ -4,11 +4,11 @@ using Locamart.Nava.Adapter.Postgresql.Configurations;
 using Locamart.Nava.Adapter.Postgresql.Extensions;
 using Locamart.Nava.Domain.Entities.Cart;
 using Locamart.Nava.Domain.Entities.Comment;
+using Locamart.Nava.Domain.Entities.Inventory;
 using Locamart.Nava.Domain.Entities.Product;
 using Locamart.Nava.Domain.Entities.Store;
 using Locamart.Nava.Domain.Entities.StoreCategory;
 using MassTransit;
-using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -25,6 +25,7 @@ public class LocamartNavaDbContext : DbContext
     public DbSet<CommentEntity> Comments => Set<CommentEntity>();
     public DbSet<CommentAttachmentEntity> CommentAttachments => Set<CommentAttachmentEntity>();
     public DbSet<CartEntity> Carts => Set<CartEntity>();
+    public DbSet<InventoryEntity> Inventories => Set<InventoryEntity>();
 
     public LocamartNavaDbContext(DbContextOptions<LocamartNavaDbContext> options, ICurrentUser currentUser)
         : base(options)
@@ -51,6 +52,8 @@ public class LocamartNavaDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CommentAttachmentConfiguration());
 
         modelBuilder.ApplyConfiguration(new CartConfiguration());
+
+        modelBuilder.ApplyConfiguration(new InventoryConfiguration());
 
         modelBuilder.ApplyAuditing();
 

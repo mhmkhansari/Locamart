@@ -45,8 +45,6 @@ public class AddProductCommandHandler(IProductRepository productRepository, ISto
 
         await unitOfWork.CommitAsync(cancellationToken);
 
-
-
         return UnitResult.Success<Error>();
     }
 }

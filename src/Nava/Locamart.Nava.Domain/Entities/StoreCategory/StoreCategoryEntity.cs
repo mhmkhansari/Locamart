@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
+using Locamart.Dina.Utils;
 using Locamart.Nava.Domain.Entities.StoreCategory.Enums;
 using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
 
@@ -11,12 +12,21 @@ public sealed class StoreCategoryEntity : AuditableEntity<StoreCategoryId>
     public StoreCategoryId? ParentId { get; private set; }
     public StoreCategoryStatus Status { get; private set; }
 
-    private StoreCategoryEntity() : base() { }
+    private StoreCategoryEntity(StoreCategoryId id) : base(id) { }
     public static Result<StoreCategoryEntity, Error> Create(string name, StoreCategoryId? parentId)
     {
-        var storeCategoryId = StoreCategoryId.Create(Guid.NewGuid());
+        if (string.IsNullOrWhiteSpace(name))
+            return Error.Create(
+            "store_category_name_required",
+            "Store category name cannot be empty");
 
-        return new StoreCategoryEntity(storeCategoryId.Value, name, parentId);
+
+        var storeCategoryId = StoreCategoryId.Create(DinaGuid.NewSequentialGuid());
+
+        if (storeCategoryId.IsFailure)
+            return storeCategoryId.Error;
+
+        return new StoreCategoryEntity(storeCategoryId.Value, name.Trim(), parentId);
     }
 
     public void MarkAsDeleted()

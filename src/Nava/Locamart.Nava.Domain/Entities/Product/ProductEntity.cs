@@ -5,7 +5,6 @@ using Locamart.Dina.ValueObjects;
 using Locamart.Nava.Domain.Entities.Product.Enums;
 using Locamart.Nava.Domain.Entities.Product.RequestModels;
 using Locamart.Nava.Domain.Entities.Product.ValueObjects;
-using Locamart.Nava.Domain.Entities.Store.ValueObjects;
 
 namespace Locamart.Nava.Domain.Entities.Product;
 
@@ -13,18 +12,14 @@ public sealed class ProductEntity : AuditableEntity<ProductId>
 {
     public string Title { get; private set; }
     public string? Description { get; private set; }
-    public Price Price { get; private set; }
     public List<Image> Images { get; } = [];
-    public StoreId StoreId { get; private set; }
     public ProductStatus Status { get; private set; }
 
     private ProductEntity() : base(ProductId.Empty()) { }
-    private ProductEntity(ProductId id, StoreId storeId, string title, string description, Price price, List<Image> images) : base(id)
+    private ProductEntity(ProductId id, string title, string description, List<Image> images) : base(id)
     {
-        StoreId = storeId;
         Title = title;
         Description = description;
-        Price = price;
         Status = ProductStatus.Available;
 
         AddImages(images);
@@ -37,17 +32,7 @@ public sealed class ProductEntity : AuditableEntity<ProductId>
     {
         var productId = ProductId.Create(DinaGuid.NewSequentialGuid());
 
-        var storeId = StoreId.Create(request.StoreId);
-
-        if (storeId.IsFailure)
-            return storeId.Error;
-
-        var price = Price.Create(request.Price, "IRR");
-
-        if (price.IsFailure)
-            return price.Error;
-
-        return new ProductEntity(productId.Value, storeId.Value, request.Title, request.Description, price.Value, request.Images);
+        return new ProductEntity(productId.Value, request.Title, request.Description, request.Images);
 
     }
 
@@ -71,11 +56,6 @@ public sealed class ProductEntity : AuditableEntity<ProductId>
         Description = description;
     }
 
-    public void SetPrice(Price price)
-    {
-        Price = price;
-    }
-
     public UnitResult<Error> AddImages(IEnumerable<Image> images)
     {
         Images.AddRange(images);
@@ -86,7 +66,4 @@ public sealed class ProductEntity : AuditableEntity<ProductId>
     {
         Status = status;
     }
-
-    public override string ToString() =>
-        $"Product [{Id}] - {Title} (${Price:F2})";
 }

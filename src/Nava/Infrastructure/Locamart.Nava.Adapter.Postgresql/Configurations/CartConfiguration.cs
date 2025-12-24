@@ -2,9 +2,9 @@
 using Locamart.Nava.Adapter.Postgresql.Converters;
 using Locamart.Nava.Domain.Entities.Cart;
 using Locamart.Nava.Domain.Entities.Cart.ValueObjects;
+using Locamart.Nava.Domain.Entities.Inventory.ValueObjects;
 using Locamart.Nava.Domain.Entities.Product.ValueObjects;
 using Locamart.Nava.Domain.Entities.Store.ValueObjects;
-using Locamart.Nava.Domain.Entities.StoreCategory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -30,6 +30,13 @@ public class CartConfiguration : IEntityTypeConfiguration<CartEntity>
             .HasColumnType("uuid")
             .IsRequired();
 
+        builder.Property(c => c.StoreId)
+            .HasConversion(
+                storeId => storeId.Value,
+                value => StoreId.Create(value).Value)
+            .HasColumnType("uuid")
+            .IsRequired();
+
         builder.Property(c => c.Status)
             .HasConversion<string>()
             .HasMaxLength(50)
@@ -41,12 +48,12 @@ public class CartConfiguration : IEntityTypeConfiguration<CartEntity>
 
             items.WithOwner().HasForeignKey("CartId");
 
-            items.HasKey("CartId", "ProductId");
+            items.HasKey("CartId", "InventoryId");
 
-            items.Property(i => i.ProductId)
+            items.Property(i => i.InventoryId)
                 .HasConversion(
-                    pid => pid.Value,
-                    value => ProductId.Create(value).Value)
+                    iid => iid.Value,
+                    value => InventoryId.Create(value).Value)
                 .HasColumnType("uuid")
                 .IsRequired();
 
@@ -58,11 +65,24 @@ public class CartConfiguration : IEntityTypeConfiguration<CartEntity>
                 .IsRequired();
         });
 
-        builder.Property(c => c.CreatedAt)
+        /*        builder.Property(c => c.CreatedAt)
+                    .IsRequired();
+
+                builder.Property(c => c.LastUpdatedAt)
+                    .IsRequired(false);*/
+
+        builder.Property(p => p.CreatedBy)
+            .HasConversion(new UserConverter())
+            .HasColumnType("uuid")
             .IsRequired();
 
-        builder.Property(c => c.LastUpdatedAt)
-            .IsRequired(false);
+        builder.Property(p => p.UpdatedBy)
+            .HasConversion(new NullableUserConverter())
+            .HasColumnType("uuid");
+
+        builder.Property(p => p.DeletedBy)
+            .HasConversion(new NullableUserConverter())
+            .HasColumnType("uuid");
     }
 }
 

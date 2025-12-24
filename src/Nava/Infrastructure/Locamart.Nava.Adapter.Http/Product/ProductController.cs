@@ -1,7 +1,6 @@
 ﻿using Locamart.Adapter.Http.Product.RequestModels;
 using Locamart.Nava.Adapter.Http.Product.RequestModels;
 using Locamart.Nava.Application.Contracts.UseCases.Product.AddComment;
-using Locamart.Nava.Application.Contracts.UseCases.Product.AddProduct;
 using Locamart.Nava.Application.Contracts.UseCases.Product.GetComments;
 using Locamart.Nava.Application.Contracts.UseCases.Product.GetProductsWithinDistance;
 using Mapster;

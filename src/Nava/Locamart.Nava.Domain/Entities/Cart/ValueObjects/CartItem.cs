@@ -1,17 +1,18 @@
 ﻿using CSharpFunctionalExtensions;
-using Locamart.Nava.Domain.Entities.Product.ValueObjects;
+using Locamart.Nava.Domain.Entities.Inventory.ValueObjects;
+
 
 namespace Locamart.Nava.Domain.Entities.Cart.ValueObjects;
 
 public class CartItem : ValueObject<CartItem>, IComparable<CartItem>
 {
-    public ProductId ProductId { get; private set; }
+    public InventoryId InventoryId { get; private set; }
     public int Quantity { get; private set; }
     public decimal UnitPrice { get; private set; }
 
-    public CartItem(ProductId productId, int quantity, decimal unitPrice)
+    public CartItem(InventoryId inventoryId, int quantity, decimal unitPrice)
     {
-        ProductId = productId;
+        InventoryId = inventoryId;
         Quantity = quantity;
         UnitPrice = unitPrice;
     }

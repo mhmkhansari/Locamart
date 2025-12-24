@@ -6,7 +6,7 @@ public sealed class UserId : ValueObject
 {
     public Guid Value { get; }
 
-    private UserId() { } // Parameterless constructor for EF Core
+    private UserId() { }
 
     private UserId(Guid value)
     {

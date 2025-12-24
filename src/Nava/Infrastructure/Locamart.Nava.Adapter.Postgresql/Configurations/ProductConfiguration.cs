@@ -37,30 +37,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
             .HasColumnType("jsonb")
             .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-        builder.HasOne<StoreEntity>()
-            .WithMany()
-            .HasForeignKey(x => x.StoreId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.OwnsOne(p => p.Price, price =>
-        {
-            price.Property(p => p.Value)
-                .HasColumnName("Price")
-                .HasColumnType("decimal(18,2)")
-                .IsRequired();
-
-            price.Property(p => p.Currency)
-                .HasColumnName("Currency")
-                .HasMaxLength(3)
-                .IsRequired();
-        });
-
-        builder.Property(p => p.StoreId)
-            .HasConversion(
-                id => id.Value,
-                value => StoreId.Create(value).Value)
-            .HasColumnType("uuid")
-            .IsRequired();
 
         builder.Property(p => p.CreatedBy)
             .HasConversion(new UserConverter())
