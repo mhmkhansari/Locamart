@@ -4,9 +4,11 @@ using Locamart.Nava.Adapter.Postgresql.Repositories;
 using Locamart.Nava.Adapter.Postgresql.Seeders;
 using Locamart.Nava.Adapter.Postgresql.Stores;
 using Locamart.Nava.Application.Contracts.Services;
+using Locamart.Nava.Domain.Entities.Cart.Abstracts;
 using Locamart.Nava.Domain.Entities.Comment.Abstracts;
 using Locamart.Nava.Domain.Entities.Inventory.Abstracts;
 using Locamart.Nava.Domain.Entities.Product.Abstracts;
+using Locamart.Nava.Domain.Entities.ProductCategory.Abstracts;
 using Locamart.Nava.Domain.Entities.Store.Abstracts;
 using Locamart.Nava.Domain.Entities.StoreCategory.Abstracts;
 using Microsoft.AspNetCore.Identity;
@@ -50,9 +52,14 @@ public static class AdapterPostgresqlServiceExtensions
 
         services.AddScoped<IInventoryRepository, InventoryRepository>();
 
+        services.AddScoped<ICartRepository, CartRepository>();
+
+        services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+
         services.AddScoped<IUnitOfWork, EfCoreUnitOfWork>();
 
         services.AddScoped<ICommentQueryService, CommentQueryService>();
+
 
         services.AddHostedService<ClientSeeder>();
 

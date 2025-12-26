@@ -6,6 +6,7 @@ using Locamart.Nava.Domain.Entities.Cart;
 using Locamart.Nava.Domain.Entities.Comment;
 using Locamart.Nava.Domain.Entities.Inventory;
 using Locamart.Nava.Domain.Entities.Product;
+using Locamart.Nava.Domain.Entities.ProductCategory;
 using Locamart.Nava.Domain.Entities.Store;
 using Locamart.Nava.Domain.Entities.StoreCategory;
 using MassTransit;
@@ -26,6 +27,7 @@ public class LocamartNavaDbContext : DbContext
     public DbSet<CommentAttachmentEntity> CommentAttachments => Set<CommentAttachmentEntity>();
     public DbSet<CartEntity> Carts => Set<CartEntity>();
     public DbSet<InventoryEntity> Inventories => Set<InventoryEntity>();
+    public DbSet<ProductCategoryEntity> ProductCategories => Set<ProductCategoryEntity>();
 
     public LocamartNavaDbContext(DbContextOptions<LocamartNavaDbContext> options, ICurrentUser currentUser)
         : base(options)
