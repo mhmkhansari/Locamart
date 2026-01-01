@@ -1,4 +1,6 @@
-﻿namespace Locamart.Nava.Application.Contracts.Dtos.ProductCategory;
+﻿using Locamart.Nava.Domain.Entities.ProductCategory.Enums;
+
+namespace Locamart.Nava.Application.Contracts.Dtos.ProductCategory;
 
 public sealed class ProductCategoryDto
 {

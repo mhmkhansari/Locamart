@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
 using Locamart.Dina.Abstracts;
-using Locamart.Nava.Application.Contracts.UseCases.StoreCategory;
+using Locamart.Nava.Application.Contracts.UseCases.StoreCategory.AddStoreCategory;
 using Locamart.Nava.Domain.Entities.StoreCategory;
 using Locamart.Nava.Domain.Entities.StoreCategory.Abstracts;
 using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;

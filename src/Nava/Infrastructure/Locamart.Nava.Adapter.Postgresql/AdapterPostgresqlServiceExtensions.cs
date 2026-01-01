@@ -11,7 +11,6 @@ using Locamart.Nava.Domain.Entities.Product.Abstracts;
 using Locamart.Nava.Domain.Entities.ProductCategory.Abstracts;
 using Locamart.Nava.Domain.Entities.Store.Abstracts;
 using Locamart.Nava.Domain.Entities.StoreCategory.Abstracts;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,6 +59,7 @@ public static class AdapterPostgresqlServiceExtensions
 
         services.AddScoped<ICommentQueryService, CommentQueryService>();
 
+        services.AddScoped<IStoreCategoryQueryService, StoreCategoryQueryService>();
 
         services.AddHostedService<ClientSeeder>();
 

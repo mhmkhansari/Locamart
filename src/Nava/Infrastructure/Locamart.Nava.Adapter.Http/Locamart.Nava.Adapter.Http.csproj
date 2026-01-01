@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\Application\Locamart.Nava.Application\Locamart.Nava.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ProductCategories\" />
+  </ItemGroup>
+
 </Project>

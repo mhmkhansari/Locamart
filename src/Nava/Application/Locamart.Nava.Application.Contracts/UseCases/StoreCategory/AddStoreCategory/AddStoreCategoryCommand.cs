@@ -2,7 +2,7 @@
 using Locamart.Dina;
 using Locamart.Dina.Abstracts;
 
-namespace Locamart.Nava.Application.Contracts.UseCases.StoreCategory;
+namespace Locamart.Nava.Application.Contracts.UseCases.StoreCategory.AddStoreCategory;
 
 public sealed class AddStoreCategoryCommand : ICommand<UnitResult<Error>>
 {

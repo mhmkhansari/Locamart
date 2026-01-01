@@ -12,11 +12,12 @@ public class UserController(IMediator mediator, IHttpClientFactory httpClientFac
 
     [HttpPost]
     [Route("login")]
-    public async Task<IActionResult> Register(string mobileNumber, CancellationToken cancellationToken)
+    public async Task<IActionResult> Register(LoginRequestModel request, CancellationToken cancellationToken)
     {
+        Console.WriteLine("Received login");
         var command = new LoginCommand()
         {
-            MobileNumber = mobileNumber
+            MobileNumber = request.MobileNumber
         };
 
         var result = await mediator.Send(command, cancellationToken);
