@@ -2,7 +2,7 @@
 using Locamart.Dina;
 using Locamart.Dina.ValueObjects;
 using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
-using Locamart.Shared.ValueObjects;
+
 
 namespace Locamart.Nava.Domain.Entities.Store.Builders;
 

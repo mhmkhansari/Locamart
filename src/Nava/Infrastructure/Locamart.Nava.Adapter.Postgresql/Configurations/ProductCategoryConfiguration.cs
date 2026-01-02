@@ -1,4 +1,5 @@
 ﻿
+using Locamart.Nava.Adapter.Postgresql.Converters;
 using Locamart.Nava.Domain.Entities.ProductCategory;
 using Locamart.Nava.Domain.Entities.ProductCategory.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,19 @@ public sealed class ProductCategoryConfiguration
             .WithMany()
             .HasForeignKey(c => c.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Property(p => p.CreatedBy)
+            .HasConversion(new UserConverter())
+            .HasColumnType("uuid")
+            .IsRequired();
+
+        builder.Property(p => p.UpdatedBy)
+            .HasConversion(new NullableUserConverter())
+            .HasColumnType("uuid");
+
+        builder.Property(p => p.DeletedBy)
+            .HasConversion(new NullableUserConverter())
+            .HasColumnType("uuid");
 
         builder.HasIndex(c => c.ParentId);
 

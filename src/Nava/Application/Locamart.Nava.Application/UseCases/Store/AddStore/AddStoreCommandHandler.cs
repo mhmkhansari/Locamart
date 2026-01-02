@@ -3,15 +3,12 @@ using Locamart.Dina;
 using Locamart.Dina.Abstracts;
 using Locamart.Dina.Extensions;
 using Locamart.Dina.ValueObjects;
-using Locamart.Nava.Adapter.Postgresql;
 using Locamart.Nava.Application.Contracts.IntegrationEvents;
 using Locamart.Nava.Application.Contracts.Services;
 using Locamart.Nava.Application.Contracts.UseCases.Store;
 using Locamart.Nava.Domain.Entities.Store.Abstracts;
 using Locamart.Nava.Domain.Entities.Store.Builders;
 using Locamart.Nava.Domain.Entities.StoreCategory.ValueObjects;
-using Locamart.Shared.ValueObjects;
-using MassTransit;
 using Serilog;
 
 namespace Locamart.Nava.Application.UseCases.Store.AddStore;

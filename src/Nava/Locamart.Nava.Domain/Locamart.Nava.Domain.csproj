@@ -11,8 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Order\" />
     <Folder Include="Entities\Product\Events\" />
+    <Folder Include="Entities\UserProfile\Abstracts\" />
+    <Folder Include="Entities\UserProfile\ValueObjects\" />
   </ItemGroup>
 
 </Project>

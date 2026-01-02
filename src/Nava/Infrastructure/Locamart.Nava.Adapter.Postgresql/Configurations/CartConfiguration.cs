@@ -24,9 +24,7 @@ public class CartConfiguration : IEntityTypeConfiguration<CartEntity>
             .IsRequired();
 
         builder.Property(c => c.OwnerId)
-            .HasConversion(
-                ownerId => ownerId.Value,
-                value => UserId.Create(value).Value)
+            .HasConversion(new UserConverter())
             .HasColumnType("uuid")
             .IsRequired();
 

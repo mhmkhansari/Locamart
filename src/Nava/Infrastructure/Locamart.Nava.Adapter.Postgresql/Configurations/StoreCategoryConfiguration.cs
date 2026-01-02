@@ -39,7 +39,10 @@ public class StoreCategoryConfiguration : IEntityTypeConfiguration<StoreCategory
             .HasConversion(new NullableUserConverter())
             .HasColumnType("uuid");
 
-        builder.Property(p => p.Name).IsRequired().HasColumnName("Name").HasMaxLength(200);
+        builder.Property(p => p.Name).
+            IsRequired()
+            .HasColumnName("Name")
+            .HasMaxLength(200);
 
     }
 }

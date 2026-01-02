@@ -1,5 +1,8 @@
-﻿using Locamart.Nava.Adapter.Http.User.RequestModels;
+﻿using Locamart.Dina.Abstracts;
+using Locamart.Nava.Adapter.Http.User.RequestModels;
+using Locamart.Nava.Application.Contracts.UseCases.User.AddUserAddress;
 using Locamart.Nava.Application.Contracts.UseCases.User.Login;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,14 +10,14 @@ namespace Locamart.Nava.Adapter.Http.User;
 
 [ApiController]
 [Route("api/users")]
-public class UserController(IMediator mediator, IHttpClientFactory httpClientFactory) : ControllerBase
+public class UserController(IMediator mediator, IHttpClientFactory httpClientFactory, ICurrentUser currentUser) : ControllerBase
 {
 
     [HttpPost]
     [Route("login")]
     public async Task<IActionResult> Register(LoginRequestModel request, CancellationToken cancellationToken)
     {
-        Console.WriteLine("Received login");
+
         var command = new LoginCommand()
         {
             MobileNumber = request.MobileNumber
@@ -52,4 +55,18 @@ public class UserController(IMediator mediator, IHttpClientFactory httpClientFac
 
         return Ok(tokenResponseJson);
     }
+
+    [HttpPost]
+    [Route("address")]
+    public async Task<IActionResult> Register(AddUserAddressRequestModel request, CancellationToken cancellationToken)
+    {
+        var command = request.Adapt<AddUserAddressCommand>();
+
+        command.UserId = currentUser.UserId;
+
+        var result = await mediator.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Ok() : BadRequest(result.Error);
+    }
+
 }

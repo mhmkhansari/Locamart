@@ -1,8 +1,6 @@
 ﻿using Locamart.Nava.Adapter.Postgresql.Converters;
 using Locamart.Nava.Domain.Entities.Product;
 using Locamart.Nava.Domain.Entities.Product.ValueObjects;
-using Locamart.Nava.Domain.Entities.Store;
-using Locamart.Nava.Domain.Entities.Store.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

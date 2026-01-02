@@ -9,9 +9,10 @@ using Locamart.Nava.Domain.Entities.Product;
 using Locamart.Nava.Domain.Entities.ProductCategory;
 using Locamart.Nava.Domain.Entities.Store;
 using Locamart.Nava.Domain.Entities.StoreCategory;
+using Locamart.Nava.Domain.Entities.UserAddress;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Internal;
 
 
 namespace Locamart.Nava.Adapter.Postgresql;
@@ -28,6 +29,7 @@ public class LocamartNavaDbContext : DbContext
     public DbSet<CartEntity> Carts => Set<CartEntity>();
     public DbSet<InventoryEntity> Inventories => Set<InventoryEntity>();
     public DbSet<ProductCategoryEntity> ProductCategories => Set<ProductCategoryEntity>();
+    public DbSet<UserAddressEntity> UserAddresses => Set<UserAddressEntity>();
 
     public LocamartNavaDbContext(DbContextOptions<LocamartNavaDbContext> options, ICurrentUser currentUser)
         : base(options)
@@ -39,7 +41,7 @@ public class LocamartNavaDbContext : DbContext
     {
         modelBuilder.HasDefaultSchema("nava");
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(LocamartNavaDbContext).Assembly);
+        //modelBuilder.ApplyConfigurationsFromAssembly(typeof(LocamartNavaDbContext).Assembly);
 
         modelBuilder.Ignore<DomainEvent>();
 
@@ -57,7 +59,11 @@ public class LocamartNavaDbContext : DbContext
 
         modelBuilder.ApplyConfiguration(new InventoryConfiguration());
 
-        modelBuilder.ApplyAuditing();
+        modelBuilder.ApplyConfiguration(new UserAddressEntityConfiguration());
+
+        modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+
+        //modelBuilder.ApplyAuditing();
 
         modelBuilder.AddTransactionalOutboxEntities();
 
