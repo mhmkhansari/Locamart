@@ -1,6 +1,7 @@
 ﻿using Locamart.Dina.Abstracts;
 using Locamart.Nava.Adapter.Http.User.RequestModels;
 using Locamart.Nava.Application.Contracts.UseCases.User.AddUserAddress;
+using Locamart.Nava.Application.Contracts.UseCases.User.GetUserAddresses;
 using Locamart.Nava.Application.Contracts.UseCases.User.Login;
 using Mapster;
 using MediatR;
@@ -58,7 +59,7 @@ public class UserController(IMediator mediator, IHttpClientFactory httpClientFac
 
     [HttpPost]
     [Route("address")]
-    public async Task<IActionResult> Register(AddUserAddressRequestModel request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddUserAddress(AddUserAddressRequestModel request, CancellationToken cancellationToken)
     {
         var command = request.Adapt<AddUserAddressCommand>();
 
@@ -67,6 +68,20 @@ public class UserController(IMediator mediator, IHttpClientFactory httpClientFac
         var result = await mediator.Send(command, cancellationToken);
 
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
+    }
+
+    [HttpGet]
+    [Route("address")]
+    public async Task<IActionResult> GetUserAddresses(CancellationToken cancellationToken)
+    {
+        var query = new GetUserAddressesQuery()
+        {
+            UserId = currentUser.UserId
+        };
+
+        var result = await mediator.Send(query, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 
 }

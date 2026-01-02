@@ -15,7 +15,7 @@ public class UserAddressRepository(LocamartNavaDbContext dbContext) : IUserAddre
     public async Task<IEnumerable<UserAddressEntity>> GetByUserId(UserId userId, CancellationToken cancellationToken)
     {
         return await dbContext.UserAddresses
-            .Where(x => x.UserId.Value == userId.Value)
+            .Where(x => x.UserId == userId)
             .ToListAsync(cancellationToken);
     }
 }
