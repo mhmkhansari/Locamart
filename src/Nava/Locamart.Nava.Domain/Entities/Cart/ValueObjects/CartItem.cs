@@ -8,13 +8,11 @@ public class CartItem : ValueObject<CartItem>, IComparable<CartItem>
 {
     public InventoryId InventoryId { get; private set; }
     public int Quantity { get; private set; }
-    public decimal UnitPrice { get; private set; }
 
-    public CartItem(InventoryId inventoryId, int quantity, decimal unitPrice)
+    public CartItem(InventoryId inventoryId, int quantity)
     {
         InventoryId = inventoryId;
         Quantity = quantity;
-        UnitPrice = unitPrice;
     }
 
     public void IncreaseQuantity(int qty)

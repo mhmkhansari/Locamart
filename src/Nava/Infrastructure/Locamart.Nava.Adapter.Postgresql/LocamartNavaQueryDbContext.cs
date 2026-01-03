@@ -1,8 +1,8 @@
 ﻿using Locamart.Nava.Application.Contracts.Dtos;
+using Locamart.Nava.Application.Contracts.Dtos.Inventory;
 using Locamart.Nava.Application.Contracts.Dtos.ProductCategory;
 using Locamart.Nava.Application.Contracts.Dtos.StoreCategory;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Locamart.Nava.Adapter.Postgresql;
 
@@ -12,6 +12,7 @@ public class LocamartNavaQueryDbContext : DbContext
     public DbSet<CommentDto> Comments => Set<CommentDto>();
     public DbSet<ProductCategoryDto> ProductCategories => Set<ProductCategoryDto>();
     public DbSet<StoreCategoryDto> StoreCategories => Set<StoreCategoryDto>();
+    public DbSet<InventoryDto> Inventories => Set<InventoryDto>();
 
     public LocamartNavaQueryDbContext(DbContextOptions<LocamartNavaQueryDbContext> options)
         : base(options)
@@ -47,6 +48,12 @@ public class LocamartNavaQueryDbContext : DbContext
         {
             entity.HasKey(c => c.Id);
             entity.ToTable("StoreCategories", "nava");
+        });
+
+        modelBuilder.Entity<InventoryDto>(entity =>
+        {
+            entity.HasKey(c => c.Id);
+            entity.ToTable("Inventories", "nava");
         });
     }
 }

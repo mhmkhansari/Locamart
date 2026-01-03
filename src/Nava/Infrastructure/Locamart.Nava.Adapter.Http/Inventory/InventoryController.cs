@@ -13,7 +13,7 @@ namespace Locamart.Nava.Adapter.Http.Inventory;
 
 [ApiController]
 [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
-[Route("api/inventories")]
+[Route("api/{storeId:guid}/inventories")]
 public class InventoryController(IMediator mediator) : ControllerBase
 {
 

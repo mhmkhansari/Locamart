@@ -4,7 +4,6 @@ using Locamart.Dina.ValueObjects;
 using Locamart.Nava.Domain.Entities.Cart.Enums;
 using Locamart.Nava.Domain.Entities.Cart.ValueObjects;
 using Locamart.Nava.Domain.Entities.Inventory.ValueObjects;
-using Locamart.Nava.Domain.Entities.Product.ValueObjects;
 using Locamart.Nava.Domain.Entities.Store.ValueObjects;
 
 namespace Locamart.Nava.Domain.Entities.Cart;
@@ -15,6 +14,7 @@ public sealed class CartEntity : AuditableEntity<CartId>
     public StoreId StoreId { get; private set; }
     public List<CartItem> Items { get; private set; } = new();
     public decimal TotalAmount => Items.Sum(i => i.Quantity * i.UnitPrice);
+    public int TotalItems => Items.Sum(i => i.Quantity);
     public CartStatus Status { get; private set; }
 
     private CartEntity(CartId id) : base(id) { }
@@ -40,7 +40,7 @@ public sealed class CartEntity : AuditableEntity<CartId>
         Status = CartStatus.Active;
     }
 
-    public UnitResult<Error> AddItem(InventoryId inventoryId, int quantity, decimal unitPrice)
+    public UnitResult<Error> AddItem(InventoryId inventoryId, int quantity)
     {
         if (Status != CartStatus.Active)
             return Error.Create("invalid_state", "Cart is not active");
@@ -56,7 +56,7 @@ public sealed class CartEntity : AuditableEntity<CartId>
         }
         else
         {
-            Items.Add(new CartItem(inventoryId, quantity, unitPrice));
+            Items.Add(new CartItem(inventoryId, quantity));
         }
 
         return UnitResult.Success<Error>();

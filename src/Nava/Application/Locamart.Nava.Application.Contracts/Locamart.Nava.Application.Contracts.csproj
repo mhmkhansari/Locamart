@@ -11,8 +11,4 @@
     <ProjectReference Include="..\..\Locamart.Nava.Domain\Locamart.Nava.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\Cart\" />
-  </ItemGroup>
-
 </Project>

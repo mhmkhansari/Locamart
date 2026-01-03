@@ -1,5 +1,6 @@
 ﻿using Locamart.Nava.Domain.Entities.Inventory;
 using Locamart.Nava.Domain.Entities.Inventory.Abstracts;
+using Locamart.Nava.Domain.Entities.Inventory.ValueObjects;
 using Locamart.Nava.Domain.Entities.Product.ValueObjects;
 using Locamart.Nava.Domain.Entities.Store.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,13 @@ public class InventoryRepository(LocamartNavaDbContext dbContext) : IInventoryRe
                 x.ProductId == productId &&
                 x.StoreId == storeId)
             .SingleOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<InventoryEntity?> GetById(InventoryId inventoryId, CancellationToken cancellationToken)
+    {
+        return await dbContext.Inventories
+            .Where(x => x.Id == inventoryId)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public void Update(InventoryEntity inventory)
