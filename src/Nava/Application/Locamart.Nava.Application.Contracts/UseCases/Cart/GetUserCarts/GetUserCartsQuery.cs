@@ -5,7 +5,7 @@ using Locamart.Nava.Application.Contracts.Dtos.Cart;
 
 namespace Locamart.Nava.Application.Contracts.UseCases.Cart.GetUserCarts;
 
-public class GetUserCartsQuery : IQuery<Result<IEnumerable<UserCartsDto>, Error>>
+public class GetUserCartsQuery : IQuery<Result<UserCartsDto, Error>>
 {
     public Guid UserId { get; set; }
 }

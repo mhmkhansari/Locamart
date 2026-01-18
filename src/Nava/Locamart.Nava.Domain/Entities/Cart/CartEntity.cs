@@ -13,7 +13,7 @@ public sealed class CartEntity : AuditableEntity<CartId>
     public UserId OwnerId { get; private set; }
     public StoreId StoreId { get; private set; }
     public List<CartItem> Items { get; private set; } = new();
-    public decimal TotalAmount => Items.Sum(i => i.Quantity * i.UnitPrice);
+    //public decimal TotalAmount => Items.Sum(i => i.Quantity * i.);
     public int TotalItems => Items.Sum(i => i.Quantity);
     public CartStatus Status { get; private set; }
 

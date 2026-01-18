@@ -64,6 +64,10 @@ public static class AdapterPostgresqlServiceExtensions
 
         services.AddScoped<IStoreCategoryQueryService, StoreCategoryQueryService>();
 
+        services.AddScoped<ICartQueryService, CartQueryService>();
+
+        services.AddScoped<IInventoryQueryService, InventoryQueryService>();
+
         services.AddHostedService<ClientSeeder>();
 
         services.AddScoped<IUserStore, UserStore>();

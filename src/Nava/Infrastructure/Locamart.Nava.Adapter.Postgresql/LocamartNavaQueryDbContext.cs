@@ -1,4 +1,5 @@
 ﻿using Locamart.Nava.Application.Contracts.Dtos;
+using Locamart.Nava.Application.Contracts.Dtos.Cart;
 using Locamart.Nava.Application.Contracts.Dtos.Inventory;
 using Locamart.Nava.Application.Contracts.Dtos.ProductCategory;
 using Locamart.Nava.Application.Contracts.Dtos.StoreCategory;
@@ -13,6 +14,7 @@ public class LocamartNavaQueryDbContext : DbContext
     public DbSet<ProductCategoryDto> ProductCategories => Set<ProductCategoryDto>();
     public DbSet<StoreCategoryDto> StoreCategories => Set<StoreCategoryDto>();
     public DbSet<InventoryDto> Inventories => Set<InventoryDto>();
+    public DbSet<CartDto> Carts => Set<CartDto>();
 
     public LocamartNavaQueryDbContext(DbContextOptions<LocamartNavaQueryDbContext> options)
         : base(options)
@@ -54,6 +56,12 @@ public class LocamartNavaQueryDbContext : DbContext
         {
             entity.HasKey(c => c.Id);
             entity.ToTable("Inventories", "nava");
+        });
+
+        modelBuilder.Entity<CartDto>(entity =>
+        {
+            entity.HasKey(c => c.Id);
+            entity.ToTable("Carts", "nava");
         });
     }
 }

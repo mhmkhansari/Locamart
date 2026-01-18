@@ -57,17 +57,7 @@ public class CartConfiguration : IEntityTypeConfiguration<CartEntity>
 
             items.Property(i => i.Quantity)
                 .IsRequired();
-
-            items.Property(i => i.UnitPrice)
-                .HasColumnType("decimal(18,2)")
-                .IsRequired();
         });
-
-        /*        builder.Property(c => c.CreatedAt)
-                    .IsRequired();
-
-                builder.Property(c => c.LastUpdatedAt)
-                    .IsRequired(false);*/
 
         builder.Property(p => p.CreatedBy)
             .HasConversion(new UserConverter())

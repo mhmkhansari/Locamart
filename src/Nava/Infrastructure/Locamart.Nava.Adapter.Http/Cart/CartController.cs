@@ -1,6 +1,7 @@
 ﻿using Locamart.Dina.Abstracts;
 using Locamart.Nava.Adapter.Http.Cart.RequestModels;
 using Locamart.Nava.Application.Contracts.UseCases.Cart.AddToCart;
+using Locamart.Nava.Application.Contracts.UseCases.Cart.GetUserCarts;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,19 @@ public class CartController(IMediator mediator, ICurrentUser currentUser) : Cont
         command.UserId = currentUser.UserId.Value;
 
         var result = await mediator.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Ok() : BadRequest(result.Error);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUserCarts(CancellationToken cancellationToken)
+    {
+        var query = new GetUserCartsQuery()
+        {
+            UserId = currentUser.UserId
+        };
+
+        var result = await mediator.Send(query, cancellationToken);
 
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }

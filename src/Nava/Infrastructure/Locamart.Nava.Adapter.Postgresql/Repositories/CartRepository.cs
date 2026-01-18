@@ -1,9 +1,11 @@
 ﻿using Locamart.Dina.ValueObjects;
+using Locamart.Nava.Application.Contracts.Dtos.Cart;
 using Locamart.Nava.Domain.Entities.Cart;
 using Locamart.Nava.Domain.Entities.Cart.Abstracts;
 using Locamart.Nava.Domain.Entities.Cart.Enums;
 using Locamart.Nava.Domain.Entities.Cart.ValueObjects;
 using Locamart.Nava.Domain.Entities.Store.ValueObjects;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Locamart.Nava.Adapter.Postgresql.Repositories;
@@ -21,16 +23,6 @@ public class CartRepository(LocamartNavaDbContext dbContext) : ICartRepository
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
-
-    public async Task<List<CartEntity>> GetByUserIdAsync(UserId userId, CancellationToken cancellationToken)
-    {
-        return await dbContext.Carts
-            .AsNoTracking()
-            .Where(x => x.CreatedBy == userId &&
-                        x.Status == CartStatus.Active)
-            .ToListAsync(cancellationToken);
-    }
-
     public async Task<CartEntity?> GetByStoreId(StoreId storeId, CancellationToken cancellationToken)
     {
         return await dbContext.Carts
