@@ -8,6 +8,6 @@ public class AddProductCommand : ICommand<UnitResult<Error>>
 {
     public Guid StoreId { get; set; }
     public string Title { get; set; }
-    public decimal Price { get; set; }
+    public string Description { get; set; }
 }
 

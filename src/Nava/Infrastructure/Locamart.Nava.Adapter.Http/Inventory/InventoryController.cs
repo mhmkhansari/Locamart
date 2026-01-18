@@ -18,9 +18,10 @@ public class InventoryController(IMediator mediator) : ControllerBase
 {
 
     [HttpPost]
-    public async Task<IActionResult> AddInventory(AddInventoryHttpRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddInventory(Guid storeId, AddInventoryHttpRequest request, CancellationToken cancellationToken)
     {
         var command = request.Adapt<AddInventoryCommand>();
+        command.StoreId = storeId;
 
         var result = await mediator.Send(command, cancellationToken);
 

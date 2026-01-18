@@ -12,7 +12,7 @@ using OpenIddict.Validation.AspNetCore;
 namespace Locamart.Nava.Adapter.Http.Store;
 
 [ApiController]
-[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme, Policy = "StoreAdminPolicy")]
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [Route("api/stores")]
 public class StoreController(IMediator mediator, ICurrentUser currentUser) : ControllerBase
 {
@@ -29,6 +29,7 @@ public class StoreController(IMediator mediator, ICurrentUser currentUser) : Con
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
     [HttpPost]
+    [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme, Policy = "StoreAdminPolicy")]
     [Route("/{storeId:guid}/products")]
     public async Task<IActionResult> Create([FromRoute] Guid storeId,
                                             [FromBody] CreateProductHttpRequest request,

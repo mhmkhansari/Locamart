@@ -62,6 +62,12 @@ public class LocamartNavaQueryDbContext : DbContext
         {
             entity.HasKey(c => c.Id);
             entity.ToTable("Carts", "nava");
+            entity.OwnsMany(c => c.Items, a =>
+            {
+
+                a.WithOwner()
+                    .HasForeignKey("CartId");
+            });
         });
     }
 }
