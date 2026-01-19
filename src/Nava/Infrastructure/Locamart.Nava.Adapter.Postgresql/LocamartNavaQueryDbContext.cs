@@ -2,6 +2,7 @@
 using Locamart.Nava.Application.Contracts.Dtos.Cart;
 using Locamart.Nava.Application.Contracts.Dtos.Inventory;
 using Locamart.Nava.Application.Contracts.Dtos.ProductCategory;
+using Locamart.Nava.Application.Contracts.Dtos.Search;
 using Locamart.Nava.Application.Contracts.Dtos.StoreCategory;
 using Microsoft.EntityFrameworkCore;
 

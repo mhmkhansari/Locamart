@@ -33,10 +33,6 @@ public class IndexInitialization
             )
             .Mappings(m => m.Properties(p => p
                 .Keyword("productId")
-                .Keyword("storeId")
-                .Keyword("storeName")
-                .Keyword("storeIdentifier")
-                .DoubleNumber("price")
                 .Text("description", t => t.Analyzer("fa_base").SearchAnalyzer("fa_base"))
                 .Text("productName", t => t
                     .Analyzer("fa_base")
@@ -44,7 +40,17 @@ public class IndexInitialization
                     .Fields(ff => ff
                         .Text("ngram", nt => nt.Analyzer("fa_ngram").SearchAnalyzer("fa_base"))
                         .Keyword("raw")))
-                .GeoPoint("storeLocation")
+                .Nested("storeInventory", n => n  // <- NEW NESTED FIELD
+                    .Properties(np => np
+                        .Keyword("storeId")
+                        .Keyword("storeName")
+                        .Keyword("storeIdentifier")
+                        .DoubleNumber("price")
+                        .IntegerNumber("availableQuantity")
+                        .IntegerNumber("reservedQuantity")
+                        .IntegerNumber("atp")
+                        .GeoPoint("storeLocation")
+                    ))
             ))
         );
 

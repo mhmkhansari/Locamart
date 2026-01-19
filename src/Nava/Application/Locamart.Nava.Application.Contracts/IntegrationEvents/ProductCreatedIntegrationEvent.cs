@@ -9,6 +9,8 @@ public record ProductCreatedIntegrationEvent : IIntegrationEvent
     public DateTime OccurredAt { get; init; }
     public Guid ProductId { get; init; }
     public string ProductName { get; init; }
+    public string Description { get; init; }
+    public List<string> Images { get; init; }
     public Guid StoreId { get; init; }
     public string StoreUniqueIdentity { get; init; }
     public string StoreName { get; init; }

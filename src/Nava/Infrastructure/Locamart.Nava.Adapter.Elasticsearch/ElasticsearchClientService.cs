@@ -3,7 +3,7 @@ using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Core.Search;
 using Locamart.Dina;
 using Locamart.Nava.Adapter.Elasticsearch.Models;
-using Locamart.Nava.Application.Contracts.Dtos;
+using Locamart.Nava.Application.Contracts.Dtos.Search;
 using Locamart.Nava.Application.Contracts.IntegrationEvents;
 using Locamart.Nava.Application.Contracts.Services;
 using System.Text.Json;
@@ -13,7 +13,7 @@ namespace Locamart.Nava.Adapter.Elasticsearch;
 
 public class ElasticsearchClientService(ElasticsearchClient client) : ISearchService
 {
-    public async Task<Result<IReadOnlyCollection<ProductDto>, Error>> GetNearbyProducts(
+    public async Task<Result<IReadOnlyCollection<ProductSearchDto>, Error>> GetNearbyProducts(
         string query, long distance, double lat, double lon)
     {
         try
@@ -22,21 +22,49 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
                 .Indices("products")
                 .Source(new SourceFilter
                 {
-                    Includes = new[] { "productId", "storeId", "storeName", "productName", "storeLocation" }
+                    Includes = new[] { "productId", "productName", "Description" }
                 })
                 .Query(q => q
                     .Bool(b => b
                         .Must(m => m
                             .Match(mq => mq
-                                .Field(f => f.productName)
+                                .Field(f => f.ProductName)
                                 .Query(query)
                             )
                         )
                         .Filter(f => f
-                            .GeoDistance(g => g
-                                .Field(f => f.storeLocation)
-                                .Distance($"{distance}m")
-                                .Location(new LatLonGeoLocation { Lat = lat, Lon = lon })
+                            .Nested(n => n
+                                .Path(p => p.StoreInventory)
+                                .Query(nq => nq
+                                    .Bool(nb => nb
+                                        .Filter(nf => nf
+                                            .Range(fx => fx
+                                                .Number(fa => fa
+                                                    .Field("storeInventory.atp")
+                                                    .Gt(0)
+                                                )
+                                            )
+                                            .GeoDistance(g => g
+                                                .Field("storeInventory.storeLocation")
+                                                .Distance($"{distance}m")
+                                                .Location(new LatLonGeoLocation { Lat = lat, Lon = lon })
+                                            )
+
+                                        )
+                                    )
+
+                                )
+                                .InnerHits(ih => ih
+                                    .Size(5)
+                                    .Sort(s => s
+                                        .GeoDistance(g => g
+                                            .Field("storeInventory.storeLocation")
+                                            .Location(new LatLonGeoLocation { Lat = lat, Lon = lon })
+                                            .Order(SortOrder.Asc)
+                                            .Unit(DistanceUnit.Kilometers)
+                                        )
+                                    )
+                                )
                             )
                         )
                     )
@@ -46,33 +74,13 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
                         .Field("_score")
                         .Order(SortOrder.Desc)
                     )
-                    .GeoDistance(g => g
-                        .Field(f => f.storeLocation)
-                        .Location(new LatLonGeoLocation { Lat = lat, Lon = lon })
-                        .Order(SortOrder.Asc)
-                        .Unit(DistanceUnit.Kilometers)
-                    )
                 )
-                .ScriptFields(sf => sf
-                    .Add("distance", new ScriptField
-                    {
-                        Script = new Script
-                        {
-                            Source = "doc['storeLocation'].arcDistance(params.lat, params.lon) / 1000",
-                            Params = new Dictionary<string, object>
-                                {
-                                    { "lat", lat },
-                                    { "lon", lon }
-                                }
-                        }
-                    }
-                    )
-                )
+
                 .Suggest(s => s
                     .Suggesters(d => d
                         .Add("did_you_mean", x => x
                             .Term(h => h
-                                .Field("productName")
+                                .Field(f => f.ProductName)
                                 .Text(query)
                                 .Size(1)
                             )
@@ -83,31 +91,37 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
 
             if (!response.IsValidResponse)
             {
-                return Result.Failure<IReadOnlyCollection<ProductDto>, Error>(Error.Create("Err",
+                return Result.Failure<IReadOnlyCollection<ProductSearchDto>, Error>(Error.Create("Error in elasticsearch query",
                     response.DebugInformation));
             }
 
             var products = response.Hits.Select(hit =>
             {
-                Guid.TryParse(hit.Source!.productId, out var productId);
-                Guid.TryParse(hit.Source.storeId, out var storeId);
+                Guid.TryParse(hit.Source!.ProductId, out var productId);
                 double firstDistance = 0;
                 if (TryGetTypedList<double>(hit.Fields!, "distance", out var distances))
                 {
                     firstDistance = Math.Round(distances.FirstOrDefault(), 1);
                 }
 
-                return new ProductDto
+                return new ProductSearchDto
                 {
-                    Id = productId,
-                    StoreId = storeId,
-                    StoreName = hit.Source.storeName,
-                    ProductName = hit.Source.productName,
-                    DistanceInKilometers = firstDistance
+                    ProductId = productId,
+                    ProductName = hit.Source.ProductName,
+                    Description = hit.Source.Description,
+                    StoreInventories = hit.Source.StoreInventory.Select(x => new InventorySearchDto()
+                    {
+                        Atp = x.AvailableQuantity - x.ReservedQuantity,
+                        StoreId = x.StoreId,
+                        StoreName = x.StoreName,
+                        StoreIdentifier = x.StoreIdentifier,
+                        DistanceInKilometers = 0
+
+                    }).ToList()
                 };
             }).ToList();
 
-            return Result.Success<IReadOnlyCollection<ProductDto>, Error>(products);
+            return Result.Success<IReadOnlyCollection<ProductSearchDto>, Error>(products);
         }
 
         catch (Exception ex)
@@ -121,11 +135,10 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
     {
         var productDocument = new ProductModel()
         {
-            productName = integrationEvent.ProductName,
-            price = integrationEvent.Price,
-            productId = integrationEvent.ProductId.ToString(),
-            storeId = integrationEvent.StoreId.ToString(),
-            storeName = integrationEvent.StoreName,
+            ProductId = integrationEvent.Id.ToString(),
+            ProductName = integrationEvent.ProductName,
+            Description = integrationEvent.Description,
+            Images = integrationEvent.Images
             storeLocation =
                 GeoLocation.LatitudeLongitude(new LatLonGeoLocation(integrationEvent.StoreLatitude,
                     integrationEvent.StoreLongitude))
@@ -133,7 +146,7 @@ public class ElasticsearchClientService(ElasticsearchClient client) : ISearchSer
 
         var result = await client.IndexAsync(productDocument, i => i
             .Index("products")
-            .Id(productDocument.productId)
+            .Id(productDocument.ProductId)
             .Refresh(Refresh.WaitFor));
 
         if (!result.IsSuccess() && result.ElasticsearchServerError is not null)
