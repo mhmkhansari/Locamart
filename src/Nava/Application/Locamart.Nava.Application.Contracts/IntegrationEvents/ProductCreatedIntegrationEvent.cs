@@ -8,13 +8,18 @@ public record ProductCreatedIntegrationEvent : IIntegrationEvent
     public Guid Id { get; init; }
     public DateTime OccurredAt { get; init; }
     public Guid ProductId { get; init; }
-    public string ProductName { get; init; }
+    public string Name { get; init; } = default!;
     public string Description { get; init; }
-    public List<string> Images { get; init; }
-    public Guid StoreId { get; init; }
-    public string StoreUniqueIdentity { get; init; }
-    public string StoreName { get; init; }
-    public decimal Price { get; init; }
-    public double StoreLatitude { get; init; }
-    public double StoreLongitude { get; init; }
+    public IReadOnlyCollection<ProductImageDto> Images { get; init; }
+        = [];
+
+    public DateTime CreatedAt { get; init; }
+    public Guid CreatedBy { get; init; }
+    public bool IsDeleted { get; init; }
+}
+
+public record ProductImageDto
+{
+    public string Url { get; init; } = default!;
+    public int Order { get; init; }
 }

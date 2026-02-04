@@ -32,13 +32,19 @@ public class AddProductCommandHandler(IProductRepository productRepository, ISto
         var productCreatedIntegrationEvent = new ProductCreatedIntegrationEvent()
         {
             Id = Guid.NewGuid(),
+            OccurredAt = DateTime.UtcNow,
             ProductId = product.Value.Id,
-            ProductName = product.Value.Title,
-            StoreId = store.Id,
-            StoreName = store.Name,
-            StoreUniqueIdentity = store.Identifier ?? "",
-            StoreLatitude = store.Location.Latitude,
-            StoreLongitude = store.Location.Longitude
+            Name = product.Value.Title,
+            Description = product.Value.Description,
+            Images = product.Value.Images.Select(x => new ProductImageDto()
+            {
+                Url = x.Url,
+                Order = x.Ordering,
+            }).ToArray(),
+            IsDeleted = product.Value.IsDeleted,
+            CreatedAt = product.Value.CreatedAt,
+            CreatedBy = product.Value.CreatedBy
+
         };
 
         await eventPublisher.PublishAsync(productCreatedIntegrationEvent, cancellationToken);

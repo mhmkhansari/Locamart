@@ -1,7 +1,4 @@
-﻿using Elastic.Clients.Elasticsearch;
-using Elastic.Transport;
-using Locamart.Adapter.Elasticsearch;
-using Locamart.Nava.Application.Contracts.Services;
+﻿using Locamart.Nava.Application.Contracts.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,13 +8,10 @@ namespace Locamart.Nava.Adapter.Elasticsearch
     {
         public static IServiceCollection AddAdapterElasticsearchServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton(sp =>
+            services.AddHttpClient<ElasticsearchHttpClient>(client =>
             {
-                var settings = new ElasticsearchClientSettings(new Uri(configuration["ElasticsearchSettings:Url"]!))
-                    .DefaultIndex(configuration["ElasticsearchSettings:DefaultIndex"]!)
-                    .Authentication(new BasicAuthentication(configuration["ElasticsearchSettings:Username"]!, configuration["ElasticsearchSettings:Password"]!));
-
-                return new ElasticsearchClient(settings);
+                client.BaseAddress = new Uri("http://localhost:9200");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
 
             services.AddScoped<ISearchService, ElasticsearchClientService>();
@@ -25,10 +19,16 @@ namespace Locamart.Nava.Adapter.Elasticsearch
             return services;
         }
 
-        public static async Task InitializeAdapterElasticsearchAsync(IServiceProvider serviceProvider)
+        public static async Task InitializeAdapterElasticsearchAsync(
+            IServiceProvider serviceProvider)
         {
-            var client = serviceProvider.GetRequiredService<ElasticsearchClient>();
-            await IndexInitialization.EnsureProductIndexExistsAsync(client);
+            using var scope = serviceProvider.CreateScope();
+
+            var client = scope.ServiceProvider
+                .GetRequiredService<ElasticsearchHttpClient>();
+
+            await ElasticsearchIndexBootstrapper
+                .EnsureProductIndexExistsAsync(client);
         }
     }
 

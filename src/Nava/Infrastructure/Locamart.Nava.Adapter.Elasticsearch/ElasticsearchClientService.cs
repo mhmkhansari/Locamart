@@ -1,158 +1,240 @@
 ﻿using CSharpFunctionalExtensions;
-using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.Core.Search;
 using Locamart.Dina;
 using Locamart.Nava.Adapter.Elasticsearch.Models;
 using Locamart.Nava.Application.Contracts.Dtos.Search;
 using Locamart.Nava.Application.Contracts.IntegrationEvents;
 using Locamart.Nava.Application.Contracts.Services;
+using System.Text;
 using System.Text.Json;
 using Result = CSharpFunctionalExtensions.Result;
 
 namespace Locamart.Nava.Adapter.Elasticsearch;
 
-public class ElasticsearchClientService(ElasticsearchClient client) : ISearchService
+public class ElasticsearchClientService(ElasticsearchHttpClient client) : ISearchService
 {
     public async Task<Result<IReadOnlyCollection<ProductSearchDto>, Error>> GetNearbyProducts(
-        string query, long distance, double lat, double lon)
+     string query, long distance, double lat, double lon)
     {
         try
         {
-            var response = await client.SearchAsync<ProductModel>(s => s
-                .Indices("products")
-                .Source(new SourceFilter
-                {
-                    Includes = new[] { "productId", "productName", "Description" }
-                })
-                .Query(q => q
-                    .Bool(b => b
-                        .Must(m => m
-                            .Match(mq => mq
-                                .Field(f => f.ProductName)
-                                .Query(query)
-                            )
-                        )
-                        .Filter(f => f
-                            .Nested(n => n
-                                .Path(p => p.StoreInventory)
-                                .Query(nq => nq
-                                    .Bool(nb => nb
-                                        .Filter(nf => nf
-                                            .Range(fx => fx
-                                                .Number(fa => fa
-                                                    .Field("storeInventory.atp")
-                                                    .Gt(0)
-                                                )
-                                            )
-                                            .GeoDistance(g => g
-                                                .Field("storeInventory.storeLocation")
-                                                .Distance($"{distance}m")
-                                                .Location(new LatLonGeoLocation { Lat = lat, Lon = lon })
-                                            )
-
-                                        )
-                                    )
-
-                                )
-                                .InnerHits(ih => ih
-                                    .Size(5)
-                                    .Sort(s => s
-                                        .GeoDistance(g => g
-                                            .Field("storeInventory.storeLocation")
-                                            .Location(new LatLonGeoLocation { Lat = lat, Lon = lon })
-                                            .Order(SortOrder.Asc)
-                                            .Unit(DistanceUnit.Kilometers)
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-                .Sort(s => s
-                    .Field(f => f
-                        .Field("_score")
-                        .Order(SortOrder.Desc)
-                    )
-                )
-
-                .Suggest(s => s
-                    .Suggesters(d => d
-                        .Add("did_you_mean", x => x
-                            .Term(h => h
-                                .Field(f => f.ProductName)
-                                .Text(query)
-                                .Size(1)
-                            )
-                        )
-                    )
-                )
-            );
-
-            if (!response.IsValidResponse)
+            // Build Elasticsearch query as anonymous object
+            var esQuery = new
             {
-                return Result.Failure<IReadOnlyCollection<ProductSearchDto>, Error>(Error.Create("Error in elasticsearch query",
-                    response.DebugInformation));
+                _source = new[] { "productId", "productName", "description", "storeInventory" },
+                query = new
+                {
+                    @bool = new
+                    {
+                        must = new[]
+                        {
+                        new
+                        {
+                            match = new
+                            {
+                                productName = new { query }
+                            }
+                        }
+                    },
+                        filter = new[]
+                        {
+                        new
+                        {
+                            nested = new
+                            {
+                                path = "storeInventory",
+                                query = new
+                                {
+                                    @bool = new
+                                    {
+                                        filter = new object[]
+                                        {
+                                            new
+                                            {
+                                                range = new Dictionary<string, object>
+                                                {
+                                                    ["storeInventory.atp"] = new Dictionary<string, object>
+                                                    {
+                                                        ["gt"] = 0
+                                                    }
+                                                }
+                                            },
+                                            new
+                                            {
+                                                geo_distance = new Dictionary<string, object>
+                                                {
+                                                    ["distance"] = $"{distance}m",
+                                                    ["storeInventory.storeLocation"] = new { lat, lon }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                inner_hits = new
+                                {
+                                    size = 5,
+                                    sort = new[]
+                                    {
+                                        new
+                                        {
+                                            _geo_distance = new Dictionary<string, object>
+                                            {
+                                                ["storeInventory.storeLocation"] = new { lat, lon },
+                                                ["order"] = "asc",
+                                                ["unit"] = "km"
+                                        }
+        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    }
+                },
+                sort = new object[]
+                {
+                new { _score = new { order = "desc" } }
+                },
+                script_fields = new
+                {
+                    distance = new
+                    {
+                        script = new
+                        {
+                            source = "doc['storeInventory.storeLocation'].arcDistance(params.lat, params.lon) / 1000",
+                            @params = new { lat, lon }
+                        }
+                    }
+                },
+                suggest = new
+                {
+                    did_you_mean = new
+                    {
+                        term = new
+                        {
+                            field = "productName",
+                            text = query,
+                            size = 1
+                        }
+                    }
+                }
+            };
+
+            var json = JsonSerializer.Serialize(esQuery, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            });
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("/products/_search", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var err = await response.Content.ReadAsStringAsync();
+                return Result.Failure<IReadOnlyCollection<ProductSearchDto>, Error>(
+                    Error.Create("elasticsearch_query_error", err));
             }
 
-            var products = response.Hits.Select(hit =>
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            using var doc = JsonDocument.Parse(responseString);
+            var hits = doc.RootElement.GetProperty("hits").GetProperty("hits");
+
+            var products = new List<ProductSearchDto>();
+
+            foreach (var hit in hits.EnumerateArray())
             {
-                Guid.TryParse(hit.Source!.ProductId, out var productId);
-                double firstDistance = 0;
-                if (TryGetTypedList<double>(hit.Fields!, "distance", out var distances))
+                var source = hit.GetProperty("_source");
+
+                var storeInventory = new List<InventorySearchDto>();
+                if (source.TryGetProperty("storeInventory", out var inventories))
                 {
-                    firstDistance = Math.Round(distances.FirstOrDefault(), 1);
+                    foreach (var inv in inventories.EnumerateArray())
+                    {
+                        int atp = 0;
+                        if (inv.TryGetProperty("availableQuantity", out var available) &&
+                            inv.TryGetProperty("reservedQuantity", out var reserved))
+                        {
+                            atp = available.GetInt32() - reserved.GetInt32();
+                        }
+
+                        storeInventory.Add(new InventorySearchDto
+                        {
+                            StoreId = inv.GetProperty("storeId").GetString() ?? "",
+                            StoreName = inv.GetProperty("storeName").GetString() ?? "",
+                            StoreIdentifier = inv.GetProperty("storeIdentifier").GetString(),
+                            Atp = atp,
+                            DistanceInKilometers = 0
+                        });
+                    }
                 }
 
-                return new ProductSearchDto
+                products.Add(new ProductSearchDto
                 {
-                    ProductId = productId,
-                    ProductName = hit.Source.ProductName,
-                    Description = hit.Source.Description,
-                    StoreInventories = hit.Source.StoreInventory.Select(x => new InventorySearchDto()
-                    {
-                        Atp = x.AvailableQuantity - x.ReservedQuantity,
-                        StoreId = x.StoreId,
-                        StoreName = x.StoreName,
-                        StoreIdentifier = x.StoreIdentifier,
-                        DistanceInKilometers = 0
-
-                    }).ToList()
-                };
-            }).ToList();
+                    ProductId = Guid.Parse(source.GetProperty("productId").GetString()!),
+                    ProductName = source.GetProperty("productName").GetString()!,
+                    Description = source.GetProperty("description").GetString() ?? "",
+                    StoreInventories = storeInventory
+                });
+            }
 
             return Result.Success<IReadOnlyCollection<ProductSearchDto>, Error>(products);
         }
-
+        catch (HttpRequestException httpEx)
+        {
+            return Result.Failure<IReadOnlyCollection<ProductSearchDto>, Error>(
+                Error.Create("http_request_error", httpEx.Message));
+        }
         catch (Exception ex)
         {
-            return Error.Create("get_nearby_products_error", ex.Message);
+            return Result.Failure<IReadOnlyCollection<ProductSearchDto>, Error>(
+                Error.Create("unexpected_error", ex.Message));
         }
-
     }
 
     public async Task<UnitResult<Error>> IndexProduct(ProductCreatedIntegrationEvent integrationEvent)
     {
-        var productDocument = new ProductModel()
+        try
         {
-            ProductId = integrationEvent.Id.ToString(),
-            ProductName = integrationEvent.ProductName,
-            Description = integrationEvent.Description,
-            Images = integrationEvent.Images
-            storeLocation =
-                GeoLocation.LatitudeLongitude(new LatLonGeoLocation(integrationEvent.StoreLatitude,
-                    integrationEvent.StoreLongitude))
-        };
+            var productDocument = new ProductModel()
+            {
+                Id = integrationEvent.Id.ToString(),
+                Name = integrationEvent.Name,
+                Description = integrationEvent.Description,
+                Images = integrationEvent.Images.Select(x => new ProductImageModel()
+                {
+                    Url = x.Url,
+                    Order = x.Order,
+                }).ToList(),
+                CreatedBy = integrationEvent.CreatedBy.ToString(),
+                IsDeleted = integrationEvent.IsDeleted,
+                StoreInventory = new List<InventoryModel>()
+            };
 
-        var result = await client.IndexAsync(productDocument, i => i
-            .Index("products")
-            .Id(productDocument.ProductId)
-            .Refresh(Refresh.WaitFor));
+            var response = await client.IndexAsync("products", productDocument, productDocument.Id, refresh: true);
 
-        if (!result.IsSuccess() && result.ElasticsearchServerError is not null)
-            return Error.Create("product_index_error", result.ElasticsearchServerError.Error.ToString());
+            if (response == null)
+            {
+                return Error.Create("product_index_error", "No response received from Elasticsearch");
+            }
 
-        return UnitResult.Success<Error>();
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                return Error.Create("product_index_error", errorContent);
+            }
+
+            return UnitResult.Success<Error>();
+        }
+        catch (HttpRequestException httpEx)
+        {
+            return Error.Create("product_index_http_error", httpEx.Message);
+        }
+        catch (Exception ex)
+        {
+            return Error.Create("product_index_unexpected_error", ex.Message);
+        }
     }
 
     public static bool TryGetTypedList<T>(IReadOnlyDictionary<string, object> dict, string key, out List<T> result)

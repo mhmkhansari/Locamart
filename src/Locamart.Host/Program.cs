@@ -272,7 +272,7 @@ builder.Services.AddMassTransit(cfg =>
         o.UseBusOutbox();
     });
 
-    cfg.UsingInMemory((context, bus) =>
+    cfg.UsingRabbitMq((context, bus) =>
     {
         bus.ConfigureEndpoints(context);
         bus.ConcurrentMessageLimit = Environment.ProcessorCount;
@@ -280,6 +280,8 @@ builder.Services.AddMassTransit(cfg =>
 });
 
 builder.Services.AddSingleton<IIntegrationEventDispatcher, IntegrationEventDispatcher>();
+
+
 
 
 

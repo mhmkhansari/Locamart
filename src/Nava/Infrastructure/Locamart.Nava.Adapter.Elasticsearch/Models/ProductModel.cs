@@ -1,29 +1,50 @@
-﻿using Elastic.Clients.Elasticsearch;
+﻿using System.Text.Json.Serialization;
 
 namespace Locamart.Nava.Adapter.Elasticsearch.Models;
 
 public class ProductModel
 {
-    public string ProductId { get; set; } = default!;
-    public string ProductName { get; set; } = default!;
-    public string Description { get; set; } = default!;
-    public List<string> Images { get; set; }
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = default!;
 
-    public List<InventoryModel> StoreInventory { get; set; } = new List<InventoryModel>();
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = default!;
+
+    [JsonPropertyName("description")]
+    public string Description { get; set; } = default!;
+
+    [JsonPropertyName("images")]
+    public List<ProductImageModel> Images { get; set; } = new();
+
+    [JsonPropertyName("createdAt")]
+    public DateTime CreatedAt { get; set; }
+
+    [JsonPropertyName("createdBy")]
+    public string CreatedBy { get; set; } = default!;
+
+    /*    [JsonPropertyName("updatedAt")]
+        public DateTime? UpdatedAt { get; set; }
+
+        [JsonPropertyName("updatedBy")]
+        public string? UpdatedBy { get; set; }*/
+
+    [JsonPropertyName("isDeleted")]
+    public bool IsDeleted { get; set; }
+
+    [JsonPropertyName("storeInventory")]
+    public List<InventoryModel> StoreInventory { get; set; } = new();
 }
 
-public class InventoryModel
+public class ProductImageModel
 {
-    public string StoreId { get; set; } = default!;
-    public string StoreName { get; set; } = default!;
-    public string? StoreIdentifier { get; set; }
+    [JsonPropertyName("url")]
+    public string Url { get; set; } = default!;
 
-    public double Price { get; set; }
-    public int AvailableQuantity { get; set; }
-    public int ReservedQuantity { get; set; }
-    public int Atp { get; set; }
+    /*    [JsonPropertyName("isPrimary")]
+        public bool IsPrimary { get; set; }*/
 
-    public GeoLocation StoreLocation { get; set; } = default!;
+    [JsonPropertyName("order")]
+    public int Order { get; set; }
 }
 
 

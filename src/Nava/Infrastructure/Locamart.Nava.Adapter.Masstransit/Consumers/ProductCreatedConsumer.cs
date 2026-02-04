@@ -10,10 +10,8 @@ public class ProductCreatedConsumer(ILogger logger) : IConsumer<ProductCreatedIn
         var message = context.Message;
 
         logger.Information(
-            "Received ProductCreatedIntegrationEvent: {ProductId} for store {StoreName} ({StoreId})",
-            message.ProductId,
-            message.StoreName,
-            message.StoreId);
+            "Received ProductCreatedIntegrationEvent: {ProductId}",
+            message.ProductId);
     }
 }
 
