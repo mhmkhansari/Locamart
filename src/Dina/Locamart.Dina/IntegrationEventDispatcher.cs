@@ -3,12 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Locamart.Dina;
 
-public class IntegrationEventDispatcher(IServiceProvider provider) : IIntegrationEventDispatcher
+public class IntegrationEventDispatcher(IServiceScopeFactory scopeFactory) : IIntegrationEventDispatcher
 {
     public async Task DispatchAsync<TEvent>(TEvent @event, CancellationToken ct = default)
         where TEvent : IIntegrationEvent
     {
-        var handlers = provider.GetServices<IIntegrationEventHandler<TEvent>>();
+        using var scope = scopeFactory.CreateScope();
+        var handlers = scope.ServiceProvider.GetServices<IIntegrationEventHandler<TEvent>>();
 
         foreach (var h in handlers)
             await h.HandleAsync(@event, ct);

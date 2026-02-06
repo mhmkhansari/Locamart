@@ -5,13 +5,13 @@ namespace Locamart.Nava.Adapter.Elasticsearch.Models;
 public class ProductModel
 {
     [JsonPropertyName("id")]
-    public string Id { get; set; } = default!;
+    public string Id { get; set; } = null!;
 
     [JsonPropertyName("name")]
-    public string Name { get; set; } = default!;
+    public string Name { get; set; } = null!;
 
     [JsonPropertyName("description")]
-    public string Description { get; set; } = default!;
+    public string Description { get; set; } = null!;
 
     [JsonPropertyName("images")]
     public List<ProductImageModel> Images { get; set; } = new();
@@ -20,7 +20,7 @@ public class ProductModel
     public DateTime CreatedAt { get; set; }
 
     [JsonPropertyName("createdBy")]
-    public string CreatedBy { get; set; } = default!;
+    public string CreatedBy { get; set; } = null!;
 
     /*    [JsonPropertyName("updatedAt")]
         public DateTime? UpdatedAt { get; set; }

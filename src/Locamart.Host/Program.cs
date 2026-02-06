@@ -7,6 +7,7 @@ using Locamart.Nava.Adapter.Masstransit;
 using Locamart.Nava.Adapter.ObjectStorage;
 using Locamart.Nava.Adapter.Postgresql;
 using Locamart.Nava.Adapter.Redis;
+using Locamart.Nava.Application;
 using Locamart.Nava.Application.Contracts.Dtos.User;
 using Locamart.Nava.Application.Contracts.Services;
 using MassTransit;
@@ -53,7 +54,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            Array.Empty<string>()
+            []
         }
     });
 });
@@ -249,6 +250,8 @@ builder.Services.AddSingleton(Log.Logger);
 
 //Nava services
 
+builder.Services.AddNavaApplicationServices();
+
 builder.Services.AddAdaptersHttpServices(configuration);
 
 builder.Services.AddPostgresqleServices(configuration);
@@ -274,6 +277,18 @@ builder.Services.AddMassTransit(cfg =>
 
     cfg.UsingRabbitMq((context, bus) =>
     {
+        var host = configuration["RabbitMq:Host"] ?? "localhost";
+        var port = configuration.GetValue<ushort>("RabbitMq:Port", 5673);
+        var virtualHost = configuration["RabbitMq:VirtualHost"] ?? "/";
+        var user = configuration["RabbitMq:Username"] ?? "guest";
+        var pass = configuration["RabbitMq:Password"] ?? "guest";
+
+        bus.Host(host, port, virtualHost, h =>
+        {
+            h.Username(user);
+            h.Password(pass);
+        });
+
         bus.ConfigureEndpoints(context);
         bus.ConcurrentMessageLimit = Environment.ProcessorCount;
     });

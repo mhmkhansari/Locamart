@@ -5,13 +5,13 @@ namespace Locamart.Nava.Adapter.Elasticsearch.Models;
 public class InventoryModel
 {
     [JsonPropertyName("storeId")]
-    public string StoreId { get; set; } = default!;
+    public string StoreId { get; set; } = null!;
 
     [JsonPropertyName("storeName")]
-    public string StoreName { get; set; } = default!;
+    public string StoreName { get; set; } = null!;
 
     [JsonPropertyName("storeIdentifier")]
-    public string StoreIdentifier { get; set; } = default!;
+    public string StoreIdentifier { get; set; } = null!;
 
     [JsonPropertyName("price")]
     public double Price { get; set; }
@@ -23,7 +23,7 @@ public class InventoryModel
     public int ReservedQuantity { get; set; }
 
     [JsonPropertyName("storeLocation")]
-    public GeoLocationRest StoreLocation { get; set; } = default!;
+    public GeoLocationRest StoreLocation { get; set; } = null!;
 }
 
 public class GeoLocationRest(double lat, double lon)

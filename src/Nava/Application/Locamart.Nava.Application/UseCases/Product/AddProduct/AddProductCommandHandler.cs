@@ -13,7 +13,11 @@ using Mapster;
 
 namespace Locamart.Nava.Application.UseCases.Product.AddProduct;
 
-public class AddProductCommandHandler(IProductRepository productRepository, IStoreRepository storeRepository, IUnitOfWork unitOfWork, IIntegrationEventPublisher eventPublisher) : ICommandHandler<AddProductCommand, UnitResult<Error>>
+public class AddProductCommandHandler(IProductRepository productRepository,
+    IStoreRepository storeRepository,
+    IUnitOfWork unitOfWork,
+    IIntegrationEventPublisher eventPublisher,
+    ICurrentUser currentUser) : ICommandHandler<AddProductCommand, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(AddProductCommand request, CancellationToken cancellationToken)
     {
@@ -43,7 +47,7 @@ public class AddProductCommandHandler(IProductRepository productRepository, ISto
             }).ToArray(),
             IsDeleted = product.Value.IsDeleted,
             CreatedAt = product.Value.CreatedAt,
-            CreatedBy = product.Value.CreatedBy
+            CreatedBy = currentUser.UserId
 
         };
 
