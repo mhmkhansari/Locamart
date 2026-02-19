@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Locamart.Dina;
+using Locamart.Dina.ValueObjects;
 using ValueObject = Locamart.Dina.ValueObject;
 
 namespace Locamart.Nava.Domain.Entities.Product.ValueObjects;
@@ -21,6 +22,14 @@ public class Price : ValueObject
     {
         Value = value;
         Currency = currency;
+    }
+
+    public Money ToMoney(int quantity)
+    {
+        if (quantity <= 0)
+            throw new InvalidOperationException("Quantity must be greater than zero");
+
+        return Money.Create(Value * quantity, Currency).Value;
     }
 
     protected override IEnumerable<object?> GetEqualityComponents()
