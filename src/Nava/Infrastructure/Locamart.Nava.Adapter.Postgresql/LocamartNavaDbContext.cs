@@ -5,6 +5,7 @@ using Locamart.Nava.Adapter.Postgresql.Extensions;
 using Locamart.Nava.Domain.Entities.Cart;
 using Locamart.Nava.Domain.Entities.Comment;
 using Locamart.Nava.Domain.Entities.Inventory;
+using Locamart.Nava.Domain.Entities.Order;
 using Locamart.Nava.Domain.Entities.Product;
 using Locamart.Nava.Domain.Entities.ProductCategory;
 using Locamart.Nava.Domain.Entities.Store;
@@ -30,6 +31,7 @@ public class LocamartNavaDbContext : DbContext
     public DbSet<InventoryEntity> Inventories => Set<InventoryEntity>();
     public DbSet<ProductCategoryEntity> ProductCategories => Set<ProductCategoryEntity>();
     public DbSet<UserAddressEntity> UserAddresses => Set<UserAddressEntity>();
+    public DbSet<OrderEntity> Orders => Set<OrderEntity>();
 
     public LocamartNavaDbContext(DbContextOptions<LocamartNavaDbContext> options, ICurrentUser currentUser)
         : base(options)
@@ -62,6 +64,12 @@ public class LocamartNavaDbContext : DbContext
         modelBuilder.ApplyConfiguration(new UserAddressEntityConfiguration());
 
         modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+
+        modelBuilder.ApplyConfiguration(new OrderConfiguration());
+
+        modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
+
+        modelBuilder.ApplyConfiguration(new OrderPaymentConfiguration());
 
         //modelBuilder.ApplyAuditing();
 

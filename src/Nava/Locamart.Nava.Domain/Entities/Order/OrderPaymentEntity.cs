@@ -6,7 +6,7 @@ using Locamart.Nava.Domain.Entities.Order.ValueObjects;
 
 namespace Locamart.Nava.Domain.Entities.Order;
 
-public sealed class OrderPaymentEntity : CSharpFunctionalExtensions.Entity<OrderPaymentId>
+public sealed class OrderPaymentEntity : AuditableEntity<OrderPaymentId>
 {
     public OrderId OrderId { get; private set; }
 

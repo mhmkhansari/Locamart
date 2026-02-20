@@ -7,6 +7,7 @@ using Locamart.Nava.Application.Contracts.Services;
 using Locamart.Nava.Domain.Entities.Cart.Abstracts;
 using Locamart.Nava.Domain.Entities.Comment.Abstracts;
 using Locamart.Nava.Domain.Entities.Inventory.Abstracts;
+using Locamart.Nava.Domain.Entities.Order.Abstracts;
 using Locamart.Nava.Domain.Entities.Product.Abstracts;
 using Locamart.Nava.Domain.Entities.ProductCategory.Abstracts;
 using Locamart.Nava.Domain.Entities.Store.Abstracts;
@@ -57,6 +58,8 @@ public static class AdapterPostgresqlServiceExtensions
         services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 
         services.AddScoped<IUserAddressRepository, UserAddressRepository>();
+
+        services.AddScoped<IOrderRepository, OrderRepository>();
 
         services.AddScoped<IUnitOfWork, EfCoreUnitOfWork>();
 

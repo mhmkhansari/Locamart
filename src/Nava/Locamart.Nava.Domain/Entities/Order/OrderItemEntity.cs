@@ -8,7 +8,7 @@ using Locamart.Nava.Domain.Entities.Product.ValueObjects;
 
 namespace Locamart.Nava.Domain.Entities.Order;
 
-public sealed class OrderItemEntity : CSharpFunctionalExtensions.Entity<OrderItemId>
+public sealed class OrderItemEntity : AuditableEntity<OrderItemId>
 {
     public OrderId OrderId { get; private set; }
 

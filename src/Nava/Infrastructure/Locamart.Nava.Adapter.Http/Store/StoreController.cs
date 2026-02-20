@@ -1,6 +1,7 @@
 ﻿using Locamart.Adapter.Http.Product.RequestModels;
 using Locamart.Dina.Abstracts;
 using Locamart.Nava.Adapter.Http.Store.RequestModels;
+using Locamart.Nava.Application.Contracts.UseCases.Order;
 using Locamart.Nava.Application.Contracts.UseCases.Product.AddProduct;
 using Locamart.Nava.Application.Contracts.UseCases.Store;
 using Mapster;
@@ -36,6 +37,21 @@ public class StoreController(IMediator mediator, ICurrentUser currentUser) : Con
                                             CancellationToken cancellationToken)
     {
         var command = request.Adapt<AddProductCommand>();
+        command.StoreId = storeId;
+
+        var result = await mediator.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Ok() : BadRequest(result.Error);
+    }
+
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+    [Route("/{storeId:guid}/cart/checkout")]
+    public async Task<IActionResult> Create([FromRoute] Guid storeId,
+        [FromBody] CreateOrderHttpRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = request.Adapt<CheckoutCartCommand>();
         command.StoreId = storeId;
 
         var result = await mediator.Send(command, cancellationToken);

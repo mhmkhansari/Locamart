@@ -245,6 +245,8 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+builder.Services.AddSingleton<IClock, SystemClock>();
+
 builder.Services.AddSingleton(Log.Logger);
 
 
