@@ -25,7 +25,7 @@ public class StoreBuilder(string name, StoreCategoryId categoryId, UserId ownerI
     public StoreBuilder WithWebsite(Uri website) =>
         Configure(store => store.SetWebsite(website));
 
-    public StoreBuilder WithLocation(Location location) =>
+    public StoreBuilder WithLocation(GeoLocation location) =>
         Configure(store => store.SetLocation(location));
 
     public Result<StoreEntity, Error> Build()

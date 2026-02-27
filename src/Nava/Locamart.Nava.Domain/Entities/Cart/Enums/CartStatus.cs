@@ -2,7 +2,7 @@
 
 public enum CartStatus
 {
-    Active,
-    CheckedOut,
-    Cancelled
+    Active = 1,
+    CheckedOut = 2,
+    Cancelled = 3
 }

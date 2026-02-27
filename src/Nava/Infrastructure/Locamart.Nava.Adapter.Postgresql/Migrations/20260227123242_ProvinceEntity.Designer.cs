@@ -3,6 +3,7 @@ using System;
 using Locamart.Nava.Adapter.Postgresql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locamart.Nava.Adapter.Postgresql.Migrations
 {
     [DbContext(typeof(LocamartNavaDbContext))]
-    partial class LocamartNavaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260227123242_ProvinceEntity")]
+    partial class ProvinceEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,109 +221,6 @@ namespace Locamart.Nava.Adapter.Postgresql.Migrations
                         .IsUnique();
 
                     b.ToTable("Inventories", "nava");
-                });
-
-            modelBuilder.Entity("Locamart.Nava.Domain.Entities.Location.CityEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("LastUpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int>("ProvinceId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("smallint");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name");
-
-                    b.HasIndex("ProvinceId");
-
-                    b.ToTable("Cities", "nava");
-                });
-
-            modelBuilder.Entity("Locamart.Nava.Domain.Entities.Location.LocaleEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("LastUpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("smallint");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.ToTable("Locales", "nava");
                 });
 
             modelBuilder.Entity("Locamart.Nava.Domain.Entities.Location.ProvinceEntity", b =>
@@ -1039,24 +939,6 @@ namespace Locamart.Nava.Adapter.Postgresql.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Locamart.Nava.Domain.Entities.Location.CityEntity", b =>
-                {
-                    b.HasOne("Locamart.Nava.Domain.Entities.Location.ProvinceEntity", null)
-                        .WithMany("Cities")
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Locamart.Nava.Domain.Entities.Location.LocaleEntity", b =>
-                {
-                    b.HasOne("Locamart.Nava.Domain.Entities.Location.CityEntity", null)
-                        .WithMany("Locales")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Locamart.Nava.Domain.Entities.Order.OrderEntity", b =>
                 {
                     b.OwnsOne("Locamart.Dina.ValueObjects.Money", "Subtotal", b1 =>
@@ -1314,16 +1196,6 @@ namespace Locamart.Nava.Adapter.Postgresql.Migrations
             modelBuilder.Entity("Locamart.Nava.Domain.Entities.Comment.CommentEntity", b =>
                 {
                     b.Navigation("Attachments");
-                });
-
-            modelBuilder.Entity("Locamart.Nava.Domain.Entities.Location.CityEntity", b =>
-                {
-                    b.Navigation("Locales");
-                });
-
-            modelBuilder.Entity("Locamart.Nava.Domain.Entities.Location.ProvinceEntity", b =>
-                {
-                    b.Navigation("Cities");
                 });
 
             modelBuilder.Entity("Locamart.Nava.Domain.Entities.Order.OrderEntity", b =>

@@ -12,7 +12,7 @@ public sealed class StoreEntity : AuditableEntity<StoreId>
     public string Name { get; private set; }
     public StoreCategoryId CategoryId { get; private set; }
     public Image? ProfileImage { get; private set; }
-    public Location? Location { get; private set; }
+    public GeoLocation? Location { get; private set; }
     public string? Bio { get; private set; }
     public Uri? Website { get; private set; }
     public StoreIdentifier? Identifier { get; private set; }
@@ -52,7 +52,7 @@ public sealed class StoreEntity : AuditableEntity<StoreId>
         Website = website;
     }
 
-    public void SetLocation(Location location)
+    public void SetLocation(GeoLocation location)
     {
         Location = location;
     }

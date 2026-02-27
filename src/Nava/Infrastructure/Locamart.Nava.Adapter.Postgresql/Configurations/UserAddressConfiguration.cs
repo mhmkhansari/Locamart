@@ -46,7 +46,7 @@ public sealed class UserAddressEntityConfiguration
 
         builder.HasIndex(x => new { x.ProvinceId, x.CityId });
 
-        builder.OwnsOne(x => x.Location, location =>
+        builder.OwnsOne(x => x.GeoLocation, location =>
         {
             location.Property(p => p.Latitude)
                 .HasColumnName("Latitude")

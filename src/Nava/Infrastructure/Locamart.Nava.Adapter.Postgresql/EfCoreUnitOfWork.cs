@@ -8,6 +8,16 @@ public class EfCoreUnitOfWork(LocamartNavaDbContext context) : IUnitOfWork
     {
         await context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<IAsyncDisposable> BeginTransactionAsync(
+        CancellationToken cancellationToken = default
+    )
+    {
+        var transaction = await context.Database
+            .BeginTransactionAsync(cancellationToken);
+
+        return new EfCoreTransaction(transaction);
+    }
 }
 
 

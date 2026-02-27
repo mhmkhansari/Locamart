@@ -21,8 +21,8 @@ public class GetUserAddressesQueryHandler(IUserAddressRepository repository) : I
 
         var mappedResult = result.Select(x => new UserAddressesDto()
         {
-            Latitude = x.Location.Latitude,
-            Longitude = x.Location.Longitude,
+            Latitude = x.GeoLocation.Latitude,
+            Longitude = x.GeoLocation.Longitude,
             AddressText = x.AddressText,
             PostalCode = x.PostalCode,
             CityId = x.CityId,

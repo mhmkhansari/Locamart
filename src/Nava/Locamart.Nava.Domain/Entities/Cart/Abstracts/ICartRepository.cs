@@ -9,6 +9,7 @@ public interface ICartRepository
     Task AddAsync(CartEntity cart, CancellationToken cancellationToken);
     Task<CartEntity?> GetByIdAsync(CartId id, CancellationToken cancellationToken);
     Task<CartEntity?> GetByStoreId(StoreId storeId, CancellationToken cancellationToken);
+    Task<CartEntity?> GetActiveCartByUserAndStore(StoreId storeId, UserId userId, CancellationToken cancellationToken);
     void Update(CartEntity cart);
     void Delete(CartEntity cart);
 }

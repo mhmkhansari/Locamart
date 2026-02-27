@@ -9,7 +9,7 @@ public sealed class UserAddressEntity : AuditableEntity<UserAddressId>
 {
     public string Name { get; private set; }
     public UserId UserId { get; private set; }
-    public Location Location { get; private set; }
+    public GeoLocation GeoLocation { get; private set; }
     public int ProvinceId { get; private set; }
     public int CityId { get; private set; }
     public string? AddressText { get; private set; }
@@ -20,7 +20,7 @@ public sealed class UserAddressEntity : AuditableEntity<UserAddressId>
     public static Result<UserAddressEntity, Error> Create(
         UserId userId,
         string name,
-        Location location,
+        GeoLocation location,
         int provinceId,
         int cityId,
         string? addressText,
@@ -46,7 +46,7 @@ public sealed class UserAddressEntity : AuditableEntity<UserAddressId>
         UserAddressId id,
         UserId userId,
         string name,
-        Location location,
+        GeoLocation geoLocation,
         int provinceId,
         int cityId,
         string? addressText,
@@ -55,16 +55,16 @@ public sealed class UserAddressEntity : AuditableEntity<UserAddressId>
     {
         UserId = userId;
         Name = name;
-        Location = location;
+        GeoLocation = geoLocation;
         ProvinceId = provinceId;
         CityId = cityId;
         AddressText = addressText;
         PostalCode = postalCode;
     }
 
-    public void UpdateLocation(Location location)
+    public void UpdateGeoLocation(GeoLocation geoLocation)
     {
-        Location = location;
+        GeoLocation = geoLocation;
     }
 
     public void UpdateAddressDetails(

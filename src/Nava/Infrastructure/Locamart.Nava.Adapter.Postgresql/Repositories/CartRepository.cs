@@ -32,6 +32,15 @@ public class CartRepository(LocamartNavaDbContext dbContext) : ICartRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<CartEntity?> GetActiveCartByUserAndStore(StoreId storeId, UserId userId, CancellationToken cancellationToken)
+    {
+        return await dbContext.Carts
+            .AsNoTracking().
+            SingleOrDefaultAsync(x => x.StoreId == storeId &&
+                                      x.OwnerId == userId,
+                                      cancellationToken: cancellationToken);
+    }
+
     public void Update(CartEntity cart)
     {
         dbContext.Carts.Update(cart);

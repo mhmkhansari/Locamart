@@ -18,7 +18,7 @@ public class AddUserAddressCommandHandler(IUserAddressRepository repository, IUn
         if (userId.IsFailure)
             return userId.Error;
 
-        var location = new Location(request.Latitude, request.Longitude);
+        var location = new GeoLocation(request.Latitude, request.Longitude);
 
         var entity = UserAddressEntity.Create(userId.Value, request.Name, location, request.ProvinceId,
             request.CityId,

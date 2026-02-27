@@ -2,12 +2,12 @@
 
 namespace Locamart.Dina.ValueObjects;
 
-public class Location(double latitude, double longitude) : ValueObject<Location>
+public class GeoLocation(double latitude, double longitude) : ValueObject<GeoLocation>
 {
     public double Latitude { get; init; } = latitude;
     public double Longitude { get; init; } = longitude;
 
-    protected override bool EqualsCore(Location other)
+    protected override bool EqualsCore(GeoLocation other)
     {
         return Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
     }
@@ -16,7 +16,7 @@ public class Location(double latitude, double longitude) : ValueObject<Location>
     {
         return HashCode.Combine(Latitude, Longitude);
     }
-    public double DistanceTo(Location other)
+    public double DistanceTo(GeoLocation other)
     {
         var dLat = (other.Latitude - Latitude) * (Math.PI / 180.0);
         var dLon = (other.Longitude - Longitude) * (Math.PI / 180.0);

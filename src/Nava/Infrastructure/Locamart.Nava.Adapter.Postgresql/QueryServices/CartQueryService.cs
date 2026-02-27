@@ -3,6 +3,7 @@ using Locamart.Nava.Application.Contracts.Dtos.Cart;
 using Locamart.Nava.Application.Contracts.Services;
 using Locamart.Nava.Domain.Entities.Cart.Enums;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Locamart.Nava.Adapter.Postgresql.QueryServices;
 
@@ -50,6 +51,36 @@ public class CartQueryService(LocamartNavaQueryDbContext dbContext) : ICartQuery
        .ToListAsync(cancellationToken);
 
         return new UserCartsDto { UserCarts = cartDtos };
+    }
+
+    public async Task<CartDto?> GetActiveForUserAndStore(
+        Guid userId,
+        Guid storeId,
+        bool lockForUpdate,
+        CancellationToken ct
+    )
+    {
+        var sql = """
+                      SELECT *
+                      FROM Carts
+                      WHERE OwnerId = @userId
+                        AND StoreId = @storeId
+                        AND status = 1
+                  """;
+
+        if (lockForUpdate)
+        {
+            sql += " FOR UPDATE";
+        }
+
+        return await dbContext.Carts
+            .FromSqlRaw(
+                sql,
+                new NpgsqlParameter("userId", userId),
+                new NpgsqlParameter("storeId", storeId)
+            )
+            .Include(c => c.Items)
+            .SingleOrDefaultAsync(ct);
     }
 }
 

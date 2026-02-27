@@ -41,7 +41,7 @@ public class AddStoreCommandHandler(IStoreRepository storeRepository,
                 .MaybeDo(request.Bio, (b, v) => b.WithBio(v))
                 .MaybeDo(request.ProfileImage, (b, v) => b.WithProfileImage(new Image(request.ProfileImage!)))
                 .MaybeDo(request.Latitude, request.Longitude, (lat, lon) => lat is not null && lon is not null,
-                    (b, lat, lon) => b.WithLocation(new Location(lat!.Value, lon!.Value)));
+                    (b, lat, lon) => b.WithLocation(new GeoLocation(lat!.Value, lon!.Value)));
 
             var entity = builder.Build();
 
